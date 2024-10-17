@@ -1,4 +1,4 @@
-import { getSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import dynamic from 'next/dynamic';
 import Link from 'next/link';
 import React from 'react';
@@ -11,6 +11,14 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
     ssr: false,
 });
 const Dashboard = () => {
+    const { data: session } = useSession();
+    const capitalizeFirstLetter = (name) => {
+        if (!name) return '';
+        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    };
+
+    const firstName = capitalizeFirstLetter(session?.user?.name?.split(' ')[0]);
+
     return (
         <>
             <Seo title={'Dashboard1'} />
@@ -37,57 +45,11 @@ const Dashboard = () => {
                                             >
                                                 <div className="text-justified align-items-center">
                                                     <h3 className="text-dark fw-semibold mb-2 mt-0">
-                                                        Hi, Welcome Back{' '}
+                                                        Olá, Bem Vindo de volta{' '}
                                                         <span className="text-primary">
-                                                            Nick!
+                                                            {firstName} !
                                                         </span>
                                                     </h3>
-                                                    <p className="text-dark fs-14 mb-3 lh-3">
-                                                        {' '}
-                                                        You have used the 85% of
-                                                        free plan storage.
-                                                        Please upgrade your plan
-                                                        to get unlimited
-                                                        storage.
-                                                    </p>
-                                                    <button className="btn btn-primary shadow">
-                                                        Upgrade Now
-                                                    </button>
-                                                </div>
-                                            </Col>
-                                            <Col
-                                                xl={3}
-                                                lg={5}
-                                                md={6}
-                                                sm={12}
-                                                className="d-flex align-items-center justify-content-center upgrade-chart-circle"
-                                            >
-                                                <div
-                                                    className="chart-circle"
-                                                    data-color
-                                                >
-                                                    <div id="radialbar-basic1">
-                                                        <ReactApexChart
-                                                            options={
-                                                                Dashboarddata
-                                                                    .Radialbar
-                                                                    .options
-                                                            }
-                                                            series={
-                                                                Dashboarddata
-                                                                    .Radialbar
-                                                                    .series
-                                                            }
-                                                            type="radialBar"
-                                                            height={170}
-                                                            width={170}
-                                                        />
-                                                    </div>
-                                                    <div className="chart-circle-value circle-style">
-                                                        <div className="fs-18 fw-semibold">
-                                                            85%
-                                                        </div>
-                                                    </div>
                                                 </div>
                                             </Col>
                                         </Row>
@@ -1374,22 +1336,4 @@ const Dashboard = () => {
 
 Dashboard.layout = 'Contentlayout';
 
-export async function getServerSideProps(context) {
-    const session = await getSession(context);
-
-    if (!session) {
-        return {
-            redirect: {
-                destination: '/',
-                permanent: false,
-            },
-        };
-    }
-
-    return {
-        props: {
-            session,
-        },
-    };
-}
 export default Dashboard;

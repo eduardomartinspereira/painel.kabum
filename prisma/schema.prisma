@@ -7,22 +7,72 @@ datasource db {
     url      = env("DATABASE_URL")
 }
 
+model Product {
+    id          Int           @id @default(autoincrement())
+    img         String
+    title       String
+    categoryId  Int
+    description String        @db.Text
+    quantity    Int           @default(1)
+    status      ProductStatus
+    game        Game
+    price       Float
+    productKey  String        @default("kjfneuisfui")
+    type        Type          @default(PC)
+    payments    Payment[]
+    category    Category      @relation(fields: [categoryId], references: [id])
+
+    @@index([categoryId], map: "Product_categoryId_fkey")
+}
+
+model Category {
+    id       Int       @id @default(autoincrement())
+    name     String
+    game     Game
+    products Product[]
+}
+
+model User {
+    id        Int       @id @default(autoincrement())
+    name      String?
+    image_url String?
+    email     String    @unique
+    password  String
+    payments  Payment[]
+}
+
+model Payment {
+    id              Int           @id @default(autoincrement())
+    userId          Int
+    productId       Int
+    productQuantity Int
+    amount          Float
+    paymentMethod   PaymentMethod
+    status          PaymentStatus
+    gatewayId       String        @unique
+    license         String?
+    product         Product       @relation(fields: [productId], references: [id])
+    user            User          @relation(fields: [userId], references: [id])
+
+    @@index([productId], map: "Payment_productId_fkey")
+    @@index([userId], map: "Payment_userId_fkey")
+}
+
 enum ProductStatus {
     IN_STOCK
     OUT_STOCK
 }
 
 enum Game {
-  PLANO_MENSAL
-  PLANO_SEMANAL
-  PLANO_PERMANENTE
+    PLANO_MENSAL
+    PLANO_SEMANAL
+    PLANO_PERMANENTE
 }
 
 enum Type {
- PC
- MOBILE
+    PC
+    MOBILE
 }
-
 
 enum PaymentMethod {
     PIX
@@ -34,51 +84,3 @@ enum PaymentStatus {
     APPROVED
     PENDING
 }
-
-model Product {
-    id          Int           @id @default(autoincrement())
-    img         String
-    title       String
-    price       Float
-    categoryId  Int
-    description String        @db.Text  // Forçar o uso de TEXT para descrições longas
-    quantity    Int           @default(1)
-    productKey  String        @default("kjfneuisfui")
-    status      ProductStatus
-    game        Game
-    category    Category      @relation(fields: [categoryId], references: [id])
-    payments    Payment[]
-    type        Type @default(PC)
-}
-
-
-model Category {
-    id       Int       @id @default(autoincrement())
-    name     String
-    game     Game
-    products Product[]
-}
-
-model User {
-    id       Int       @id @default(autoincrement())
-    name     String?
-    email    String    @unique
-    password String
-    payments Payment[]
-}
-
-model Payment {
-    id              Int           @id @default(autoincrement())
-    userId          Int
-    productId       Int
-    productQuantity Int
-    amount          Float
-    gatewayId       String        @unique
-    paymentMethod   PaymentMethod
-    status          PaymentStatus
-    license         String?          
-
-    product Product @relation(fields: [productId], references: [id])
-    user    User    @relation(fields: [userId], references: [id])
-}
-

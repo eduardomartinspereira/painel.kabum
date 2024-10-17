@@ -11,11 +11,11 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
         layouts[Component.layout] ||
         ((pageProps) => <Component>{pageProps}</Component>);
     return (
-        <Layout>
-            <SessionProvider session={session}>
+        <SessionProvider session={session}>
+            <Layout>
                 <Component {...pageProps} />
-            </SessionProvider>
-        </Layout>
+            </Layout>
+        </SessionProvider>
     );
 }
 

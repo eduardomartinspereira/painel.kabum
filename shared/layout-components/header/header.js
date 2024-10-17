@@ -25,10 +25,21 @@ import {
     pane3,
 } from '../../data/header/header';
 import store from '../../redux/store';
-function Header({ local_varaiable, ThemeChanger }) {
+function Header({ local_varaiable, ThemeChanger, session }) {
     const handleLogout = () => {
         signOut({ redirect: true, callbackUrl: '/' });
     };
+
+    console.log(session, 'session on front');
+
+    const capitalizeWords = (name) => {
+        return name
+            .toLowerCase()
+            .split(' ')
+            .map((word) => word.charAt(0).toUpperCase() + word.slice(1))
+            .join(' ');
+    };
+
     const ToggleDark = () => {
         ThemeChanger({
             ...local_varaiable,
@@ -941,12 +952,10 @@ function Header({ local_varaiable, ThemeChanger }) {
                                 <div className="d-flex align-items-center">
                                     <div className="me-sm-2 me-0">
                                         <img
-                                            src={`${
-                                                process.env.NODE_ENV ===
-                                                'production'
-                                                    ? basePath
-                                                    : ''
-                                            }/assets/images/faces/2.jpg`}
+                                            src={
+                                                session?.user?.image_url ||
+                                                '/assets/images/faces/2.jpg'
+                                            }
                                             alt="img"
                                             width="32"
                                             height="32"
@@ -955,10 +964,14 @@ function Header({ local_varaiable, ThemeChanger }) {
                                     </div>
                                     <div className="d-xl-block d-none">
                                         <p className="fw-semibold mb-0 lh-1">
-                                            Ashton Cox
+                                            {session &&
+                                                capitalizeWords(
+                                                    session?.user.name
+                                                )}
                                         </p>
+
                                         <span className="op-7 fw-normal d-block fs-11">
-                                            Web Developer
+                                            Administrador
                                         </span>
                                     </div>
                                 </div>

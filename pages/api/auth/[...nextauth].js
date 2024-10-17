@@ -30,6 +30,8 @@ export const authOptions = {
 
                     const response = await res.json();
 
+                    console.log(response.user);
+
                     if (
                         response.user &&
                         response.user.id &&
@@ -58,15 +60,25 @@ export const authOptions = {
     secret: process.env.NEXTAUTH_SECRET,
 
     callbacks: {
-        async jwt({ token, user, account }) {
-            if (account && user) {
+        async jwt({ token, user }) {
+            if (user) {
                 return {
                     ...token,
-                    accessToken: account.token,
-                    refreshToken: account.refreshToken,
+                    id: user.id,
+                    name: user.name,
+                    email: user.email,
+                    image_url: user.image_url,
                 };
             }
             return token;
+        },
+
+        async session({ session, token }) {
+            session.user.id = token.id;
+            session.user.name = token.name;
+            session.user.email = token.email;
+            session.user.image_url = token.image_url;
+            return session;
         },
     },
 };
