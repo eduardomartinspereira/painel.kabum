@@ -1,17 +1,17 @@
+import { signIn } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { Fragment, useEffect, useState } from 'react';
 import { Alert, Container, Form, Tab } from 'react-bootstrap';
 import { basePath } from '../next.config.js';
-import { auth } from '../shared/firebase/firebaseapi';
 import Seo from '../shared/layout-components/seo/seo';
 
 const Home = () => {
     const [passwordshow1, setpasswordshow1] = useState(false);
     const [err, setError] = useState('');
     const [data, setData] = useState({
-        email: 'admin@solid.digital',
-        password: '1234567890',
+        email: '',
+        password: '',
     });
     const { email, password } = data;
     const changeHandler = (e) => {
@@ -24,33 +24,26 @@ const Home = () => {
         navigate.push(path);
     };
 
-    const Login = (e) => {
+    async function handleLogin(e) {
         e.preventDefault();
-        auth.signInWithEmailAndPassword(email, password)
-            .then((user) => {
-                console.log(user);
-                routeChange();
-            })
-            .catch((err) => {
-                console.log(err);
-                setError(err.message);
-            });
-    };
-    const Login1 = (e) => {
-        e.preventDefault();
-        if (
-            data.email == 'adminnextjs@gmail.com' &&
-            data.password == '1234567890'
-        ) {
-            // routeChange();
-        } else {
+        setError('');
+
+        const result = await signIn('credentials', {
+            redirect: false,
+            email: data.email,
+            password: data.password,
+        });
+
+        if (result?.error) {
             setError('Usuário e senha inválidos. Tente novamente!');
             setData({
-                email: 'adminnextjs@gmail.com',
-                password: '1234567890',
+                email: '',
+                password: '',
             });
+        } else {
+            routeChange();
         }
-    };
+    }
     useEffect(() => {
         if (document.body) {
             document
@@ -167,7 +160,7 @@ const Home = () => {
                                                                                     <Form.Control
                                                                                         className="form-control form-control-lg"
                                                                                         id="signin-password"
-                                                                                        placeholder="Enter your password"
+                                                                                        placeholder="Digite sua senha"
                                                                                         name="password"
                                                                                         type={
                                                                                             passwordshow1
@@ -205,7 +198,7 @@ const Home = () => {
                                                                             <button
                                                                                 className="btn btn-primary btn-block"
                                                                                 onClick={
-                                                                                    Login1
+                                                                                    handleLogin
                                                                                 }
                                                                             >
                                                                                 Login

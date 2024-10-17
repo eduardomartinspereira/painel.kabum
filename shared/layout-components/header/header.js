@@ -1,3 +1,4 @@
+import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { Fragment, useEffect, useRef, useState } from 'react';
 import {
@@ -25,6 +26,9 @@ import {
 } from '../../data/header/header';
 import store from '../../redux/store';
 function Header({ local_varaiable, ThemeChanger }) {
+    const handleLogout = () => {
+        signOut({ redirect: true, callbackUrl: '/' });
+    };
     const ToggleDark = () => {
         ThemeChanger({
             ...local_varaiable,
@@ -1012,14 +1016,13 @@ function Header({ local_varaiable, ThemeChanger }) {
                                         Settings
                                     </Link>
                                 </li>
-                                <li>
-                                    <Link
-                                        className="dropdown-item d-flex"
-                                        href="/"
-                                    >
-                                        <i className="far fa-arrow-alt-circle-left fs-16 me-2 op-7"></i>
-                                        Sair
-                                    </Link>
+                                <li
+                                    className="dropdown-item d-flex"
+                                    onClick={() => handleLogout()}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    <i className="far fa-arrow-alt-circle-left fs-16 me-2 op-7"></i>
+                                    Sair
                                 </li>
                             </Dropdown.Menu>
                         </Dropdown>
