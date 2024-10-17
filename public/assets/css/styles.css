@@ -32511,7 +32511,7 @@ code[class*=language-] {
 }
 .app-sidebar .main-sidebar-header .header-logo img {
   height: 3rem;
-  width: 9rem;
+  width: 8rem;
   object-fit: cover;
 }
 .app-sidebar .main-sidebar-header .header-logo .desktop-logo {
@@ -36434,7 +36434,8 @@ code[class*=language-] {
 }
 
 .ht-40 {
-  height: 40px;
+  height: 60px;
+  object-fit: cover;
 }
 
 .ht-50 {
