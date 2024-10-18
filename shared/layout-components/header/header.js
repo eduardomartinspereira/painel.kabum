@@ -523,7 +523,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 type="text"
                                 className=" "
                                 id="typehead"
-                                placeholder="Search for results..."
+                                placeholder="Pesquise o que quiser..."
                                 onClick={() => {}}
                                 autoComplete="off"
                                 ref={searchRef}

@@ -1,3 +1,4 @@
+import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
@@ -18,7 +19,7 @@ const Dashboard = () => {
 
     return (
         <>
-            <Seo title={'dashboard'} />
+            <Seo title={'Dashboard'} />
             <React.Fragment>
                 <Pageheader
                     title="DASHBOARD"
@@ -860,3 +861,28 @@ const Dashboard = () => {
 Dashboard.layout = 'Contentlayout';
 
 export default Dashboard;
+
+export const getServerSideProps = async (context) => {
+    const session = await getServerSession(context.req, context.res);
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/',
+                permanent: false,
+            },
+        };
+    }
+
+    const safeSession = {
+        ...session,
+        user: {
+            ...session.user,
+            image: session.user?.image ?? null,
+        },
+    };
+
+    return {
+        props: { session: safeSession },
+    };
+};

@@ -39,6 +39,9 @@ model User {
     email     String    @unique
     password  String
     payments  Payment[]
+    role      Role      @default(SUBSCRIBER)
+
+    @@index([role], map: "User_role_fkey")
 }
 
 model Payment {
@@ -64,9 +67,9 @@ enum ProductStatus {
 }
 
 enum Game {
-    PLANO_MENSAL
-    PLANO_SEMANAL
-    PLANO_PERMANENTE
+    PLAN_MONTHLY
+    PLAN_WEEKLY
+    PLAN_PERMANENT
 }
 
 enum Type {
@@ -76,11 +79,16 @@ enum Type {
 
 enum PaymentMethod {
     PIX
-    CREDITO
-    DEBITO
+    CREDIT
+    DEBIT
 }
 
 enum PaymentStatus {
     APPROVED
     PENDING
+}
+
+enum Role {
+    SUBSCRIBER
+    ADMIN
 }
