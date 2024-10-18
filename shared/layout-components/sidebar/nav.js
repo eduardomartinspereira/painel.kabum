@@ -61,7 +61,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/admin/icons/icons',
+        path: '/admin/finance/',
         // children: [
         //     {
         //         path: '/admin/apps/fullcalendar',
