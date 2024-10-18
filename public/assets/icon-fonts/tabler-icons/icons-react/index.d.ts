@@ -1,6 +1,10 @@
 import { FC, SVGAttributes } from 'react';
 
-interface TablerIconProps extends SVGAttributes<SVGElement> { color?: string; size?: string | number; stroke?: string | number; }
+interface TablerIconProps extends SVGAttributes<SVGElement> {
+    color?: string;
+    size?: string | number;
+    stroke?: string | number;
+}
 
 type TablerIcon = FC<TablerIconProps>;
 
@@ -666,8 +670,8 @@ export const IconComet: TablerIcon;
 export const IconCommand: TablerIcon;
 export const IconCompassOff: TablerIcon;
 export const IconCompass: TablerIcon;
-export const IconComponentsOff: TablerIcon;
-export const IconComponents: TablerIcon;
+export const IconadminOff: TablerIcon;
+export const Iconadmin: TablerIcon;
 export const IconCone2: TablerIcon;
 export const IconCone: TablerIcon;
 export const IconConfetti: TablerIcon;

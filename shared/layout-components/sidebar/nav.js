@@ -17,24 +17,24 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/components/dashboard',
+        path: '/admin/dashboard',
         // children: [
         // 	{
-        // 		path: "/components/dashboard/dashboard",
+        // 		path: "/admin/dashboard/dashboard",
         // 		type: "link",
         // 		active: false,
         // 		selected: false,
         // 		title: "Dashboard-1",
         // 	},
         // 	{
-        // 		path: "/components/dashboard/dashboard2",
+        // 		path: "/admin/dashboard/dashboard2",
         // 		type: "link",
         // 		active: false,
         // 		selected: false,
         // 		title: "Dashboard-2",
         // 	},
         // 	{
-        // 		path: "/components/dashboard/dashboard3",
+        // 		path: "/admin/dashboard/dashboard3",
         // 		type: "link",
         // 		active: false,
         // 		selected: false,
@@ -61,31 +61,31 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/components/icons/icons',
+        path: '/admin/icons/icons',
         // children: [
         //     {
-        //         path: '/components/apps/fullcalendar',
+        //         path: '/admin/apps/fullcalendar',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'Full Calendar',
         //     },
         //     {
-        //         path: '/components/apps/contacts',
+        //         path: '/admin/apps/contacts',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'Contacts',
         //     },
         //     {
-        //         path: '/components/apps/gallery',
+        //         path: '/admin/apps/gallery',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'Gallery',
         //     },
         //     {
-        //         path: '/components/apps/sweetalerts',
+        //         path: '/admin/apps/sweetalerts',
         //         type: 'link',
         //         active: false,
         //         selected: false,
@@ -93,42 +93,42 @@ export const MENUITEMS = [
         //     },
 
         //     {
-        //         path: '/components/apps/notifications',
+        //         path: '/admin/apps/notifications',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'Notifications',
         //     },
         //     {
-        //         path: '/components/apps/widget-notification',
+        //         path: '/admin/apps/widget-notification',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'Widget-notification',
         //     },
         //     {
-        //         path: '/components/apps/treeview',
+        //         path: '/admin/apps/treeview',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'Treeview',
         //     },
         //     {
-        //         path: '/components/apps/file-manager',
+        //         path: '/admin/apps/file-manager',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'File-manager',
         //     },
         //     {
-        //         path: '/components/apps/file-manager1',
+        //         path: '/admin/apps/file-manager1',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //         title: 'File-manager1',
         //     },
         //     {
-        //         path: '/components/apps/file-details',
+        //         path: '/admin/apps/file-details',
         //         type: 'link',
         //         active: false,
         //         selected: false,
@@ -154,7 +154,7 @@ export const MENUITEMS = [
     //     active: false,
     //     children: [
     //         {
-    //             path: '/components/elements/alerts',
+    //             path: '/admin/elements/alerts',
     //             title: 'Alerts',
     //             type: 'link',
     //             active: false,
@@ -162,49 +162,49 @@ export const MENUITEMS = [
     //         },
 
     //         {
-    //             path: '/components/elements/breadcrumb',
+    //             path: '/admin/elements/breadcrumb',
     //             title: 'Breadcrumbs',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/button-group',
+    //             path: '/admin/elements/button-group',
     //             title: 'Button Group',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/buttons',
+    //             path: '/admin/elements/buttons',
     //             title: 'Buttons',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/badge',
+    //             path: '/admin/elements/badge',
     //             title: 'Badge',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/cards',
+    //             path: '/admin/elements/cards',
     //             title: 'Cards',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/dropdowns',
+    //             path: '/admin/elements/dropdowns',
     //             title: 'Dropdowns',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/images&figures',
+    //             path: '/admin/elements/images&figures',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -212,21 +212,21 @@ export const MENUITEMS = [
     //             title: 'Images & Figures',
     //         },
     //         {
-    //             path: '/components/elements/listgroup',
+    //             path: '/admin/elements/listgroup',
     //             title: 'List Group',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/navs-tabs',
+    //             path: '/admin/elements/navs-tabs',
     //             title: 'Navs &Tabs',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/media-object',
+    //             path: '/admin/elements/media-object',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -234,28 +234,28 @@ export const MENUITEMS = [
     //         },
 
     //         {
-    //             path: '/components/elements/pagination',
+    //             path: '/admin/elements/pagination',
     //             title: 'Pagination',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/popovers',
+    //             path: '/admin/elements/popovers',
     //             title: 'Popovers',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/progress',
+    //             path: '/admin/elements/progress',
     //             title: 'Progress',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/spinners',
+    //             path: '/admin/elements/spinners',
     //             title: 'Spinners',
     //             type: 'link',
     //             active: false,
@@ -263,28 +263,28 @@ export const MENUITEMS = [
     //         },
 
     //         {
-    //             path: '/components/elements/tooltips',
+    //             path: '/admin/elements/tooltips',
     //             title: 'Tooltips',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/toasts',
+    //             path: '/admin/elements/toasts',
     //             title: 'Toasts',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/tags',
+    //             path: '/admin/elements/tags',
     //             title: 'Tags',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //         },
     //         {
-    //             path: '/components/elements/typography',
+    //             path: '/admin/elements/typography',
     //             title: 'Typography',
     //             type: 'link',
     //             active: false,
@@ -312,7 +312,7 @@ export const MENUITEMS = [
     //     active: false,
     //     children: [
     //         {
-    //             path: '/components/advancedui/accordions-collapse',
+    //             path: '/admin/advancedui/accordions-collapse',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -320,14 +320,14 @@ export const MENUITEMS = [
     //             title: 'Accordions & Collapse',
     //         },
     //         {
-    //             path: '/components/advancedui/carousel',
+    //             path: '/admin/advancedui/carousel',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //             title: 'Carousel',
     //         },
     //         {
-    //             path: '/components/advancedui/draggable-cards',
+    //             path: '/admin/advancedui/draggable-cards',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -335,7 +335,7 @@ export const MENUITEMS = [
     //             title: 'Draggable Cards',
     //         },
     //         {
-    //             path: '/components/advancedui/modals-closes',
+    //             path: '/admin/advancedui/modals-closes',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -343,7 +343,7 @@ export const MENUITEMS = [
     //             title: 'Modals & Closes',
     //         },
     //         {
-    //             path: '/components/advancedui/navbar',
+    //             path: '/admin/advancedui/navbar',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -351,7 +351,7 @@ export const MENUITEMS = [
     //             title: 'Navbar',
     //         },
     //         {
-    //             path: '/components/advancedui/offcanvas',
+    //             path: '/admin/advancedui/offcanvas',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -359,7 +359,7 @@ export const MENUITEMS = [
     //             title: 'Offcanvas',
     //         },
     //         {
-    //             path: '/components/advancedui/placeholders',
+    //             path: '/admin/advancedui/placeholders',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -367,7 +367,7 @@ export const MENUITEMS = [
     //             title: 'Placeholders',
     //         },
     //         {
-    //             path: '/components/advancedui/ratings',
+    //             path: '/admin/advancedui/ratings',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -375,7 +375,7 @@ export const MENUITEMS = [
     //             title: 'Ratings',
     //         },
     //         {
-    //             path: '/components/advancedui/swiperjs',
+    //             path: '/admin/advancedui/swiperjs',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -383,7 +383,7 @@ export const MENUITEMS = [
     //             title: 'Swiper JS',
     //         },
     //         {
-    //             path: '/components/advancedui/timeline',
+    //             path: '/admin/advancedui/timeline',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -391,35 +391,35 @@ export const MENUITEMS = [
     //         },
 
     //         {
-    //             path: '/components/advancedui/search',
+    //             path: '/admin/advancedui/search',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //             title: 'Search',
     //         },
     //         {
-    //             path: '/components/advancedui/userlist',
+    //             path: '/admin/advancedui/userlist',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //             title: 'Userlist',
     //         },
     //         {
-    //             path: '/components/advancedui/blog',
+    //             path: '/admin/advancedui/blog',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //             title: 'Blog',
     //         },
     //         {
-    //             path: '/components/advancedui/blog-details',
+    //             path: '/admin/advancedui/blog-details',
     //             type: 'link',
     //             active: false,
     //             selected: false,
     //             title: 'Blog-details',
     //         },
     //         {
-    //             path: '/components/advancedui/edit-post',
+    //             path: '/admin/advancedui/edit-post',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -446,7 +446,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/components/icons/icons',
+        path: '/admin/icons/icons',
         // children: [
         //     {
         //         title: 'Authentication',
@@ -455,63 +455,63 @@ export const MENUITEMS = [
         //         active: false,
         //         children: [
         //             {
-        //                 path: '/components/pages/authentication/sign-in',
+        //                 path: '/admin/pages/authentication/sign-in',
         //                 title: 'Sign In',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/sign-up',
+        //                 path: '/admin/pages/authentication/sign-up',
         //                 title: 'Sign Up',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/forgot-password',
+        //                 path: '/admin/pages/authentication/forgot-password',
         //                 title: 'Forgot Password',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/reset-password',
+        //                 path: '/admin/pages/authentication/reset-password',
         //                 title: 'Reset Password',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/lockscreen',
+        //                 path: '/admin/pages/authentication/lockscreen',
         //                 title: 'Lockscreen',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/underconstruction',
+        //                 path: '/admin/pages/authentication/underconstruction',
         //                 title: 'UnderConstruction',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/404',
+        //                 path: '/admin/pages/authentication/404',
         //                 title: '404 Error',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/500',
+        //                 path: '/admin/pages/authentication/500',
         //                 title: '500 Error',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/authentication/501',
+        //                 path: '/admin/pages/authentication/501',
         //                 title: '501 Error',
         //                 type: 'link',
         //                 active: false,
@@ -527,35 +527,35 @@ export const MENUITEMS = [
         //         active: false,
         //         children: [
         //             {
-        //                 path: '/components/pages/e-commerce/shop',
+        //                 path: '/admin/pages/e-commerce/shop',
         //                 title: 'Shop',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/e-commerce/product-details',
+        //                 path: '/admin/pages/e-commerce/product-details',
         //                 title: 'Product Details',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/e-commerce/cart',
+        //                 path: '/admin/pages/e-commerce/cart',
         //                 title: 'Cart',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/e-commerce/checkout',
+        //                 path: '/admin/pages/e-commerce/checkout',
         //                 title: 'Checkout',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/e-commerce/wish-list',
+        //                 path: '/admin/pages/e-commerce/wish-list',
         //                 title: 'Wish-list',
         //                 type: 'link',
         //                 active: false,
@@ -565,28 +565,28 @@ export const MENUITEMS = [
         //     },
 
         //     {
-        //         path: '/components/pages/profile',
+        //         path: '/admin/pages/profile',
         //         title: 'Profile',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //     },
         //     {
-        //         path: '/components/pages/notification-list',
+        //         path: '/admin/pages/notification-list',
         //         title: 'Notification-list',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //     },
         //     {
-        //         path: '/components/pages/about-us',
+        //         path: '/admin/pages/about-us',
         //         title: 'About Us',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //     },
         //     {
-        //         path: '/components/pages/settings',
+        //         path: '/admin/pages/settings',
         //         title: 'Settings',
         //         type: 'link',
         //         active: false,
@@ -599,35 +599,35 @@ export const MENUITEMS = [
         //         active: false,
         //         children: [
         //             {
-        //                 path: '/components/pages/mail/mail',
+        //                 path: '/admin/pages/mail/mail',
         //                 title: 'Mail',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/mail/mail-compose',
+        //                 path: '/admin/pages/mail/mail-compose',
         //                 title: 'Mail Compose',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/mail/read-mail',
+        //                 path: '/admin/pages/mail/read-mail',
         //                 title: 'Read-Mail',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/mail/mail-settings',
+        //                 path: '/admin/pages/mail/mail-settings',
         //                 title: 'Mail-Settings',
         //                 type: 'link',
         //                 active: false,
         //                 selected: false,
         //             },
         //             {
-        //                 path: '/components/pages/mail/chat',
+        //                 path: '/admin/pages/mail/chat',
         //                 title: 'Chat',
         //                 type: 'link',
         //                 active: false,
@@ -636,14 +636,14 @@ export const MENUITEMS = [
         //         ],
         //     },
         //     {
-        //         path: '/components/pages/invoice',
+        //         path: '/admin/pages/invoice',
         //         title: 'Invoice',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //     },
         //     {
-        //         path: '/components/pages/pricing',
+        //         path: '/admin/pages/pricing',
         //         title: 'Pricing',
         //         type: 'link',
         //         active: false,
@@ -651,21 +651,21 @@ export const MENUITEMS = [
         //     },
 
         //     {
-        //         path: '/components/pages/todotask',
+        //         path: '/admin/pages/todotask',
         //         title: 'Todo Task',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //     },
         //     {
-        //         path: '/components/pages/faqs',
+        //         path: '/admin/pages/faqs',
         //         title: 'FAQS',
         //         type: 'link',
         //         active: false,
         //         selected: false,
         //     },
         //     {
-        //         path: '/components/pages/empty-page',
+        //         path: '/admin/pages/empty-page',
         //         title: 'Empty Page',
         //         type: 'link',
         //         active: false,
@@ -696,7 +696,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/components/icons/icons',
+        path: '/admin/icons/icons',
     },
     {
         title: 'Categorias',
@@ -713,7 +713,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/components/icons/icons',
+        path: '/admin/icons/icons',
     },
 
     {
@@ -754,7 +754,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/components/icons/icons',
+        path: '/admin/icons/icons',
     },
     // {
     //     title: 'Charts',
@@ -780,7 +780,7 @@ export const MENUITEMS = [
     //             dirchange: false,
     //             children: [
     //                 {
-    //                     path: '/components/charts/apexcharts/linecharts',
+    //                     path: '/admin/charts/apexcharts/linecharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -788,7 +788,7 @@ export const MENUITEMS = [
     //                     title: 'Line Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/areacharts',
+    //                     path: '/admin/charts/apexcharts/areacharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -796,7 +796,7 @@ export const MENUITEMS = [
     //                     title: 'Area Charts ',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/columncharts',
+    //                     path: '/admin/charts/apexcharts/columncharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -804,7 +804,7 @@ export const MENUITEMS = [
     //                     title: 'Column Charts ',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/barcharts',
+    //                     path: '/admin/charts/apexcharts/barcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -812,7 +812,7 @@ export const MENUITEMS = [
     //                     title: 'Bar Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/mixedcharts',
+    //                     path: '/admin/charts/apexcharts/mixedcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -820,7 +820,7 @@ export const MENUITEMS = [
     //                     title: 'Mixed Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/rangeareacharts',
+    //                     path: '/admin/charts/apexcharts/rangeareacharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -828,7 +828,7 @@ export const MENUITEMS = [
     //                     title: 'Range Area Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/timelinecharts',
+    //                     path: '/admin/charts/apexcharts/timelinecharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -836,7 +836,7 @@ export const MENUITEMS = [
     //                     title: 'Timeline Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/candlestickcharts',
+    //                     path: '/admin/charts/apexcharts/candlestickcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -844,7 +844,7 @@ export const MENUITEMS = [
     //                     title: 'CandleStick Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/boxplotcharts',
+    //                     path: '/admin/charts/apexcharts/boxplotcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -852,7 +852,7 @@ export const MENUITEMS = [
     //                     title: 'Boxplot Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/bubblecharts',
+    //                     path: '/admin/charts/apexcharts/bubblecharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -860,7 +860,7 @@ export const MENUITEMS = [
     //                     title: 'Bubble Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/scattercharts',
+    //                     path: '/admin/charts/apexcharts/scattercharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -868,7 +868,7 @@ export const MENUITEMS = [
     //                     title: 'Scatter Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/heatmapcharts',
+    //                     path: '/admin/charts/apexcharts/heatmapcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -876,7 +876,7 @@ export const MENUITEMS = [
     //                     title: 'Heatmap Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/treemapcharts',
+    //                     path: '/admin/charts/apexcharts/treemapcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -884,7 +884,7 @@ export const MENUITEMS = [
     //                     title: 'Treemap Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/piecharts',
+    //                     path: '/admin/charts/apexcharts/piecharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -892,7 +892,7 @@ export const MENUITEMS = [
     //                     title: 'Pie Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/radialbarcharts',
+    //                     path: '/admin/charts/apexcharts/radialbarcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -900,7 +900,7 @@ export const MENUITEMS = [
     //                     title: 'Radialbar Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/radarcharts',
+    //                     path: '/admin/charts/apexcharts/radarcharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -908,7 +908,7 @@ export const MENUITEMS = [
     //                     title: 'Radar Charts',
     //                 },
     //                 {
-    //                     path: '/components/charts/apexcharts/polarareacharts',
+    //                     path: '/admin/charts/apexcharts/polarareacharts',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -918,7 +918,7 @@ export const MENUITEMS = [
     //             ],
     //         },
     //         {
-    //             path: '/components/charts/chartjscharts',
+    //             path: '/admin/charts/chartjscharts',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -926,7 +926,7 @@ export const MENUITEMS = [
     //             title: 'ChartJS Charts',
     //         },
     //         {
-    //             path: '/components/charts/echartcharts',
+    //             path: '/admin/charts/echartcharts',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1003,7 +1003,7 @@ export const MENUITEMS = [
     //     ],
     // },
     // {
-    //     menutitle: 'COMPONENTS',
+    //     menutitle: 'admin',
     // },
     // {
     //     title: 'Forms',
@@ -1031,7 +1031,7 @@ export const MENUITEMS = [
     //             dirchange: false,
     //             children: [
     //                 {
-    //                     path: '/components/forms/formelements/inputs',
+    //                     path: '/admin/forms/formelements/inputs',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1039,7 +1039,7 @@ export const MENUITEMS = [
     //                     title: 'Inputs',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/checks&radios',
+    //                     path: '/admin/forms/formelements/checks&radios',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1047,7 +1047,7 @@ export const MENUITEMS = [
     //                     title: 'checks&Radios',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/inputgroups',
+    //                     path: '/admin/forms/formelements/inputgroups',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1055,7 +1055,7 @@ export const MENUITEMS = [
     //                     title: 'Input Group',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/formselect',
+    //                     path: '/admin/forms/formelements/formselect',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1063,7 +1063,7 @@ export const MENUITEMS = [
     //                     title: 'Form Select',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/rangeslider',
+    //                     path: '/admin/forms/formelements/rangeslider',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1071,7 +1071,7 @@ export const MENUITEMS = [
     //                     title: 'Range Slider',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/inputmasks',
+    //                     path: '/admin/forms/formelements/inputmasks',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1079,7 +1079,7 @@ export const MENUITEMS = [
     //                     title: 'Input Masks',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/fileuploads',
+    //                     path: '/admin/forms/formelements/fileuploads',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1087,14 +1087,14 @@ export const MENUITEMS = [
     //                     title: 'File Uploads',
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/datetimepicker',
+    //                     path: '/admin/forms/formelements/datetimepicker',
     //                     title: 'Date,Time Picker',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
     //                 },
     //                 {
-    //                     path: '/components/forms/formelements/colorpickers',
+    //                     path: '/admin/forms/formelements/colorpickers',
     //                     title: 'Color Pickers',
     //                     type: 'link',
     //                     active: false,
@@ -1103,7 +1103,7 @@ export const MENUITEMS = [
     //             ],
     //         },
     //         {
-    //             path: '/components/forms/floatinglabels',
+    //             path: '/admin/forms/floatinglabels',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1111,7 +1111,7 @@ export const MENUITEMS = [
     //             title: 'Floating Labels',
     //         },
     //         {
-    //             path: '/components/forms/formlayouts',
+    //             path: '/admin/forms/formlayouts',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1127,7 +1127,7 @@ export const MENUITEMS = [
     //             dirchange: false,
     //             children: [
     //                 {
-    //                     path: '/components/forms/formeditors/quilleditor',
+    //                     path: '/admin/forms/formeditors/quilleditor',
     //                     type: 'link',
     //                     active: false,
     //                     selected: false,
@@ -1137,7 +1137,7 @@ export const MENUITEMS = [
     //             ],
     //         },
     //         {
-    //             path: '/components/forms/validation',
+    //             path: '/admin/forms/validation',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1145,7 +1145,7 @@ export const MENUITEMS = [
     //             title: 'Validation',
     //         },
     //         {
-    //             path: '/components/forms/select2',
+    //             path: '/admin/forms/select2',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1172,7 +1172,7 @@ export const MENUITEMS = [
     //     active: false,
     //     children: [
     //         {
-    //             path: '/components/tables/tables',
+    //             path: '/admin/tables/tables',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1180,7 +1180,7 @@ export const MENUITEMS = [
     //             title: 'Tables',
     //         },
     //         {
-    //             path: '/components/tables/gridjs',
+    //             path: '/admin/tables/gridjs',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1188,7 +1188,7 @@ export const MENUITEMS = [
     //             title: 'Grid JS Tables',
     //         },
     //         {
-    //             path: '/components/tables/datatables',
+    //             path: '/admin/tables/datatables',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1212,7 +1212,7 @@ export const MENUITEMS = [
     //     ),
     //     type: 'link',
     //     selected: false,
-    //     path: '/components/widgets/widgets',
+    //     path: '/admin/widgets/widgets',
     // },
     // {
     //     title: 'Maps',
@@ -1232,7 +1232,7 @@ export const MENUITEMS = [
     //     active: false,
     //     children: [
     //         {
-    //             path: '/components/maps/leafletmaps',
+    //             path: '/admin/maps/leafletmaps',
     //             type: 'link',
     //             active: false,
     //             selected: false,
@@ -1240,7 +1240,7 @@ export const MENUITEMS = [
     //             title: 'Leaflet Maps',
     //         },
     //         {
-    //             path: '/components/maps/vectormaps',
+    //             path: '/admin/maps/vectormaps',
     //             type: 'link',
     //             active: false,
     //             selected: false,

@@ -4,73 +4,76 @@ const WrapperPlugin = require('wrapper-webpack-plugin');
 const packageJson = require('./package.json');
 
 module.exports = {
-  entry: `${__dirname}/src/index.js`,
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    library: 'BoxIconElement',
-    libraryTarget: 'umd',
-    filename: 'boxicons.js',
-  },
-  devtool: 'source-map',
-  module: {
-    rules: [
-      {
-        test: /\.js$/,
-        loader: 'babel-loader',
-        options: {
-          babelrc: false,
-          presets: [
-              ['env', { modules: false, targets: { uglify: true } }],
-          ],
-          plugins: [
-            ['babel-plugin-transform-builtin-classes', {
-              globals: ['Array', 'Error', 'HTMLElement'],
-            }],
-          ],
-        },
-      },
-      {
-        test: /\.css$/,
-        use: [
-            { loader: 'to-string-loader' },
-          {
-            loader: 'css-loader',
-            options: {
-              camelCase: true,
+    entry: `${__dirname}/src/index.js`,
+    output: {
+        path: path.resolve(__dirname, 'dist'),
+        library: 'BoxIconElement',
+        libraryTarget: 'umd',
+        filename: 'boxicons.js',
+    },
+    devtool: 'source-map',
+    module: {
+        rules: [
+            {
+                test: /\.js$/,
+                loader: 'babel-loader',
+                options: {
+                    babelrc: false,
+                    presets: [
+                        ['env', { modules: false, targets: { uglify: true } }],
+                    ],
+                    plugins: [
+                        [
+                            'babel-plugin-transform-builtin-classes',
+                            {
+                                globals: ['Array', 'Error', 'HTMLElement'],
+                            },
+                        ],
+                    ],
+                },
             },
-          },
+            {
+                test: /\.css$/,
+                use: [
+                    { loader: 'to-string-loader' },
+                    {
+                        loader: 'css-loader',
+                        options: {
+                            camelCase: true,
+                        },
+                    },
+                ],
+            },
         ],
-      },
+    },
+    plugins: [
+        new webpack.DefinePlugin({
+            'BUILD.DATA': {
+                VERSION: JSON.stringify(packageJson.version),
+            },
+        }),
+        new WrapperPlugin({
+            test: /boxicons\.js$/,
+            header: getWrapper('header'),
+            footer: getWrapper('footer'),
+        }),
     ],
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-      'BUILD.DATA': {
-        VERSION: JSON.stringify(packageJson.version),
-      },
-    }),
-    new WrapperPlugin({
-      test: /boxicons\.js$/,
-      header: getWrapper('header'),
-      footer: getWrapper('footer'),
-    }),
-  ],
 };
 
 function getWrapper(type) {
-  if (getWrapper.header) {
-    return getWrapper[type];
-  }
+    if (getWrapper.header) {
+        return getWrapper[type];
+    }
 
-  const templatePieces = `(function (
+    const templatePieces = `(function (
     DEFAULT_CDN_PREFIX,   
-    STRING_WEB_COMPONENTS_REQUESTED,
+    STRING_WEB_admin_REQUESTED,
     WINDOW,
     DOCUMENT,
     init
 ) {
     /**
-     * A Custom Elements (Web Components) polyfill loader wrapper.
+     * A Custom Elements (Web admin) polyfill loader wrapper.
      * Use it to wrap modules that use CEs and it will take care of
      * only executing the module initialization function when the
      * polyfill is loaded.
@@ -81,43 +84,43 @@ function getWrapper(type) {
      * The loader contains default URLs for polyfills, however, these
      * can be overwritten with the following globals:
      *
-     * -    \`window.WEB_COMPONENTS_POLYFILL\`
+     * -    \`window.WEB_admin_POLYFILL\`
      * -    \`window.ES6_CORE_POLYFILL\`
      *
      * In addition, this loader will add the following global
      * variable, which is used to store module initialization
      * functions until the environment is patched:
      *
-     * -    \`window.AWAITING_WEB_COMPONENTS_POLYFILL\`: an Array 
+     * -    \`window.AWAITING_WEB_admin_POLYFILL\`: an Array 
      *      with callbacks. To store a new one, use
-     *      \`window.AWAITING_WEB_COMPONENTS_POLYFILL.then(callbackHere)\`
+     *      \`window.AWAITING_WEB_admin_POLYFILL.then(callbackHere)\`
      */
     if (!('customElements' in WINDOW)) {
         
         // If in the mist of loading the polyfills, then just add init to when that is done
-        if (WINDOW[STRING_WEB_COMPONENTS_REQUESTED]) {
-            WINDOW[STRING_WEB_COMPONENTS_REQUESTED].then(init);
+        if (WINDOW[STRING_WEB_admin_REQUESTED]) {
+            WINDOW[STRING_WEB_admin_REQUESTED].then(init);
             return;
         }
         
-        var _WEB_COMPONENTS_REQUESTED = WINDOW[STRING_WEB_COMPONENTS_REQUESTED] = getCallbackQueue();
-        _WEB_COMPONENTS_REQUESTED.then(init);
+        var _WEB_admin_REQUESTED = WINDOW[STRING_WEB_admin_REQUESTED] = getCallbackQueue();
+        _WEB_admin_REQUESTED.then(init);
         
-        var WEB_COMPONENTS_POLYFILL = WINDOW.WEB_COMPONENTS_POLYFILL || "/" + "/" + DEFAULT_CDN_PREFIX + "/webcomponentsjs/2.0.2/webcomponents-bundle.js";
+        var WEB_admin_POLYFILL = WINDOW.WEB_admin_POLYFILL || "/" + "/" + DEFAULT_CDN_PREFIX + "/webadminjs/2.0.2/webadmin-bundle.js";
         var ES6_CORE_POLYFILL = WINDOW.ES6_CORE_POLYFILL || "/" + "/" + DEFAULT_CDN_PREFIX + "/core-js/2.5.3/core.min.js";
         
         if (!("Promise" in WINDOW)) {
             loadScript(ES6_CORE_POLYFILL)
                 .then(function () {
-                    loadScript(WEB_COMPONENTS_POLYFILL).then(function () {
-                      _WEB_COMPONENTS_REQUESTED.isDone = true;
-                      _WEB_COMPONENTS_REQUESTED.exec();
+                    loadScript(WEB_admin_POLYFILL).then(function () {
+                      _WEB_admin_REQUESTED.isDone = true;
+                      _WEB_admin_REQUESTED.exec();
                     });
                 });
         } else {
-            loadScript(WEB_COMPONENTS_POLYFILL).then(function () {
-              _WEB_COMPONENTS_REQUESTED.isDone = true;
-              _WEB_COMPONENTS_REQUESTED.exec();
+            loadScript(WEB_admin_POLYFILL).then(function () {
+              _WEB_admin_REQUESTED.isDone = true;
+              _WEB_admin_REQUESTED.exec();
             });
         }
     } else {
@@ -173,7 +176,7 @@ function getWrapper(type) {
 
 })(
     "cdnjs.cloudflare.com/ajax/libs",
-    "AWAITING_WEB_COMPONENTS_POLYFILL",  // Global wait queue var name
+    "AWAITING_WEB_admin_POLYFILL",  // Global wait queue var name
     window,
     document,
     function () {
@@ -181,9 +184,8 @@ ____SPLIT_HERE____
     }
 );`.split('____SPLIT_HERE____');
 
-  getWrapper.header = templatePieces[0];
-  getWrapper.footer = templatePieces[1];
+    getWrapper.header = templatePieces[0];
+    getWrapper.footer = templatePieces[1];
 
-  return getWrapper[type];
+    return getWrapper[type];
 }
-

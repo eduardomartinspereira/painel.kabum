@@ -741,7 +741,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                         ? location.pathname.slice(0, -1)
                         : location.pathname;
                     currentPath = !currentPath
-                        ? 'components/dashboard/crypto/'
+                        ? 'admin/dashboard/crypto/'
                         : currentPath;
                     setMenuUsingUrl(currentPath);
                 } else {
@@ -768,7 +768,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                 <div className="main-sidebar-header">
                     <Link
                         className="header-logo active"
-                        href={'/components/dashboard/'}
+                        href={'/admin/dashboard/'}
                     >
                         <img
                             src={`${

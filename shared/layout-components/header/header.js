@@ -438,7 +438,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             <div className="horizontal-logo">
                                 <Link
                                     className="header-logo active"
-                                    href={'/components/dashboard/'}
+                                    href={'/admin/dashboard/'}
                                 >
                                     <img
                                         src={`${
@@ -856,7 +856,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                                         <div className="flex-grow-1 d-flex align-items-center justify-content-between">
                                                             <div>
                                                                 <p className="mb-0 fw-semibold">
-                                                                    <Link href="/components/apps/notifications">
+                                                                    <Link href="/admin/apps/notifications">
                                                                         {
                                                                             notification.name
                                                                         }
@@ -897,7 +897,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 >
                                     <div className="d-grid">
                                         <Link
-                                            href="/components/apps/notifications"
+                                            href="/admin/apps/notifications"
                                             className="btn btn-primary btn-sm"
                                         >
                                             View All
@@ -984,7 +984,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 <li>
                                     <Link
                                         className="dropdown-item d-flex border-bottom"
-                                        href="/components/pages/profile"
+                                        href="/admin/pages/profile"
                                     >
                                         <i className="far fa-user-circle fs-16 me-2 op-7"></i>
                                         Profile
@@ -993,7 +993,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 <li>
                                     <Link
                                         className="dropdown-item d-flex border-bottom"
-                                        href="/components/pages/mail/chat"
+                                        href="/admin/pages/mail/chat"
                                     >
                                         <i className="far fa-smile fs-16 me-2 op-7"></i>
                                         Chat
@@ -1002,7 +1002,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 <li>
                                     <Link
                                         className="dropdown-item d-flex border-bottom"
-                                        href="/components/pages/mail/mail"
+                                        href="/admin/pages/mail/mail"
                                     >
                                         <i className="far fa-envelope  fs-16 me-2 op-7"></i>
                                         Inbox{' '}
@@ -1014,7 +1014,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 <li>
                                     <Link
                                         className="dropdown-item d-flex border-bottom border-block-end"
-                                        href="/components/pages/mail/chat"
+                                        href="/admin/pages/mail/chat"
                                     >
                                         <i className="far fa-comment-dots fs-16 me-2 op-7"></i>
                                         Messages
@@ -1023,7 +1023,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 <li>
                                     <Link
                                         className="dropdown-item d-flex border-bottom"
-                                        href="/components/pages/mail/mail-settings"
+                                        href="/admin/pages/mail/mail-settings"
                                     >
                                         <i className="far fa-sun fs-16 me-2 op-7"></i>
                                         Settings

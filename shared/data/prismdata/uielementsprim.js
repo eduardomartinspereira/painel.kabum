@@ -1711,8 +1711,7 @@ export const objectfit1 = ` <img src="../../../assets/images/media/media-28.jpg"
 export const objectfit2 = `<img src="../../../assets/images/media/media-28.jpg" 
  className="object-fit-cover border rounded" alt="..."/>`;
 
-export const objectfit3 =
-    `<img src="../../../assets/images/media/media-28.jpg"
+export const objectfit3 = `<img src="../../../assets/images/media/media-28.jpg"
  className="object-fit-fill border rounded" alt="..."/>`;
 
 export const objectfit4 = ` <img src="../../../assets/images/media/media-28.jpg"
@@ -1773,8 +1772,7 @@ export const pagination1 = `<nav aria-label="Page navigation">
 </Pagination>
 </nav>`;
 
-export const pagination2 =
-    ` <Pagination  className="pagination mb-0">
+export const pagination2 = ` <Pagination  className="pagination mb-0">
 <Pagination.Item  className="page-item" as="li" href="#!" aria-label="Previous">
         <span aria-hidden="true"><i  className="bi bi-caret-left"></i></span></Pagination.Item>
 <Pagination.Item as="li" href="#!">1</Pagination.Item>
@@ -1938,8 +1936,7 @@ export const popovers1 = `{Defaultalerts.map((idx)=>(
     <Button variant='' href="#!"  className="btn btn-outline-primary btn-wave">Popover {idx.text}</Button>
     </OverlayTrigger>))}`;
 
-export const popovers2 =
-    `<OverlayTrigger trigger="click" placement={idx.class}  key={Math.random()}
+export const popovers2 = `<OverlayTrigger trigger="click" placement={idx.class}  key={Math.random()}
 overlay={<Popover>
 <Popover.Header as="h3" data-bs-custom- className="header-primary"> Color Header</Popover.Header>
    <Popover.Body>
@@ -1949,8 +1946,7 @@ overlay={<Popover>
 <Button variant={idx.color} href="#!"   className="btn btn-wave">Header {idx.text}</Button>
 </OverlayTrigger> ))}`;
 
-export const popovers3 =
-    `<OverlayTrigger placement="top trigger="click" overlay={<Popover  className="popover-primary">
+export const popovers3 = `<OverlayTrigger placement="top trigger="click" overlay={<Popover  className="popover-primary">
 <Popover.Header as="h3">Color Background</Popover.Header>
 <Popover.Body>Popover with primary background.</Popover.Body>
 </Popover>}>
@@ -2060,15 +2056,13 @@ export const progress2 = `<ProgressBar  variant='secondary' now={20}  className=
 <ProgressBar  variant='success' now={80}  className="progress mb-3" />
 <ProgressBar  variant='danger' now={100}  className="progress mb-0" />`;
 
-export const progress3 =
-    `<ProgressBar striped variant='primary' now={10}  className="progress mb-3" />
+export const progress3 = `<ProgressBar striped variant='primary' now={10}  className="progress mb-3" />
 <ProgressBar striped variant='secondary' now={25}  className="progress mb-3" />
 <ProgressBar striped variant='success' now={50}  className="progress mb-3" />
 <ProgressBar striped variant='info' now={75}  className="progress mb-3" />
 <ProgressBar striped variant='warning' now={100}  className="progress mb-0" />`;
 
-export const progress4 =
-    `<ProgressBar  variant='primary' now={10}  className="progress progress-xs mb-3" />
+export const progress4 = `<ProgressBar  variant='primary' now={10}  className="progress progress-xs mb-3" />
 <ProgressBar  variant='primary' now={25}  className="progress progress-sm mb-3" />
 <ProgressBar  variant='primary' now={50}  className="progress  mb-3" />
 <ProgressBar  variant='primary' now={75}  className="progress progress-lg mb-3" />
@@ -2117,8 +2111,7 @@ export const progress10 = `<div  className="progress progress-sm progress-custom
 <ProgressBar variant="success"  className="w-100 custom-height1" now={70} />
 </div>`;
 
-export const progress11 =
-    `<ProgressBar  className="progress progress-sm mb-4">
+export const progress11 = `<ProgressBar  className="progress progress-sm mb-4">
 <div  className="progress-item-1 bg-secondary"></div>
 <div  className="progress-item-2 bg-secondary"></div>
 <div  className="progress-item-3"></div>
@@ -2266,8 +2259,7 @@ export const spinner9 = ` <div  className="spinner-border text-primary m-5" role
 <span  className="visually-hidden">Loading...</span>
 </div>`;
 
-export const spinner10 =
-    ` <div  className="btn-list">
+export const spinner10 = ` <div  className="btn-list">
 <Button variant='primary-light'  className="btn" type="button" disabled>
     <span  className="spinner-border spinner-border-sm align-middle" role="status"
         aria-hidden="true"></span>
@@ -2717,7 +2709,7 @@ export const toast9 = `<Toast role="alert"
 </Toast>
 <div>
 <span  className="my-4 text-muted">
-   Alternatively, you can also add additional controls and components to
+   Alternatively, you can also add additional controls and admin to
    toasts.
 </span>
 </div>
@@ -2763,8 +2755,7 @@ export const typography2 = `<p  className="h1 mb-3">h1. Bootstrap heading</p>
 <p  className="h5 mb-3">h5. Bootstrap heading</p>
 <p  className="h6 mb-0">h6. Bootstrap heading</p>`;
 
-export const typography3 =
-    `<h1  className="display-1">Display 1</h1>
+export const typography3 = `<h1  className="display-1">Display 1</h1>
 <h1  className="display-2">Display 2</h1>
 <h1  className="display-3">Display 3</h1>
 <h1  className="display-4">Display 4</h1>
@@ -2798,8 +2789,7 @@ export const typography6 = `<p  className="fs-1 mb-2">.fs-1 text</p>
 <p  className="fs-5 mb-2">.fs-5 text</p>
 <p  className="fs-6 mb-0">.fs-6 text</p>`;
 
-export const typography7 =
-    `<p  className="lead mb-0">
+export const typography7 = `<p  className="lead mb-0">
 <b>This is a lead paragraph. It stands out from regular paragraphs</b>.There are many variations of passages of Lorem Ipsum available,
  but the majority have suffered alteration in some form, by injected humour, or randomised words which don't look even slightly believable.
   If you are going to use a passage of Lorem Ipsum, you need to be sure there isn't anything embarrassing hidden in the middle of text.
@@ -2918,15 +2908,17 @@ magni numquam quos perferendis nulla magnam odit amet excepturi quisquam provide
  aut doloremque assumenda voluptatem, id qui vero adipisci! Nostrum ipsam praesentium!</p>
 <hr  className="border-primary border-3 opacity-75"/>`;
 
-export const typography21 = "<p  class=\"font-monospace mb-0\">This is in monospace</p>";
+export const typography21 =
+    '<p  class="font-monospace mb-0">This is in monospace</p>';
 
 export const typography22 = `<p  className="text-muted mb-0">
 Muted text with a <a href="#!"  className="text-reset text-decoration-underline text-dark">reset link</a>.
 </p>`;
 
-export const typography23 = "<p  class=\"visible mb-0\">This is visible text</p>";
+export const typography23 = '<p  class="visible mb-0">This is visible text</p>';
 
-export const typography24 = "<p  class=\"invisible mb-0\">This is invisible text</p>";
+export const typography24 =
+    '<p  class="invisible mb-0">This is invisible text</p>';
 
 export const typography25 = `<p  className="text-lowercase">Lowercased text.</p>
 <p  className="text-uppercase">Uppercased text.</p>

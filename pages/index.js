@@ -20,7 +20,7 @@ const Home = () => {
     };
     const navigate = useRouter();
     const routeChange = () => {
-        const path = '/components/dashboard/';
+        const path = '/admin/dashboard/';
         navigate.push(path);
     };
 
@@ -95,7 +95,7 @@ const Home = () => {
                                                 <div className="main-card-signin d-md-flex">
                                                     <div className="wd-100p">
                                                         <div className="d-flex mb-4">
-                                                            <Link href="/components/dashboard">
+                                                            <Link href="/admin/dashboard">
                                                                 <img
                                                                     src={`${
                                                                         process
@@ -148,7 +148,7 @@ const Home = () => {
                                                                                 >
                                                                                     Password
                                                                                     {/* <Link
-                                                                                        href="/components/authentication/resetpassword/resetbasic/"
+                                                                                        href="/admin/authentication/resetpassword/resetbasic/"
                                                                                         className="float-end text-primary"
                                                                                     >
                                                                                         Forget
@@ -227,7 +227,7 @@ const Home = () => {
                                                 <div className="main-card-signin d-md-flex">
                                                     <div className="wd-100p">
                                                         <div className="d-flex mb-4">
-                                                            <Link href="/components/dashboard">
+                                                            <Link href="/admin/dashboard">
                                                                 <img
                                                                     src={`${
                                                                         process
@@ -280,7 +280,7 @@ const Home = () => {
                                                                                     Password
                                                                                     <Link
                                                                                         href={
-                                                                                            '/components/pages/authentication/forgot-password/'
+                                                                                            '/admin/pages/authentication/forgot-password/'
                                                                                         }
                                                                                         className="float-end text-primary"
                                                                                     >
@@ -373,7 +373,7 @@ const Home = () => {
                                                                 <div className="main-signin-footer text-center mt-3">
                                                                     <p>
                                                                         <Link
-                                                                            href="/components/pages/authentication/forgot-password"
+                                                                            href="/admin/pages/authentication/forgot-password"
                                                                             className="mb-3"
                                                                         >
                                                                             Forgot
@@ -384,7 +384,7 @@ const Home = () => {
                                                                         Don't
                                                                         have an
                                                                         account?{' '}
-                                                                        <Link href="/components/pages/authentication/sign-up">
+                                                                        <Link href="/admin/pages/authentication/sign-up">
                                                                             Create
                                                                             an
                                                                             Account
