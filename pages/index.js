@@ -20,7 +20,7 @@ const Home = () => {
     };
     const navigate = useRouter();
     const routeChange = () => {
-        const path = '/components/dashboards/dashboard1/';
+        const path = '/components/dashboard/';
         navigate.push(path);
     };
 
@@ -95,7 +95,7 @@ const Home = () => {
                                                 <div className="main-card-signin d-md-flex">
                                                     <div className="wd-100p">
                                                         <div className="d-flex mb-4">
-                                                            <Link href="/components/dashboards/dashboard1">
+                                                            <Link href="/components/dashboard">
                                                                 <img
                                                                     src={`${
                                                                         process
@@ -227,7 +227,7 @@ const Home = () => {
                                                 <div className="main-card-signin d-md-flex">
                                                     <div className="wd-100p">
                                                         <div className="d-flex mb-4">
-                                                            <Link href="/components/dashboards/dashboard1">
+                                                            <Link href="/components/dashboard">
                                                                 <img
                                                                     src={`${
                                                                         process

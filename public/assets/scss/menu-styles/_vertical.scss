@@ -113,16 +113,66 @@
         // border-radius: $default-radius;
         &.active,
         &:hover {
-            color: $primary;
+            color: $primary !important;
 
             .side-menu__label,
             .side-menu__angle {
-                color: $primary;
+                color: $primary !important;
             }
 
             .side-menu__icon {
                 fill: $primary;
                 color: $menu-prime-color;
+            }
+
+            .person {
+                fill: $primary;
+                color: $menu-prime-color;
+                path {
+                    stroke: $primary !important;
+                }
+            }
+        }
+
+        &.active {
+            font-weight: 400;
+            border-inline-end: 3px solid $primary;
+
+            .side-menu__label,
+            .side-menu__angle {
+                // color: $menu-label-color;
+                font-weight: 600;
+            }
+        }
+    }
+    .side-menu__item {
+        // padding: 10px 91px 10px 30px;
+        padding-block-start: 10px;
+        padding-inline-end: 90px;
+        padding-block-end: 10px;
+        padding-inline-start: 30px;
+        position: relative;
+        display: flex;
+        align-items: center;
+        text-decoration: none;
+        font-size: 0.813rem;
+        color: $menu-prime-color;
+
+        &.active,
+        &:hover {
+            color: $primary !important;
+
+            .side-menu__label,
+            .side-menu__angle {
+                color: $primary !important;
+            }
+
+            .side-menu__icon {
+                fill: $primary;
+                color: $menu-prime-color;
+                path {
+                    // stroke: $primary !important;
+                }
             }
         }
 

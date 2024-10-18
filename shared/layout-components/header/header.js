@@ -438,7 +438,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             <div className="horizontal-logo">
                                 <Link
                                     className="header-logo active"
-                                    href={'/components/dashboards/dashboard1/'}
+                                    href={'/components/dashboard/'}
                                 >
                                     <img
                                         src={`${
