@@ -3,12 +3,14 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
+import { getProductsSoldToday } from '../../api/server/db/products/getProductsSoldToday';
+
 import * as Dashboarddata from '../../../shared/data/dashboards/dashboards1data';
 import { BasicTable } from '../../../shared/data/dashboards/dashboards1data';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
 
-const Dashboard = () => {
+const Dashboard = ({ totalSoldToday }) => {
     const { data: session } = useSession();
     const capitalizeFirstLetter = (name) => {
         if (!name) return '';
@@ -45,7 +47,7 @@ const Dashboard = () => {
                                                     <h3 className="text-dark fw-semibold mb-2 mt-0">
                                                         Olá, Bem Vindo de volta{' '}
                                                         <span className="text-primary">
-                                                            {firstName} !
+                                                            {firstName}
                                                         </span>
                                                     </h3>
                                                 </div>
@@ -67,7 +69,7 @@ const Dashboard = () => {
                                                 <div className="pb-0 mt-0">
                                                     <div className="d-flex">
                                                         <h4 className="fs-20 fw-semibold mb-2">
-                                                            5,472
+                                                            {totalSoldToday}
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
@@ -882,7 +884,11 @@ export const getServerSideProps = async (context) => {
         },
     };
 
+    const totalSoldToday = await getProductsSoldToday();
+
+    console.log(totalSoldToday);
+
     return {
-        props: { session: safeSession },
+        props: { session: safeSession, totalSoldToday },
     };
 };
