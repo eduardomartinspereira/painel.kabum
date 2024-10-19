@@ -3,18 +3,33 @@ import { useSession } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
-import { getProductsSoldToday } from '../../api/server/db/products/getProductsSoldToday';
-
 import * as Dashboarddata from '../../../shared/data/dashboards/dashboards1data';
 import { BasicTable } from '../../../shared/data/dashboards/dashboards1data';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
+import { getSalesAmountLastWeek } from '../../api/server/db/finance/getSalesAmountLastWeek';
+import { getSalesAmountToday } from '../../api/server/db/finance/getSalesAmountToday';
+import { getProductsSoldLastWeek } from '../../api/server/db/products/getProductsSoldLastWeek';
+import { getProductsSoldToday } from '../../api/server/db/products/getProductsSoldToday';
 
-const Dashboard = ({ totalSoldToday }) => {
+const Dashboard = ({
+    totalSoldToday,
+    salesAmountToday,
+    productsSoldLastWeek,
+    totalSalesAmountLastWeek,
+}) => {
     const { data: session } = useSession();
+
     const capitalizeFirstLetter = (name) => {
         if (!name) return '';
         return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
+    };
+
+    const formatAmount = (amount) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(amount);
     };
 
     const firstName = capitalizeFirstLetter(session?.user?.name?.split(' ')[0]);
@@ -28,7 +43,6 @@ const Dashboard = ({ totalSoldToday }) => {
                     heading="Dashboard"
                     active="Geral"
                 />
-                {/* <!-- row --> */}
                 <Row>
                     <Col xxl={5} xl={12} lg={12} md={12} sm={12}>
                         <Row>
@@ -69,7 +83,11 @@ const Dashboard = ({ totalSoldToday }) => {
                                                 <div className="pb-0 mt-0">
                                                     <div className="d-flex">
                                                         <h4 className="fs-20 fw-semibold mb-2">
-                                                            {totalSoldToday}
+                                                            {new Intl.NumberFormat(
+                                                                'pt-BR'
+                                                            ).format(
+                                                                totalSoldToday
+                                                            )}
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
@@ -110,7 +128,9 @@ const Dashboard = ({ totalSoldToday }) => {
                                                 <div className="pb-0 mt-0">
                                                     <div className="d-flex">
                                                         <h4 className="fs-20 fw-semibold mb-2">
-                                                            R$7,589
+                                                            {formatAmount(
+                                                                salesAmountToday
+                                                            )}
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
@@ -140,13 +160,18 @@ const Dashboard = ({ totalSoldToday }) => {
                                             <div className="ps-4 pt-4 pe-3 pb-4">
                                                 <div className="">
                                                     <span className="mb-2 fs-12 fw-semibold d-block">
-                                                        Pedidos semana passada
+                                                        Pedidos nos últimos 7
+                                                        dias
                                                     </span>
                                                 </div>
                                                 <div className="pb-0 mt-0">
                                                     <div className="d-flex">
                                                         <h4 className="fs-20 fw-semibold mb-2">
-                                                            8,943
+                                                            {new Intl.NumberFormat(
+                                                                'pt-BR'
+                                                            ).format(
+                                                                productsSoldLastWeek
+                                                            )}
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
@@ -180,7 +205,9 @@ const Dashboard = ({ totalSoldToday }) => {
                                                 <div className="pb-0 mt-0">
                                                     <div className="d-flex">
                                                         <h4 className="fs-20 fw-semibold mb-2">
-                                                            R$57.2M
+                                                            {formatAmount(
+                                                                totalSalesAmountLastWeek
+                                                            )}
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12  text-muted">
@@ -886,9 +913,21 @@ export const getServerSideProps = async (context) => {
 
     const totalSoldToday = await getProductsSoldToday();
 
-    console.log(totalSoldToday);
+    const salesAmountToday = await getSalesAmountToday();
+
+    const productsSoldLastWeek = await getProductsSoldLastWeek();
+
+    const totalSalesAmountLastWeek = await getSalesAmountLastWeek();
+
+    console.log(salesAmountToday, 'salesAmountToday');
 
     return {
-        props: { session: safeSession, totalSoldToday },
+        props: {
+            session: safeSession,
+            totalSoldToday,
+            salesAmountToday,
+            productsSoldLastWeek,
+            totalSalesAmountLastWeek,
+        },
     };
 };

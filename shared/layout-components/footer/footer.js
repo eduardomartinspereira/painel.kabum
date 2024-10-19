@@ -12,9 +12,9 @@ const Footer = () => {
                         <Link href="#!" className="text-primary">
                             Solid Tecnologia
                         </Link>
-                        . Designed with{' '}
+                        . Feito com{' '}
                         <span className="bi bi-heart-fill text-danger"></span>{' '}
-                        by{' '}
+                        pela{' '}
                         <Link href="#!">
                             <span className="fw-semibold text-primary text-decoration-underline">
                                 Solid

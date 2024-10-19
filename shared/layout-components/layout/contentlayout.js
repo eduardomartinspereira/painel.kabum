@@ -9,8 +9,7 @@ import Switcher from '../switcher/switcher';
 import TabToTop from '../tab-to-top/tab-to-top';
 
 const Contentlayout = ({ children }) => {
-    const { data: session, status } = useSession();
-    console.log('session from front', session);
+    const { data: session } = useSession();
     const [lateLoad, setlateLoad] = useState(false);
 
     useEffect(() => {

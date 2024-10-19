@@ -11,6 +11,7 @@ export async function getProductsSoldToday() {
                 gte: todayStart,
                 lte: todayEnd,
             },
+            status: 'APPROVED',
         },
         select: {
             productQuantity: true,

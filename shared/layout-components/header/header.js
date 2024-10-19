@@ -30,8 +30,6 @@ function Header({ local_varaiable, ThemeChanger, session }) {
         signOut({ redirect: true, callbackUrl: '/' });
     };
 
-    console.log(session, 'session on front');
-
     const capitalizeWords = (name) => {
         return name
             .toLowerCase()
