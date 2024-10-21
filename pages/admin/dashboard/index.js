@@ -6,6 +6,7 @@ import * as Dashboarddata from '../../../shared/data/dashboards/dashboards1data'
 import { BasicTable } from '../../../shared/data/dashboards/dashboards1data';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
+import { getAccessData } from '../../api/server/db/access/getAccessData';
 import { getMonthlySalesData } from '../../api/server/db/finance/getMonthlySalesData';
 import { getRecentPayments } from '../../api/server/db/finance/getRecentPayments';
 import { getSalesAmountLastWeek } from '../../api/server/db/finance/getSalesAmountLastWeek';
@@ -20,9 +21,9 @@ const Dashboard = ({
     totalSalesAmountLastWeek,
     chartData,
     recentOrders,
+    accessData,
 }) => {
     const { data: session } = useSession();
-
     const capitalizeFirstLetter = (name) => {
         if (!name) return '';
         return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
@@ -241,177 +242,86 @@ const Dashboard = ({
                                     </Card.Header>
                                     <Card.Body className="card-body p-0">
                                         <div className="browser-stats">
-                                            <div className="d-flex align-items-center item  border-bottom my-2">
-                                                <div className="d-flex">
-                                                    <img
-                                                        src="../../../assets/images/svgicons/chrome.svg"
-                                                        alt="img"
-                                                        className="ht-30 wd-30 me-2"
-                                                    />
-                                                    <div className="truncate">
-                                                        <h6 className="">
-                                                            Chrome
-                                                        </h6>
-                                                        <span className="text-muted fs-12">
-                                                            Google, Inc.
-                                                        </span>
+                                            {Object.entries(
+                                                accessData?.browser
+                                            ).map(([browser, count]) => {
+                                                let iconPath = '';
+                                                let company = '';
+
+                                                switch (browser.toLowerCase()) {
+                                                    case 'chrome':
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/chrome.svg';
+                                                        company =
+                                                            'Google, Inc.';
+                                                        break;
+                                                    case 'edge':
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/edge.svg';
+                                                        company =
+                                                            'Microsoft Corporation, Inc.';
+                                                        break;
+                                                    case 'firefox':
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/firefox.svg';
+                                                        company =
+                                                            'Mozilla Foundation, Inc.';
+                                                        break;
+                                                    case 'mobile safari':
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/safari.svg';
+                                                        company =
+                                                            'Apple Corporation, Inc.';
+                                                        break;
+                                                    case 'opera':
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/opera.svg';
+                                                        company = 'Opera, Inc.';
+                                                        break;
+                                                    case 'samsung internet':
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/ss-internet.svg';
+                                                        company = 'Opera, Inc.';
+                                                        break;
+                                                    default:
+                                                        iconPath =
+                                                            '../../../assets/images/svgicons/opera.svg';
+                                                        company = 'Outros';
+                                                        break;
+                                                }
+
+                                                return (
+                                                    <div
+                                                        className="d-flex align-items-center item border-bottom my-2"
+                                                        key={browser}
+                                                    >
+                                                        <div className="d-flex">
+                                                            <img
+                                                                src={iconPath}
+                                                                alt={browser}
+                                                                className="ht-30 wd-30 me-2"
+                                                            />
+                                                            <div className="truncate">
+                                                                <h6 className="">
+                                                                    {browser}
+                                                                </h6>
+                                                                <span className="text-muted fs-12">
+                                                                    {company}
+                                                                </span>
+                                                            </div>
+                                                        </div>
+                                                        <div className="ms-auto my-auto">
+                                                            <div className="d-flex">
+                                                                <span className="me-4 mt-1 fw-semibold fs-16">
+                                                                    {count}{' '}
+                                                                    acessos
+                                                                </span>
+                                                                {/* Aqui você pode adicionar a lógica de exibir a porcentagem ou outro dado adicional */}
+                                                            </div>
+                                                        </div>
                                                     </div>
-                                                </div>
-                                                <div className="ms-auto my-auto">
-                                                    <div className="d-flex">
-                                                        <span className="me-4 mt-1 fw-semibold fs-16">
-                                                            35,502
-                                                        </span>
-                                                        <span className="text-success fs-13 my-auto">
-                                                            <i className="fe fe-trending-up text-success mx-2 my-auto"></i>
-                                                            12.75%
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex align-items-center item  border-bottom my-2">
-                                                <div className="d-flex">
-                                                    <img
-                                                        src="../../../assets/images/svgicons/edge.svg"
-                                                        alt="img"
-                                                        className="ht-30 wd-30 me-2"
-                                                    />
-                                                    <div className="truncate">
-                                                        <h6 className="">
-                                                            Edge
-                                                        </h6>
-                                                        <span className="text-muted fs-12">
-                                                            Microsoft
-                                                            Corporation, Inc.
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="ms-auto my-auto">
-                                                    <div className="d-flex">
-                                                        <span className="me-4 mt-1 fw-semibold fs-16">
-                                                            25,364
-                                                        </span>
-                                                        <span className="text-success">
-                                                            <i className="fe fe-trending-down text-danger mx-2 my-auto"></i>
-                                                            24.37%
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex align-items-center item  border-bottom my-2">
-                                                <div className="d-flex">
-                                                    <img
-                                                        src="../../../assets/images/svgicons/firefox.svg"
-                                                        alt="img"
-                                                        className="ht-30 wd-30 me-2"
-                                                    />
-                                                    <div className="truncate">
-                                                        <h6 className="">
-                                                            Firefox
-                                                        </h6>
-                                                        <span className="text-muted fs-12">
-                                                            Mozilla Foundation,
-                                                            Inc.
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="ms-auto my-auto">
-                                                    <div className="d-flex">
-                                                        <span className="me-4 mt-1 fw-semibold fs-16">
-                                                            14,635
-                                                        </span>
-                                                        <span className="text-success">
-                                                            <i className="fe fe-trending-up text-success mx-2 my-auto"></i>
-                                                            15,63%
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex align-items-center item  border-bottom my-2">
-                                                <div className="d-flex">
-                                                    <img
-                                                        src="../../../assets/images/svgicons/safari.svg"
-                                                        alt="img"
-                                                        className="ht-30 wd-30 me-2"
-                                                    />
-                                                    <div className="truncate">
-                                                        <h6 className="">
-                                                            Safari
-                                                        </h6>
-                                                        <span className="text-muted fs-12">
-                                                            Apple Corporation,
-                                                            Inc.
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="ms-auto my-auto">
-                                                    <div className="d-flex">
-                                                        <span className="me-4 mt-1 fw-semibold fs-16">
-                                                            35,657
-                                                        </span>
-                                                        <span className="text-danger">
-                                                            <i className="fe fe-trending-up text-success mx-2 my-auto"></i>
-                                                            12.54%
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex align-items-center item  border-bottom my-2">
-                                                <div className="d-flex">
-                                                    <img
-                                                        src="../../../assets/images/svgicons/chrome.svg"
-                                                        alt="img"
-                                                        className="ht-30 wd-30 me-2"
-                                                    />
-                                                    <div className="truncate">
-                                                        <h6 className="">
-                                                            Chrome
-                                                        </h6>
-                                                        <span className="text-muted fs-12">
-                                                            Google, Inc.
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="ms-auto my-auto">
-                                                    <div className="d-flex">
-                                                        <span className="me-4 mt-1 fw-semibold fs-16">
-                                                            35,502
-                                                        </span>
-                                                        <span className="text-success fs-13 my-auto">
-                                                            <i className="fe fe-trending-up text-success mx-2 my-auto"></i>
-                                                            12.75%
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div className="d-flex align-items-center item my-2 pb-3">
-                                                <div className="d-flex">
-                                                    <img
-                                                        src="../../../assets/images/svgicons/opera.svg"
-                                                        alt="img"
-                                                        className="ht-30 wd-30 me-2"
-                                                    />
-                                                    <div className="truncate">
-                                                        <h6 className="">
-                                                            Opera
-                                                        </h6>
-                                                        <span className="text-muted fs-12">
-                                                            Opera, Inc.
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                                <div className="ms-auto my-auto">
-                                                    <div className="d-flex">
-                                                        <span className="me-4 mt-1 fw-semibold fs-16">
-                                                            12,563
-                                                        </span>
-                                                        <span className="text-danger">
-                                                            <i className="fe fe-trending-down text-danger mx-2 my-auto"></i>
-                                                            15.12%
-                                                        </span>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                                );
+                                            })}
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -495,8 +405,8 @@ const Dashboard = ({
                                                                                 >
                                                                                     {order.status ===
                                                                                     'APPROVED'
-                                                                                        ? 'Paid'
-                                                                                        : 'Pending'}
+                                                                                        ? ' Pago'
+                                                                                        : 'Pendente'}
                                                                                 </span>
                                                                             </span>
                                                                         </span>
@@ -527,7 +437,9 @@ const Dashboard = ({
                                                 </div>
                                                 <div className="d-flex justify-content-center align-items-center flex-wrap">
                                                     <span className="me-3 fs-26 fw-semibold">
-                                                        2,132
+                                                        {
+                                                            accessData.totalMobileAccesses
+                                                        }
                                                     </span>
                                                     <span className="text-success fw-semibold">
                                                         <i className="fa fa-caret-up me-2"></i>
@@ -541,7 +453,9 @@ const Dashboard = ({
                                                 </div>
                                                 <div className="d-flex justify-content-center align-items-center flex-wrap">
                                                     <span className="me-3 fs-26 fw-semibold">
-                                                        1,053
+                                                        {
+                                                            accessData.totalDesktopAccesses
+                                                        }
                                                     </span>
                                                     <span className="text-danger fw-semibold">
                                                         <i className="fa fa-caret-down me-2"></i>
@@ -551,7 +465,9 @@ const Dashboard = ({
                                             </div>
                                         </div>
                                         <div id="Viewers">
-                                            <Dashboarddata.Viewers />
+                                            <Dashboarddata.Viewers
+                                                accessData={accessData}
+                                            />
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -731,13 +647,12 @@ const Dashboard = ({
                             </Card.Header>
                             <Card.Body className="pt-0 example1-table">
                                 <div className="table-responsive">
-                                    <BasicTable />
+                                    <BasicTable recentOrders={recentOrders} />
                                 </div>
                             </Card.Body>
                         </Card>
                     </Col>
                 </Row>
-                {/* <!-- row closed --> */}
             </React.Fragment>
         </>
     );
@@ -753,7 +668,7 @@ export const getServerSideProps = async (context) => {
     if (!session) {
         return {
             redirect: {
-                destination: '/',
+                destination: '/auth/signin',
                 permanent: false,
             },
         };
@@ -763,23 +678,17 @@ export const getServerSideProps = async (context) => {
         ...session,
         user: {
             ...session.user,
-            image: session.user?.image ?? null,
+            image: session.user?.image || null,
         },
     };
 
     const totalSoldToday = await getProductsSoldToday();
-
     const salesAmountToday = await getSalesAmountToday();
-
     const productsSoldLastWeek = await getProductsSoldLastWeek();
-
     const totalSalesAmountLastWeek = await getSalesAmountLastWeek();
-
     const recentOrders = await getRecentPayments();
-
-    console.log(recentOrders, 'recentOrders');
-
     const monthlySalesData = await getMonthlySalesData();
+    const accessData = await getAccessData();
 
     const chartData = {
         series: [
@@ -795,6 +704,8 @@ export const getServerSideProps = async (context) => {
         categories: monthlySalesData.map((data) => data.month),
     };
 
+    console.log(recentOrders, 'recentOrders');
+
     return {
         props: {
             session: safeSession,
@@ -804,6 +715,7 @@ export const getServerSideProps = async (context) => {
             totalSalesAmountLastWeek,
             chartData,
             recentOrders,
+            accessData,
         },
     };
 };

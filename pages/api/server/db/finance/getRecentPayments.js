@@ -22,5 +22,9 @@ export async function getRecentPayments() {
         userId: payment.user.id,
         status: payment.status,
         amount: payment.amount,
+        productId: payment.id,
+        paymentMethod: payment.paymentMethod,
+        amount: payment.amount,
+        date: Date(payment.createdAt),
     }));
 }

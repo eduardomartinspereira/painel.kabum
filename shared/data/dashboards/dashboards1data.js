@@ -1,3 +1,6 @@
+import dayjs from 'dayjs';
+import 'dayjs/locale/pt-br';
+import localeData from 'dayjs/plugin/localeData';
 import dynamic from 'next/dynamic';
 import React, { Fragment } from 'react';
 import { ButtonGroup, Dropdown } from 'react-bootstrap';
@@ -10,6 +13,8 @@ import {
 const ReactApexChart = dynamic(() => import('react-apexcharts'), {
     ssr: false,
 });
+dayjs.extend(localeData);
+dayjs.locale('pt-br');
 export class Statistics1 extends React.Component {
     constructor(props) {
         super(props);
@@ -142,15 +147,16 @@ export class Statistics1 extends React.Component {
 export class Viewers extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
             series: [
                 {
                     name: 'Celular',
-                    data: [51, 44, 55, 42, 58, 50, 62],
+                    data: this.props.accessData.mobile, // Use mobile data from props
                 },
                 {
                     name: 'Computador',
-                    data: [56, 58, 38, 50, 64, 45, 55],
+                    data: this.props.accessData.desktop, // Use desktop data from props
                 },
             ],
             options: {
@@ -175,13 +181,12 @@ export class Viewers extends React.Component {
                     curve: 'smooth',
                     width: 2,
                 },
-
                 legend: {
                     show: true,
                     position: 'top',
                 },
                 xaxis: {
-                    show: false,
+                    categories: this.props.accessData.dates, // Use dates from props
                     axisBorder: {
                         show: false,
                         color: 'rgba(119, 119, 142, 0.05)',
@@ -201,7 +206,7 @@ export class Viewers extends React.Component {
                     },
                 },
                 yaxis: {
-                    show: false,
+                    show: true,
                     axisBorder: {
                         show: false,
                     },
@@ -217,6 +222,7 @@ export class Viewers extends React.Component {
             },
         };
     }
+
     render() {
         return (
             <div id="chart">
@@ -230,6 +236,7 @@ export class Viewers extends React.Component {
         );
     }
 }
+
 export const Radialbar = {
     series: [85],
     options: {
@@ -294,38 +301,54 @@ export const Radialbar = {
 export const COLUMNS = [
     {
         Header: 'Data da compra',
-        accessor: 'PurchaseDate',
-        className: 'text-center ',
+        accessor: 'date', // Chave referente ao campo da data de compra
+        Cell: ({ value }) => {
+            return dayjs(value).format('DD/MM/YYYY'); // Formatar a data
+        },
     },
     {
         Header: 'Nome do cliente',
-        accessor: 'ClientName',
-        className: 'text-center ',
+        accessor: 'name', // Chave referente ao nome do cliente
     },
     {
         Header: 'ID do produto',
-        accessor: 'ProductID',
-        className: 'text-center ',
-    },
-    {
-        Header: 'Produto',
-        accessor: 'Product',
-        className: 'text-center ',
-    },
-    {
-        Header: 'Valor do produto',
-        accessor: 'ProductCost',
-        className: 'text-center ',
+        accessor: 'productId', // Chave referente ao ID do produto
     },
     {
         Header: 'Método de pagamento',
-        accessor: 'PaymentMode',
-        className: 'text-center ',
+        accessor: 'paymentMethod', // Chave referente ao método de pagamento
+    },
+    {
+        Header: 'Valor do produto',
+        accessor: 'amount', // Chave referente ao valor do produto
+        Cell: ({ value }) => {
+            return `R$ ${value.toFixed(2)}`; // Formatar o valor do produto
+        },
     },
     {
         Header: 'Status',
-        accessor: 'Status',
-        className: 'text-center ',
+        accessor: 'status', // Chave referente ao status do pedido
+        Cell: ({ value }) => {
+            let badgeClass = '';
+            let statusText = '';
+
+            // Definindo as classes e textos de acordo com o status
+            if (value === 'PENDING') {
+                badgeClass = 'badge bg-orange';
+                statusText = 'Pendente';
+            } else if (value === 'APPROVED') {
+                badgeClass = 'badge bg-success';
+                statusText = 'Aprovado';
+            } else if (value === 'DELIVERED') {
+                badgeClass = 'badge bg-blue';
+                statusText = 'Aprovado';
+            } else if (value === 'CANCELED') {
+                badgeClass = 'badge bg-red';
+                statusText = 'Cancelado';
+            }
+
+            return <span className={badgeClass}>{statusText}</span>;
+        },
     },
 ];
 
@@ -415,11 +438,11 @@ export const GlobalFilter = ({ filter, setFilter }) => {
         />
     );
 };
-export const BasicTable = () => {
+export const BasicTable = ({ recentOrders }) => {
     const tableInstance = useTable(
         {
             columns: COLUMNS,
-            data: DATATABLE,
+            data: recentOrders, // Passa os dados recebidos de recentOrders
         },
         useGlobalFilter,
         useSortBy,
