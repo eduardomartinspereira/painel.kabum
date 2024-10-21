@@ -21,16 +21,12 @@ export async function getSalesAmountLastWeek() {
         },
     });
 
-    console.log(paymentsLastWeek, 'paymentsLastWeek');
-
     const totalSalesAmountLastWeek = paymentsLastWeek.reduce(
         (total, payment) => {
             return total + Number(payment.amount);
         },
         0
     );
-
-    console.log(totalSalesAmountLastWeek, 'totalSalesAmountLastWeek');
 
     return totalSalesAmountLastWeek;
 }

@@ -6,8 +6,6 @@ export const registerUser = async (name, email, password) => {
         where: { email },
     });
 
-    console.log(existingUser);
-
     if (existingUser) {
         throw new Error('Email already in use');
     }
@@ -21,8 +19,6 @@ export const registerUser = async (name, email, password) => {
             password: hashedPassword,
         },
     });
-
-    console.log(newUser);
 
     return newUser;
 };

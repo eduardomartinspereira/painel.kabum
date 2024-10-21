@@ -6,13 +6,9 @@ export async function POST(req) {
     try {
         const { name, email, password, action, userId } = await req.json();
 
-        console.log(name, email, password, action, userId);
-
         const user = await prisma.user.findUnique({
             where: { email: email },
         });
-
-        console.log(user);
 
         if (!user) {
             return NextResponse.json(
@@ -22,7 +18,6 @@ export async function POST(req) {
         }
 
         const isPasswordValid = await verifyPassword(password, user.password);
-        console.log(isPasswordValid);
         if (!isPasswordValid) {
             return NextResponse.json(
                 { message: 'Credenciais inválidas.' },

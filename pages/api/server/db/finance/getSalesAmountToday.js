@@ -18,14 +18,10 @@ export async function getSalesAmountToday() {
         },
     });
 
-    console.log(paymentsToday, 'paymentsToday'); // Debugging step to inspect the fetched amounts
-
-    // Ensure the amounts are treated as numbers by explicitly converting them
+    console.log(paymentsToday, 'paymentsToday');
     const totalSalesAmount = paymentsToday.reduce((total, payment) => {
-        return total + Number(payment.amount); // Ensure amount is treated as a number
+        return total + Number(payment.amount);
     }, 0);
-
-    console.log(totalSalesAmount, 'totalSalesAmount');
 
     return totalSalesAmount;
 }

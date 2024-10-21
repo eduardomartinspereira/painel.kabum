@@ -26,9 +26,6 @@ export async function gerarKeyKeyAuth(plano) {
             throw new Error('Plano inválido.');
     }
     try {
-        console.log(
-            'Enviando requisição para a API KeyAuth com os parâmetros:'
-        );
         console.log({
             sellerkey: sellerKey,
             type: 'add',

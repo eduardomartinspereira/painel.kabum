@@ -11,7 +11,6 @@ export const authOptions = {
             },
             async authorize(credentials) {
                 try {
-                    console.log(credentials, 'credentials');
                     const res = await fetch(
                         'https://game-ecommerce-template.vercel.app/api/auth/login',
                         {
@@ -29,8 +28,6 @@ export const authOptions = {
                     }
 
                     const response = await res.json();
-
-                    console.log(response.user);
 
                     if (
                         response.user &&

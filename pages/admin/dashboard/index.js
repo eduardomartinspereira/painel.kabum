@@ -1,12 +1,13 @@
 import { getServerSession } from 'next-auth';
 import { useSession } from 'next-auth/react';
-import Link from 'next/link';
 import React from 'react';
 import { Card, Col, Row } from 'react-bootstrap';
 import * as Dashboarddata from '../../../shared/data/dashboards/dashboards1data';
 import { BasicTable } from '../../../shared/data/dashboards/dashboards1data';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
+import { getMonthlySalesData } from '../../api/server/db/finance/getMonthlySalesData';
+import { getRecentPayments } from '../../api/server/db/finance/getRecentPayments';
 import { getSalesAmountLastWeek } from '../../api/server/db/finance/getSalesAmountLastWeek';
 import { getSalesAmountToday } from '../../api/server/db/finance/getSalesAmountToday';
 import { getProductsSoldLastWeek } from '../../api/server/db/products/getProductsSoldLastWeek';
@@ -17,6 +18,8 @@ const Dashboard = ({
     salesAmountToday,
     productsSoldLastWeek,
     totalSalesAmountLastWeek,
+    chartData,
+    recentOrders,
 }) => {
     const { data: session } = useSession();
 
@@ -427,7 +430,9 @@ const Dashboard = ({
                             </Card.Header>
                             <Card.Body>
                                 <div id="statistics1">
-                                    <Dashboarddata.Statistics1 />
+                                    <Dashboarddata.Statistics1
+                                        chartData={chartData}
+                                    />
                                 </div>
                             </Card.Body>
                         </Card>
@@ -441,216 +446,67 @@ const Dashboard = ({
                                     </Card.Header>
                                     <Card.Body className=" p-0 customers mt-1">
                                         <div className="list-group list-lg-group list-group-flush">
-                                            <Link
-                                                href="#!"
-                                                className="border-0"
-                                            >
-                                                <div className="list-group-item list-group-item-action p-3 border-0">
-                                                    <div className="media mt-0">
-                                                        <img
-                                                            className="avatar-lg rounded-circle me-3 my-auto shadow"
-                                                            src="../../../assets/images/faces/2.jpg"
-                                                            alt="Image description"
-                                                        />
-                                                        <div className="media-body flex-fill">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="mt-0">
-                                                                    <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
-                                                                        Samantha
-                                                                        Melon
-                                                                    </h5>
-                                                                    <p className="mb-0 fs-12 text-muted">
-                                                                        User ID:
-                                                                        #1234
-                                                                    </p>
-                                                                </div>
-                                                                <span className="ms-auto wd-45p fs-14">
-                                                                    <span className="float-end badge bg-success-transparent">
-                                                                        <span className="op-7 text-success fw-semibold">
-                                                                            paid{' '}
+                                            {recentOrders.map(
+                                                (order, index) => (
+                                                    <div
+                                                        className="border-0"
+                                                        key={index}
+                                                    >
+                                                        <div className="list-group-item list-group-item-action p-3 border-0">
+                                                            <div className="media mt-0">
+                                                                <img
+                                                                    className="avatar-lg rounded-circle me-3 my-auto shadow"
+                                                                    src="../../../assets/images/faces/person.png"
+                                                                    alt="Image description"
+                                                                />
+                                                                <div className="media-body flex-fill">
+                                                                    <div className="d-flex align-items-center">
+                                                                        <div className="mt-0">
+                                                                            <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
+                                                                                {
+                                                                                    order.name
+                                                                                }
+                                                                            </h5>
+                                                                            <p className="mb-0 fs-12 text-muted">
+                                                                                User
+                                                                                ID:
+                                                                                #
+                                                                                {
+                                                                                    order.userId
+                                                                                }
+                                                                            </p>
+                                                                        </div>
+                                                                        <span className="ms-auto wd-45p fs-14">
+                                                                            <span
+                                                                                className={`float-end badge ${
+                                                                                    order.status ===
+                                                                                    'APPROVED'
+                                                                                        ? 'bg-success-transparent'
+                                                                                        : 'bg-danger-transparent'
+                                                                                }`}
+                                                                            >
+                                                                                <span
+                                                                                    className={`op-7 fw-semibold ${
+                                                                                        order.status ===
+                                                                                        'APPROVED'
+                                                                                            ? 'text-success'
+                                                                                            : 'text-danger'
+                                                                                    }`}
+                                                                                >
+                                                                                    {order.status ===
+                                                                                    'APPROVED'
+                                                                                        ? 'Paid'
+                                                                                        : 'Pending'}
+                                                                                </span>
+                                                                            </span>
                                                                         </span>
-                                                                    </span>
-                                                                </span>
+                                                                    </div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </Link>
-                                            <Link
-                                                href="#!"
-                                                className="border-0"
-                                            >
-                                                <div className="list-group-item list-group-item-action p-3 border-0">
-                                                    <div className="media mt-0">
-                                                        <img
-                                                            className="avatar-lg rounded-circle me-3 my-auto shadow"
-                                                            src="../../../assets/images/faces/1.jpg"
-                                                            alt="Image description"
-                                                        />
-                                                        <div className="media-body flex-fill">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="mt-1">
-                                                                    <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
-                                                                        Allie
-                                                                        Grater
-                                                                    </h5>
-                                                                    <p className="mb-0 fs-12 text-muted">
-                                                                        User ID:
-                                                                        #1234
-                                                                    </p>
-                                                                </div>
-                                                                <span className="ms-auto wd-45p fs-14">
-                                                                    <span className="float-end badge bg-danger-transparent ">
-                                                                        <span className="op-7 text-danger fw-semibold">
-                                                                            Pending
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <Link
-                                                href="#!"
-                                                className="border-0"
-                                            >
-                                                <div className="list-group-item list-group-item-action p-3 border-0">
-                                                    <div className="media mt-0">
-                                                        <img
-                                                            className="avatar-lg rounded-circle me-3 my-auto shadow"
-                                                            src="../../../assets/images/faces/5.jpg"
-                                                            alt="Image description"
-                                                        />
-                                                        <div className="media-body flex-fill">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="mt-1">
-                                                                    <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
-                                                                        Gabe
-                                                                        Lackmen
-                                                                    </h5>
-                                                                    <p className="mb-0 fs-12 text-muted">
-                                                                        User ID:
-                                                                        #1234
-                                                                    </p>
-                                                                </div>
-                                                                <span className="ms-auto wd-45p  fs-14">
-                                                                    <span className="float-end badge bg-danger-transparent ">
-                                                                        <span className="op-7 text-danger fw-semibold">
-                                                                            Pending
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <Link
-                                                href="#!"
-                                                className="border-0"
-                                            >
-                                                <div className="list-group-item list-group-item-action p-3 border-0">
-                                                    <div className="media mt-0">
-                                                        <img
-                                                            className="avatar-lg rounded-circle me-3 my-auto shadow"
-                                                            src="../../../assets/images/faces/7.jpg"
-                                                            alt="Image description"
-                                                        />
-                                                        <div className="media-body flex-fill">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="mt-1">
-                                                                    <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
-                                                                        Manuel
-                                                                        Labor
-                                                                    </h5>
-                                                                    <p className="mb-0 fs-12 text-muted">
-                                                                        User ID:
-                                                                        #1234
-                                                                    </p>
-                                                                </div>
-                                                                <span className="ms-auto wd-45p fs-14">
-                                                                    <span className="float-end badge bg-success-transparent ">
-                                                                        <span className="op-7 text-success fw-semibold">
-                                                                            Paid
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <Link
-                                                href="#!"
-                                                className="border-0"
-                                            >
-                                                <div className="list-group-item list-group-item-action p-3 border-0">
-                                                    <div className="media mt-0">
-                                                        <img
-                                                            className="avatar-lg rounded-circle me-3 my-auto shadow"
-                                                            src="../../../assets/images/faces/9.jpg"
-                                                            alt="Image description"
-                                                        />
-                                                        <div className="media-body flex-fill">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="mt-1">
-                                                                    <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
-                                                                        Hercules
-                                                                        Bing
-                                                                    </h5>
-                                                                    <p className="mb-0 fs-12 text-muted">
-                                                                        User ID:
-                                                                        #1754
-                                                                    </p>
-                                                                </div>
-                                                                <span className="ms-auto wd-45p fs-14">
-                                                                    <span className="float-end badge bg-success-transparent ">
-                                                                        <span className="op-7 text-success fw-semibold">
-                                                                            Paid
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
-                                            <Link
-                                                href="#!"
-                                                className="border-0"
-                                            >
-                                                <div className="list-group-item list-group-item-action p-3 border-0">
-                                                    <div className="media mt-0">
-                                                        <img
-                                                            className="avatar-lg rounded-circle me-3 my-auto shadow"
-                                                            src="../../../assets/images/faces/11.jpg"
-                                                            alt="Image description"
-                                                        />
-                                                        <div className="media-body flex-fill">
-                                                            <div className="d-flex align-items-center">
-                                                                <div className="mt-1">
-                                                                    <h5 className="mb-1 fs-13 font-weight-sembold text-dark">
-                                                                        Manuel
-                                                                        Labor
-                                                                    </h5>
-                                                                    <p className="mb-0 fs-12 text-muted">
-                                                                        User ID:
-                                                                        #1234
-                                                                    </p>
-                                                                </div>
-                                                                <span className="ms-auto wd-45p fs-14">
-                                                                    <span className="float-end badge bg-danger-transparent ">
-                                                                        <span className="op-7 text-danger fw-semibold">
-                                                                            Pending
-                                                                        </span>
-                                                                    </span>
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </Link>
+                                                )
+                                            )}
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -660,7 +516,7 @@ const Dashboard = ({
                                 <Card>
                                     <Card.Header className=" pb-0">
                                         <h3 className="card-title mb-2">
-                                            Weekly Visitors
+                                            Visitas Semanais
                                         </h3>
                                     </Card.Header>
                                     <Card.Body className=" pb-0">
@@ -871,7 +727,7 @@ const Dashboard = ({
                     <Col sm={12} className="col-12">
                         <Card>
                             <Card.Header>
-                                <h4 className="card-title">Product Summary</h4>
+                                <h4 className="card-title">Últimos pedidos</h4>
                             </Card.Header>
                             <Card.Body className="pt-0 example1-table">
                                 <div className="table-responsive">
@@ -919,7 +775,25 @@ export const getServerSideProps = async (context) => {
 
     const totalSalesAmountLastWeek = await getSalesAmountLastWeek();
 
-    console.log(salesAmountToday, 'salesAmountToday');
+    const recentOrders = await getRecentPayments();
+
+    console.log(recentOrders, 'recentOrders');
+
+    const monthlySalesData = await getMonthlySalesData();
+
+    const chartData = {
+        series: [
+            {
+                name: 'Total de Pedidos',
+                data: monthlySalesData.map((data) => data.totalOrders),
+            },
+            {
+                name: 'Total Faturado',
+                data: monthlySalesData.map((data) => data.totalRevenue),
+            },
+        ],
+        categories: monthlySalesData.map((data) => data.month),
+    };
 
     return {
         props: {
@@ -928,6 +802,8 @@ export const getServerSideProps = async (context) => {
             salesAmountToday,
             productsSoldLastWeek,
             totalSalesAmountLastWeek,
+            chartData,
+            recentOrders,
         },
     };
 };

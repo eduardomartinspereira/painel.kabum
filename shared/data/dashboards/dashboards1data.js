@@ -13,8 +13,9 @@ const ReactApexChart = dynamic(() => import('react-apexcharts'), {
 export class Statistics1 extends React.Component {
     constructor(props) {
         super(props);
+
         this.state = {
-            series: [
+            series: props.chartData.series || [
                 {
                     name: 'Total de Pedidos',
                     data: [44, 42, 57, 86, 58, 55, 70, 43, 23, 54, 77, 34],
@@ -77,10 +78,10 @@ export class Statistics1 extends React.Component {
                         'Jun',
                         'Jul',
                         'Aug',
-                        'sep',
-                        'oct',
-                        'nov',
-                        'dec',
+                        'Sep',
+                        'Oct',
+                        'Nov',
+                        'Dec',
                     ],
                     axisBorder: {
                         show: true,
@@ -137,10 +138,10 @@ export class Statistics1 extends React.Component {
         );
     }
 }
+
 export class Viewers extends React.Component {
     constructor(props) {
         super(props);
-
         this.state = {
             series: [
                 {
