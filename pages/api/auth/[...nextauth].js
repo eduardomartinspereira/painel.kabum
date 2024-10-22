@@ -20,8 +20,6 @@ export const authOptions = {
                         }
                     );
 
-                    console.log(res);
-
                     if (!res.ok) {
                         console.error('Erro ao fazer login:', res.statusText);
                         return null;
