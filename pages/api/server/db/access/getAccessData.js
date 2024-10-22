@@ -1,6 +1,7 @@
 import dayjs from 'dayjs';
 import 'dayjs/locale/pt-br';
 import localeData from 'dayjs/plugin/localeData';
+import { prisma } from '../prisma';
 
 dayjs.extend(localeData);
 dayjs.locale('pt-br');
