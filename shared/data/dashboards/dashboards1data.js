@@ -3,7 +3,6 @@ import 'dayjs/locale/pt-br';
 import localeData from 'dayjs/plugin/localeData';
 import dynamic from 'next/dynamic';
 import React, { Fragment } from 'react';
-import { ButtonGroup, Dropdown } from 'react-bootstrap';
 import {
     useGlobalFilter,
     usePagination,
@@ -473,12 +472,12 @@ export const BasicTable = ({ recentOrders }) => {
         <>
             <div className="d-flex justify-content-between flex-wrap gap-2 mb-3">
                 <div>
-                    <GlobalFilter
+                    {/* <GlobalFilter
                         filter={globalFilter}
                         setFilter={setGlobalFilter}
-                    />
+                    /> */}
                 </div>
-                <ButtonGroup>
+                {/* <ButtonGroup>
                     <Dropdown>
                         <Dropdown.Toggle
                             variant=""
@@ -506,7 +505,7 @@ export const BasicTable = ({ recentOrders }) => {
                             </Dropdown.Item>
                         </Dropdown.Menu>
                     </Dropdown>
-                </ButtonGroup>
+                </ButtonGroup> */}
             </div>
             <table {...getTableProps()} className="table  mb-0 table-bordered">
                 <thead>

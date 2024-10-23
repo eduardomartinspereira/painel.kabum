@@ -5,22 +5,15 @@ export async function getProductsSoldToday() {
     const todayStart = startOfDay(new Date());
     const todayEnd = endOfDay(new Date());
 
-    const paymentsToday = await prisma.payment.findMany({
-        where: {
-            createdAt: {
-                gte: todayStart,
-                lte: todayEnd,
-            },
-            status: 'APPROVED',
-        },
-        select: {
-            productQuantity: true,
-        },
-    });
+    const paymentsToday = await prisma.$queryRaw`
+        SELECT SUM(\`productQuantity\`) as \`totalProductsSold\`
+        FROM \`Payment\`
+        WHERE \`createdAt\` >= ${todayStart}
+        AND \`createdAt\` <= ${todayEnd}
+        AND \`status\` = 'APPROVED';
+    `;
 
-    const totalProductsSold = paymentsToday.reduce((total, payment) => {
-        return total + payment.productQuantity;
-    }, 0);
+    const totalProductsSold = paymentsToday[0]?.totalProductsSold || 0;
 
     return totalProductsSold;
 }

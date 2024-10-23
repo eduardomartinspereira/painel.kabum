@@ -7,17 +7,15 @@ dayjs.extend(localeData);
 dayjs.locale('pt-br');
 
 export async function getAccessData() {
-    const accessData = await prisma.accessLog.groupBy({
-        by: ['deviceType', 'browser', 'createdAt'],
-        _count: {
-            id: true,
-        },
-        where: {
-            createdAt: {
-                gte: dayjs().startOf('day').subtract(6, 'days').toDate(),
-            },
-        },
-    });
+    const last7DaysStart = dayjs().startOf('day').subtract(6, 'days').toDate();
+
+    const accessData = await prisma.$queryRaw`
+        SELECT \`deviceType\`, \`city\`, \`browser\`, DATE(\`createdAt\`) as \`day\`, COUNT(id) as \`count\`
+        FROM \`AccessLog\`
+        WHERE \`createdAt\` >= ${last7DaysStart}
+        GROUP BY \`deviceType\`, \`city\`, \`browser\`, \`day\`
+        ORDER BY \`day\` ASC;
+    `;
 
     const shortWeekdays = {
         'segunda-feira': 'Segunda',
@@ -42,18 +40,20 @@ export async function getAccessData() {
     const mobileCounts = Array(7).fill(0);
     const desktopCounts = Array(7).fill(0);
     const browserCounts = {};
+    const cityCounts = {};
+
+    let totalAccesses = 0;
 
     accessData.forEach((access) => {
-        const formattedCreatedAt = dayjs(access.createdAt)
-            .startOf('day')
-            .format('dddd');
+        const formattedCreatedAt = dayjs(access.day).format('dddd');
         const index = last7Days.indexOf(shortWeekdays[formattedCreatedAt]);
 
+        const count = Number(access.count);
         if (index !== -1) {
             if (access.deviceType === 'MOBILE') {
-                mobileCounts[index] += access._count.id;
+                mobileCounts[index] += count;
             } else if (access.deviceType === 'DESKTOP') {
-                desktopCounts[index] += access._count.id;
+                desktopCounts[index] += count;
             }
 
             const browserName =
@@ -62,7 +62,14 @@ export async function getAccessData() {
             if (!browserCounts[browserName]) {
                 browserCounts[browserName] = 0;
             }
-            browserCounts[browserName] += access._count.id;
+            browserCounts[browserName] += count;
+
+            if (!cityCounts[access.city]) {
+                cityCounts[access.city] = 0;
+            }
+            cityCounts[access.city] += count;
+
+            totalAccesses += count;
         }
     });
 
@@ -74,7 +81,20 @@ export async function getAccessData() {
         (acc, count) => acc + count,
         0
     );
-    const totalAccesses = totalMobileAccesses + totalDesktopAccesses;
+
+    const cityStats = Object.keys(cityCounts).map((city) => {
+        const cityAccessCount = cityCounts[city];
+        const percentage = ((cityAccessCount / totalAccesses) * 100).toFixed(2);
+        return {
+            city,
+            accessCount: cityAccessCount,
+            percentage,
+        };
+    });
+
+    const top10Cities = cityStats
+        .sort((a, b) => b.accessCount - a.accessCount)
+        .slice(0, 9);
 
     return {
         mobile: mobileCounts,
@@ -84,5 +104,7 @@ export async function getAccessData() {
         totalMobileAccesses,
         totalDesktopAccesses,
         totalAccesses,
+        cityStats,
+        top10Cities,
     };
 }

@@ -1,30 +1,22 @@
 import { prisma } from '../prisma';
 
 export async function getRecentPayments() {
-    // Buscar os pagamentos mais recentes, limitando a quantidade de registros
-    const recentPayments = await prisma.payment.findMany({
-        where: {
-            status: {
-                in: ['APPROVED', 'PENDING'],
-            },
-        },
-        orderBy: {
-            createdAt: 'desc',
-        },
-        take: 10,
-        include: {
-            user: true,
-        },
-    });
+    const recentPayments = await prisma.$queryRaw`
+        SELECT p.id as \`productId\`, p.status, p.amount, p.\`paymentMethod\`, p.\`createdAt\`, u.id as \`userId\`, u.name
+        FROM \`Payment\` p
+        JOIN \`User\` u ON p.\`userId\` = u.id
+        WHERE p.status IN ('APPROVED', 'PENDING')
+        ORDER BY p.\`createdAt\` DESC
+        LIMIT 20;
+    `;
 
     return recentPayments.map((payment) => ({
-        name: payment.user.name,
-        userId: payment.user.id,
+        name: payment.name,
+        userId: payment.userId,
         status: payment.status,
         amount: payment.amount,
-        productId: payment.id,
+        productId: payment.productId,
         paymentMethod: payment.paymentMethod,
-        amount: payment.amount,
-        date: Date(payment.createdAt),
+        date: payment.createdAt.toISOString(),
     }));
 }

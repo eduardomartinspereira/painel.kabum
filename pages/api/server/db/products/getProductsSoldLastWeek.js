@@ -8,24 +8,16 @@ export async function getProductsSoldLastWeek() {
 
     const lastWeekEnd = endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 0 });
 
-    const paymentsLastWeek = await prisma.payment.findMany({
-        where: {
-            createdAt: {
-                gte: lastWeekStart,
-                lte: lastWeekEnd,
-            },
-            status: 'APPROVED',
-        },
-        select: {
-            productQuantity: true,
-        },
-    });
+    const paymentsLastWeek = await prisma.$queryRaw`
+        SELECT SUM(\`productQuantity\`) as \`totalProductsSoldLastWeek\`
+        FROM \`Payment\`
+        WHERE \`createdAt\` >= ${lastWeekStart}
+        AND \`createdAt\` <= ${lastWeekEnd}
+        AND \`status\` = 'APPROVED';
+    `;
 
-    const totalProductsSoldLastWeek = paymentsLastWeek.reduce(
-        (total, payment) => {
-            return total + payment.productQuantity;
-        },
-        0
+    const totalProductsSoldLastWeek = Number(
+        paymentsLastWeek[0]?.totalProductsSoldLastWeek || 0
     );
 
     return totalProductsSoldLastWeek;

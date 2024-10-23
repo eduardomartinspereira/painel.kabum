@@ -13,6 +13,26 @@ import { MENUITEMS } from '../sidebar/nav';
 const Sidebar = ({ local_varaiable, ThemeChanger }) => {
     const [menuitems, setMenuitems] = useState(MENUITEMS);
 
+    const router = useRouter();
+
+    const isActiveMenuItem = (path) => {
+        if (!path) return false;
+
+        const lowerPath = router.pathname.toLowerCase();
+
+        return lowerPath.includes(path.toLowerCase());
+    };
+
+    const isSpecialActive = (title) => {
+        const lowerPath = router.pathname.toLowerCase();
+        return (
+            (lowerPath.includes('finance') &&
+                title?.toLowerCase() === 'financeiro') ||
+            (lowerPath.includes('dashboard') &&
+                title?.toLowerCase() === 'dashboard')
+        );
+    };
+
     function closeMenuFn() {
         const closeMenuRecursively = (items) => {
             items?.forEach((item) => {
@@ -31,7 +51,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         Container.addEventListener('click', Containerclick);
     }, []);
 
-    // const location = useLocation();
     const location = useRouter();
 
     function Onhover() {
@@ -74,7 +93,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
     }
 
     useEffect(() => {
-        // Check if window is defined (i.e., we are in the browser)
         if (typeof window !== 'undefined') {
             const WindowPreSize = [window.innerWidth];
 
@@ -89,7 +107,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                         WindowPreSize[WindowPreSize.length - 1] < 992 &&
                         WindowPreSize[WindowPreSize.length - 2] >= 992
                     ) {
-                        // less than 992;
                         ThemeChanger({ ...theme, toggled: 'close' });
                     }
 
@@ -97,7 +114,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                         WindowPreSize[WindowPreSize.length - 1] >= 992 &&
                         WindowPreSize[WindowPreSize.length - 2] < 992
                     ) {
-                        // greater than 992
                         ThemeChanger({
                             ...theme,
                             toggled:
@@ -120,7 +136,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
     }, []);
 
     function switcherArrowFn() {
-        // Used to remove is-expanded class and remove class on clicking arrow buttons
         function slideClick() {
             const slide = document.querySelectorAll('.slide');
             const slideMenu = document.querySelectorAll('.slide-menu');
@@ -346,17 +361,16 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
     let hasParentLevel = 0;
 
     function setSubmenu(event, targetObject, MENUITEMS = menuitems) {
-        const theme = store.getState();
-        // if ((window.screen.availWidth <= 992 || theme.dataNavStyle != "icon-hover") && (window.screen.availWidth <= 992 || theme.dataNavStyle != "menu-hover")) {
         if (!event?.ctrlKey) {
             for (const item of MENUITEMS) {
                 if (item === targetObject) {
+                    console.log(item === targetObject, item, targetObject);
                     item.active = true;
                     item.selected = true;
                     setMenuAncestorsActive(item);
                 } else if (!item.active && !item.selected) {
-                    item.active = false; // Set active to false for items not matching the target
-                    item.selected = false; // Set active to false for items not matching the target
+                    item.active = false;
+                    item.selected = false;
                 } else {
                     removeActiveOtherMenus(item);
                 }
@@ -376,7 +390,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                     typeof obj[key] === 'object' &&
                     JSON.stringify(obj[key]) === JSON.stringify(childObject)
                 ) {
-                    return obj; // Return the parent object
+                    return obj;
                 }
                 if (typeof obj[key] === 'object') {
                     const parentObject = getParentObject(obj[key], childObject);
@@ -386,7 +400,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                 }
             }
         }
-        return null; // Object not found
+        return null;
     }
     function setMenuAncestorsActive(targetObject) {
         const parent = getParentObject(menuitems, targetObject);
@@ -422,11 +436,10 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         } else {
         }
     }
-    //
     function setMenuUsingUrl(currentPath) {
         hasParent = false;
         hasParentLevel = 1;
-        // Check current url and trigger the setSidemenu method to active the menu.
+
         const setSubmenuRecursively = (items) => {
             items?.forEach((item) => {
                 if (item.path == '') {
@@ -441,16 +454,12 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
     const [previousUrl, setPreviousUrl] = useState('/');
 
     useEffect(() => {
-        // Select the target element
         const targetElement = document.documentElement;
 
-        // Create a MutationObserver instance
         const observer = new MutationObserver(handleAttributeChange);
 
-        // Configure the observer to watch for attribute changes
         const config = { attributes: true };
 
-        // Start observing the target element
         observer.observe(targetElement, config);
         let currentPath = location.pathname.endsWith('/')
             ? location.pathname.slice(0, -1)
@@ -460,16 +469,12 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
             setMenuUsingUrl(currentPath);
             setPreviousUrl(currentPath);
         }
-
-        // ... the rest of your useEffect code
     }, [location]);
 
-    //
     function toggleSidemenu(event, targetObject, MENUITEMS = menuitems) {
         const theme = store.getState();
         let element = event.target;
 
-        // if ((window.screen.availWidth <= 992 || theme.dataNavStyle != "icon-hover") && (window.screen.availWidth <= 992 || theme.dataNavStyle != "menu-hover")) {
         if (
             (theme.dataNavStyle != 'icon-hover' &&
                 theme.dataNavStyle != 'menu-hover') ||
@@ -501,7 +506,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                     setAncestorsActive(MENUITEMS, item);
                 } else if (!item.active) {
                     if (theme.dataVerticalStyle != 'doublemenu') {
-                        item.active = false; // Set active to false for items not matching the target
+                        item.active = false;
                     }
                 }
                 if (item.children && item.children.length > 0) {
@@ -524,7 +529,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
             ) {
                 const listItem = element.closest('li');
                 if (listItem) {
-                    // Find the first sibling <ul> element
                     const siblingUL = listItem.querySelector('ul');
                     let outterUlWidth = 0;
                     let listItemUL = listItem.closest('ul:not(.main-menu)');
@@ -538,7 +542,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                         }
                     }
                     if (siblingUL) {
-                        // You've found the sibling <ul> element
                         let siblingULRect = listItem.getBoundingClientRect();
                         if (theme.dir == 'rtl') {
                             if (
@@ -650,7 +653,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         ) {
             const listItem = element.closest('li');
             if (listItem) {
-                // Find the first sibling <ul> element
                 const siblingUL = listItem.querySelector('ul');
                 let outterUlWidth = 0;
                 let listItemUL = listItem.closest('ul:not(.main-menu)');
@@ -662,7 +664,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                     }
                 }
                 if (siblingUL) {
-                    // You've found the sibling <ul> element
                     let siblingULRect = listItem.getBoundingClientRect();
                     if (theme.dir == 'rtl') {
                         if (
@@ -703,7 +704,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
             }
         }
     }
-    //to open menu
+
     const Sideclick = () => {
         if (window.innerWidth > 992) {
             let html = document.documentElement;
@@ -713,7 +714,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         }
     };
 
-    //
     const [MyclassName, setMyClass] = useState('');
     const Containerclick = () => {
         if (localStorage.getItem('nowaverticalstyles') == 'icontext') {
@@ -751,11 +751,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         }
     }
 
-    const handleClick = (event) => {
-        // Your logic here
-        event.preventDefault(); // Prevents the default anchor behavior (navigation)
-        // ... other logic you want to perform on click
-    };
     return (
         <Fragment>
             <div id="responsive-overlay" onClick={() => menuClose()}></div>
@@ -861,9 +856,9 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                                 ? 'slide__category'
                                                 : ''
                                         } 
-									${levelone.type === 'link' ? 'slide' : ''} 
-									${levelone.type === 'sub' ? 'slide has-sub' : ''} 
-									${levelone.active ? 'open' : ''} ${levelone.selected ? 'active' : ''}`}
+                ${levelone.type === 'link' ? 'slide' : ''} 
+                ${levelone.type === 'sub' ? 'slide has-sub' : ''} 
+                ${isSpecialActive(levelone.title) ? 'active' : ''}`}
                                     >
                                         {levelone.menutitle ? (
                                             <span className="category-name">
@@ -872,12 +867,14 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                         ) : (
                                             ''
                                         )}
-                                        {/* if Link */}
+
                                         {levelone.type === 'link' ? (
                                             <Link
                                                 href={levelone.path}
                                                 className={`side-menu__item ${
-                                                    levelone.selected
+                                                    isSpecialActive(
+                                                        levelone.title
+                                                    )
                                                         ? 'active'
                                                         : ''
                                                 }`}
@@ -903,12 +900,12 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                                         </div>
                                                     </OverlayTrigger>
                                                 </span>
-                                                {local_varaiable.dataVerticalStyle !=
+                                                {local_varaiable.dataVerticalStyle !==
                                                 'doublemenu'
                                                     ? levelone.icon
                                                     : ''}
                                                 <span className="side-menu__label">
-                                                    {levelone.title}{' '}
+                                                    {levelone.title}
                                                     {levelone.badgetxt ? (
                                                         <span
                                                             className={
@@ -926,33 +923,8 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                         ) : (
                                             ''
                                         )}
-                                        {/* if empty  */}
-                                        {levelone.type === 'empty' ? (
-                                            <Link
-                                                href="#!"
-                                                className="side-menu__item"
-                                                onClick={handleClick}
-                                            >
-                                                {levelone.icon}
-                                                <span className="">
-                                                    {levelone.title}
-                                                    {levelone.badgetxt ? (
-                                                        <span
-                                                            className={
-                                                                levelone.class
-                                                            }
-                                                        >
-                                                            {levelone.badgetxt}
-                                                        </span>
-                                                    ) : (
-                                                        ''
-                                                    )}
-                                                </span>
-                                            </Link>
-                                        ) : (
-                                            ''
-                                        )}
-                                        {/* if Sub level  */}
+
+                                        {/* if Sub level */}
                                         {levelone.type === 'sub' ? (
                                             <Menuloop
                                                 MENUITEMS={levelone}

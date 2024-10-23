@@ -5,23 +5,16 @@ export async function getSalesAmountToday() {
     const todayStart = startOfDay(new Date());
     const todayEnd = endOfDay(new Date());
 
-    const paymentsToday = await prisma.payment.findMany({
-        where: {
-            createdAt: {
-                gte: todayStart,
-                lte: todayEnd,
-            },
-            status: 'APPROVED',
-        },
-        select: {
-            amount: true,
-        },
-    });
+    const paymentsToday = await prisma.$queryRaw`
+        SELECT SUM(\`amount\`) as \`totalSalesAmount\`
+        FROM \`Payment\`
+        WHERE \`createdAt\` >= ${todayStart}
+        AND \`createdAt\` <= ${todayEnd}
+        AND \`status\` = 'APPROVED';
+    `;
+
+    const totalSalesAmount = paymentsToday[0]?.totalSalesAmount || 0;
 
     console.log(paymentsToday, 'paymentsToday');
-    const totalSalesAmount = paymentsToday.reduce((total, payment) => {
-        return total + Number(payment.amount);
-    }, 0);
-
     return totalSalesAmount;
 }
