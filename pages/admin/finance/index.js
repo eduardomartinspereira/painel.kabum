@@ -16,26 +16,59 @@ import { getProductsSoldLastWeek } from '../../api/server/db/products/getProduct
 import { getProductsSoldToday } from '../../api/server/db/products/getProductsSoldToday';
 const Finance = ({
     totalSoldToday,
+    totalSoldYesterday,
     salesAmountToday,
-    productsSoldLastWeek,
+    salesAmountYesterday,
+    totalProductsSoldLastWeek,
+    totalProductsSoldWeekBeforeLast,
     totalSalesAmountLastWeek,
+    totalSalesAmountWeekBeforeLast,
     chartData,
     recentOrders,
     accessData,
     totalSales,
     totalRevenueThisMonth,
+    totalRevenueLastMonth,
 }) => {
-    const capitalizeFirstLetter = (name) => {
-        if (!name) return '';
-        return name.charAt(0).toUpperCase() + name.slice(1).toLowerCase();
-    };
-
     const formatAmount = (amount) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
         }).format(amount);
     };
+
+    const percentageChangeThisMonth =
+        totalRevenueLastMonth > 0
+            ? ((totalRevenueThisMonth - totalRevenueLastMonth) /
+                  totalRevenueLastMonth) *
+              100
+            : 0;
+
+    const percentageChangeOrders =
+        totalSoldYesterday > 0
+            ? ((totalSoldToday - totalSoldYesterday) / totalSoldYesterday) * 100
+            : 0;
+
+    const percentageChangeSalesToday =
+        salesAmountYesterday > 0
+            ? ((salesAmountToday - salesAmountYesterday) /
+                  salesAmountYesterday) *
+              100
+            : 0;
+
+    const percentageChangeLastWeekOrders =
+        totalProductsSoldWeekBeforeLast > 0
+            ? ((totalProductsSoldLastWeek - totalProductsSoldWeekBeforeLast) /
+                  totalProductsSoldWeekBeforeLast) *
+              100
+            : 0;
+
+    const percentageChangeLastWeekSales =
+        totalSalesAmountWeekBeforeLast > 0
+            ? ((totalSalesAmountLastWeek - totalSalesAmountWeekBeforeLast) /
+                  totalSalesAmountWeekBeforeLast) *
+              100
+            : 0;
 
     const colors = [
         '#3498db',
@@ -78,8 +111,32 @@ const Finance = ({
                                                         Pedidos Hoje
                                                     </h6>
                                                     <span className="badge bg-success-transparent text-success fw-semibold ms-auto rounded-pill lh-maincard px-2 my-auto">
-                                                        <i className="bx bx-caret-up me-1"></i>
-                                                        0.11%
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeOrders >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeOrders >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeOrders >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeOrders.toFixed(
+                                                                2
+                                                            )}
+                                                            %
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <div className="pb-0 mt-0">
@@ -97,6 +154,7 @@ const Finance = ({
                                         </div>
                                     </Row>
                                 </Col>
+
                                 <Col xl={6} lg={6} md={6} sm={6} xxl={3}>
                                     <Row className=" border-end bd-md-e-0 bd-xs-e-0 bd-lg-e-0 bd-xl-e-0  p-3">
                                         <div className="col-2 d-flex align-items-center justify-content-center">
@@ -110,9 +168,33 @@ const Finance = ({
                                                     <h6 className="mb-2 tx-12">
                                                         Faturado Hoje
                                                     </h6>
-                                                    <span className="badge bg-danger-transparent text-danger fw-semibold ms-auto rounded-pill lh-maincard px-2 my-auto">
-                                                        <i className="fa fa-caret-up me-1"></i>
-                                                        0.23%
+                                                    <span className="badge bg-success-transparent text-success fw-semibold ms-auto rounded-pill lh-maincard px-2 my-auto">
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeSalesToday >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeSalesToday >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeSalesToday >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeSalesToday.toFixed(
+                                                                2
+                                                            )}
+                                                            %
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <div className="pb-0 mt-0">
@@ -128,6 +210,7 @@ const Finance = ({
                                         </div>
                                     </Row>
                                 </Col>
+
                                 <Col xl={6} lg={6} md={6} sm={6} xxl={3}>
                                     <Row className=" border-end bd-xs-e-0  p-3">
                                         <div className="col-2 d-flex align-items-center justify-content-center">
@@ -142,8 +225,32 @@ const Finance = ({
                                                         Últimos 7 dias
                                                     </h6>
                                                     <span className="badge bg-success-transparent text-success fw-semibold ms-auto rounded-pill lh-maincard px-2 my-auto">
-                                                        <i className="fa fa-caret-up me-1"></i>
-                                                        1.57%
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeLastWeekSales >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeLastWeekSales >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeLastWeekSales >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeLastWeekSales.toFixed(
+                                                                2
+                                                            )}
+                                                            %
+                                                        </span>
                                                     </span>
                                                 </div>
                                                 <div className="pb-0 mt-0">
@@ -160,6 +267,7 @@ const Finance = ({
                                     </Row>
                                 </Col>
 
+                                {/* Total Faturado */}
                                 <Col xl={6} lg={6} md={6} sm={6} xxl={3}>
                                     <Row className="p-3">
                                         <div className="col-2 d-flex align-items-center justify-content-center">
@@ -169,14 +277,10 @@ const Finance = ({
                                         </div>
                                         <div className="col-10">
                                             <div className="pt-4 pb-3">
-                                                <div className="d-flex	">
+                                                <div className="d-flex">
                                                     <h6 className="mb-2 fs-12 d-block">
                                                         Total Faturado
                                                     </h6>
-                                                    <span className="badge bg-danger-transparent text-danger fw-semibold ms-auto rounded-pill lh-maincard px-2 my-auto">
-                                                        <i className="fa fa-caret-up me-1"></i>
-                                                        0.45%
-                                                    </span>
                                                 </div>
                                                 <div className="pb-0 mt-0">
                                                     <div className="d-flex">
@@ -203,6 +307,7 @@ const Finance = ({
                             </Card.Header>
                             <Card.Body>
                                 <Row className=" mb-2 ps-lg-5">
+                                    {/* Esse mês */}
                                     <Col xl={4} lg={4} md={4} sm={4}>
                                         <p className="mb-1">Esse mês</p>
                                         <h5 className="mb-1">
@@ -212,14 +317,40 @@ const Finance = ({
                                         </h5>
                                         <p className="tx-11 text-muted">
                                             Mês passado
-                                            <span className="text-success ms-2">
-                                                <i className="fa fa-caret-up me-2"></i>
-                                                <span className="badge bg-success text-white tx-11">
-                                                    0.9%
+                                            <span
+                                                className={`text-${
+                                                    percentageChangeThisMonth >=
+                                                    0
+                                                        ? 'success'
+                                                        : 'danger'
+                                                } ms-2`}
+                                            >
+                                                <i
+                                                    className={`fa fa-caret-${
+                                                        percentageChangeThisMonth >=
+                                                        0
+                                                            ? 'up'
+                                                            : 'down'
+                                                    } me-2`}
+                                                ></i>
+                                                <span
+                                                    className={`badge bg-${
+                                                        percentageChangeThisMonth >=
+                                                        0
+                                                            ? 'success'
+                                                            : 'danger'
+                                                    } text-white tx-11`}
+                                                >
+                                                    {percentageChangeThisMonth.toFixed(
+                                                        2
+                                                    )}
+                                                    %
                                                 </span>
                                             </span>
                                         </p>
                                     </Col>
+
+                                    {/* Semana passada */}
                                     <Col xl={4} lg={4} md={4} sm={4}>
                                         <p className=" mb-1">Semana passada</p>
                                         <h5 className="mb-1">
@@ -228,15 +359,41 @@ const Finance = ({
                                             )}
                                         </h5>
                                         <p className="tx-11 text-muted">
-                                            Últimos 15 dias
-                                            <span className="text-danger ms-2">
-                                                <i className="fa fa-caret-down me-2"></i>
-                                                <span className="badge bg-danger text-white tx-11">
-                                                    0.15%
+                                            Últimos 14 dias
+                                            <span
+                                                className={`text-${
+                                                    percentageChangeLastWeekSales >=
+                                                    0
+                                                        ? 'success'
+                                                        : 'danger'
+                                                } ms-2`}
+                                            >
+                                                <i
+                                                    className={`fa fa-caret-${
+                                                        percentageChangeLastWeekSales >=
+                                                        0
+                                                            ? 'up'
+                                                            : 'down'
+                                                    } me-2`}
+                                                ></i>
+                                                <span
+                                                    className={`badge bg-${
+                                                        percentageChangeLastWeekSales >=
+                                                        0
+                                                            ? 'success'
+                                                            : 'danger'
+                                                    } text-white tx-11`}
+                                                >
+                                                    {percentageChangeLastWeekSales.toFixed(
+                                                        2
+                                                    )}
+                                                    %
                                                 </span>
                                             </span>
                                         </p>
                                     </Col>
+
+                                    {/* Hoje */}
                                     <Col xl={4} lg={4} md={4} sm={4}>
                                         <p className=" mb-1">Hoje</p>
                                         <h5 className="mb-1">
@@ -244,15 +401,40 @@ const Finance = ({
                                         </h5>
                                         <p className="tx-11 text-muted">
                                             Ontem
-                                            <span className="text-success ms-2">
-                                                <i className="fa fa-caret-up me-2"></i>
-                                                <span className="badge bg-success text-white tx-11">
-                                                    0.11%
+                                            <span
+                                                className={`text-${
+                                                    percentageChangeSalesToday >=
+                                                    0
+                                                        ? 'success'
+                                                        : 'danger'
+                                                } ms-2`}
+                                            >
+                                                <i
+                                                    className={`fa fa-caret-${
+                                                        percentageChangeSalesToday >=
+                                                        0
+                                                            ? 'up'
+                                                            : 'down'
+                                                    } me-2`}
+                                                ></i>
+                                                <span
+                                                    className={`badge bg-${
+                                                        percentageChangeSalesToday >=
+                                                        0
+                                                            ? 'success'
+                                                            : 'danger'
+                                                    } text-white tx-11`}
+                                                >
+                                                    {percentageChangeSalesToday.toFixed(
+                                                        2
+                                                    )}
+                                                    %
                                                 </span>
                                             </span>
                                         </p>
                                     </Col>
                                 </Row>
+
                                 <div id="statistics2">
                                     <Dashboard2data.Statistics2
                                         series={chartData.series}
@@ -458,26 +640,59 @@ export const getServerSideProps = async (context) => {
         },
     };
 
-    const totalSoldToday = await getProductsSoldToday();
-    const salesAmountToday = await getSalesAmountToday();
-    const productsSoldLastWeek = await getProductsSoldLastWeek();
-    const totalSalesAmountLastWeek = await getSalesAmountLastWeek();
+    // Fetch current day's and yesterday's sales data
+    const {
+        totalProductsSoldToday: totalSoldToday,
+        totalProductsSoldYesterday: totalSoldYesterday,
+    } = await getProductsSoldToday();
+
+    const {
+        totalSalesAmountToday: salesAmountToday,
+        totalSalesAmountYesterday: salesAmountYesterday,
+    } = await getSalesAmountToday();
+
+    const { totalProductsSoldLastWeek, totalProductsSoldWeekBeforeLast } =
+        await getProductsSoldLastWeek();
+
+    const { totalSalesAmountLastWeek, totalSalesAmountWeekBeforeLast } =
+        await getSalesAmountLastWeek();
+
     const recentOrders = await getRecentPayments();
+
     const monthlySalesData = await getMonthlySalesData();
+
     const accessData = await getAccessData();
+
     const totalSales = await getTotalApprovedPayments();
 
+    // Fetch current and last month revenue
     const currentMonth = new Date().toLocaleString('default', {
         month: 'long',
     });
 
+    // Calculate previous month
+    const previousMonthDate = new Date();
+    previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
+    const lastMonth = previousMonthDate.toLocaleString('default', {
+        month: 'long',
+    });
+
+    // Find data for current and last month in monthlySalesData
     const currentMonthData = monthlySalesData.find(
         (data) => data.month === currentMonth
+    );
+
+    const lastMonthData = monthlySalesData.find(
+        (data) => data.month === lastMonth
     );
 
     const totalRevenueThisMonth = currentMonthData
         ? currentMonthData.totalRevenue
         : 0;
+
+    const totalRevenueLastMonth = lastMonthData
+        ? lastMonthData.totalRevenue
+        : 0; // Default to 0 if no data for last month
 
     const chartData = {
         series: [
@@ -497,14 +712,19 @@ export const getServerSideProps = async (context) => {
         props: {
             session: safeSession,
             totalSoldToday,
+            totalSoldYesterday,
             salesAmountToday,
-            productsSoldLastWeek,
+            salesAmountYesterday,
+            totalProductsSoldLastWeek,
+            totalProductsSoldWeekBeforeLast,
             totalSalesAmountLastWeek,
+            totalSalesAmountWeekBeforeLast,
             chartData,
             recentOrders,
             accessData,
             totalSales,
             totalRevenueThisMonth,
+            totalRevenueLastMonth, // Pass last month's revenue as a prop
         },
     };
 };
