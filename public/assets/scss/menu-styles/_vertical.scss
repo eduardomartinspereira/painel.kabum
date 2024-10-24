@@ -109,8 +109,12 @@
         font-size: 0.813rem;
         color: $menu-prime-color;
 
-        // font-weight: 500;
-        // border-radius: $default-radius;
+        .person {
+            stroke: $menu-prime-color !important;
+            fill: none !important;
+            stroke-width: 2px !important;
+        }
+
         &.active,
         &:hover {
             color: $primary !important;
@@ -123,14 +127,6 @@
             .side-menu__icon {
                 fill: $primary;
                 color: $menu-prime-color;
-            }
-
-            .person {
-                fill: $primary;
-                color: $menu-prime-color;
-                path {
-                    stroke: $primary !important;
-                }
             }
         }
 

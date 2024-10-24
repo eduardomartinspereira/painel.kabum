@@ -32600,6 +32600,11 @@ code[class*=language-] {
   font-size: 0.813rem;
   color: var(--menu-prime-color);
 }
+.app-sidebar .side-menu__item .person {
+  stroke: var(--menu-prime-color) !important;
+  fill: none !important;
+  stroke-width: 2px !important;
+}
 .app-sidebar .side-menu__item.active, .app-sidebar .side-menu__item:hover {
   color: var(--primary-color) !important;
 }
@@ -32611,13 +32616,6 @@ code[class*=language-] {
 .app-sidebar .side-menu__item.active .side-menu__icon, .app-sidebar .side-menu__item:hover .side-menu__icon {
   fill: var(--primary-color);
   color: var(--menu-prime-color);
-}
-.app-sidebar .side-menu__item.active .person, .app-sidebar .side-menu__item:hover .person {
-  fill: var(--primary-color);
-  color: var(--menu-prime-color);
-}
-.app-sidebar .side-menu__item.active .person path, .app-sidebar .side-menu__item:hover .person path {
-  stroke: var(--primary-color) !important;
 }
 .app-sidebar .side-menu__item.active {
   font-weight: 400;

@@ -350,7 +350,6 @@ const Finance = ({
                                         </p>
                                     </Col>
 
-                                    {/* Semana passada */}
                                     <Col xl={4} lg={4} md={4} sm={4}>
                                         <p className=" mb-1">Semana passada</p>
                                         <h5 className="mb-1">
@@ -640,7 +639,6 @@ export const getServerSideProps = async (context) => {
         },
     };
 
-    // Fetch current day's and yesterday's sales data
     const {
         totalProductsSoldToday: totalSoldToday,
         totalProductsSoldYesterday: totalSoldYesterday,
@@ -665,19 +663,16 @@ export const getServerSideProps = async (context) => {
 
     const totalSales = await getTotalApprovedPayments();
 
-    // Fetch current and last month revenue
     const currentMonth = new Date().toLocaleString('default', {
         month: 'long',
     });
 
-    // Calculate previous month
     const previousMonthDate = new Date();
     previousMonthDate.setMonth(previousMonthDate.getMonth() - 1);
     const lastMonth = previousMonthDate.toLocaleString('default', {
         month: 'long',
     });
 
-    // Find data for current and last month in monthlySalesData
     const currentMonthData = monthlySalesData.find(
         (data) => data.month === currentMonth
     );
@@ -692,7 +687,7 @@ export const getServerSideProps = async (context) => {
 
     const totalRevenueLastMonth = lastMonthData
         ? lastMonthData.totalRevenue
-        : 0; // Default to 0 if no data for last month
+        : 0;
 
     const chartData = {
         series: [
@@ -724,7 +719,7 @@ export const getServerSideProps = async (context) => {
             accessData,
             totalSales,
             totalRevenueThisMonth,
-            totalRevenueLastMonth, // Pass last month's revenue as a prop
+            totalRevenueLastMonth,
         },
     };
 };
