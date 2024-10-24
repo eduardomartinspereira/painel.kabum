@@ -204,7 +204,7 @@ const Home = () => {
                                                                             >
                                                                                 {isLoading
                                                                                     ? 'Carregando...'
-                                                                                    : 'Login'}
+                                                                                    : 'Entrar'}
                                                                             </button>
                                                                         </form>
                                                                     </div>
