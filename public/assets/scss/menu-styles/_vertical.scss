@@ -110,14 +110,16 @@
         color: $menu-prime-color;
 
         .person {
-            stroke: $menu-prime-color !important;
-            fill: none !important;
+            stroke: $menu-prime-color;
+            fill: none;
             stroke-width: 2px !important;
         }
 
         &.active,
         &:hover {
             color: $primary !important;
+
+            stroke: none !important;
 
             .side-menu__label,
             .side-menu__angle {
@@ -127,6 +129,11 @@
             .side-menu__icon {
                 fill: $primary;
                 color: $menu-prime-color;
+            }
+
+            .person {
+                stroke: $primary !important;
+                fill: none !important;
             }
         }
 

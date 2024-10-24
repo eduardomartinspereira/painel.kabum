@@ -32601,12 +32601,13 @@ code[class*=language-] {
   color: var(--menu-prime-color);
 }
 .app-sidebar .side-menu__item .person {
-  stroke: var(--menu-prime-color) !important;
-  fill: none !important;
+  stroke: var(--menu-prime-color);
+  fill: none;
   stroke-width: 2px !important;
 }
 .app-sidebar .side-menu__item.active, .app-sidebar .side-menu__item:hover {
   color: var(--primary-color) !important;
+  stroke: none !important;
 }
 .app-sidebar .side-menu__item.active .side-menu__label,
 .app-sidebar .side-menu__item.active .side-menu__angle, .app-sidebar .side-menu__item:hover .side-menu__label,
@@ -32616,6 +32617,10 @@ code[class*=language-] {
 .app-sidebar .side-menu__item.active .side-menu__icon, .app-sidebar .side-menu__item:hover .side-menu__icon {
   fill: var(--primary-color);
   color: var(--menu-prime-color);
+}
+.app-sidebar .side-menu__item.active .person, .app-sidebar .side-menu__item:hover .person {
+  stroke: var(--primary-color) !important;
+  fill: none !important;
 }
 .app-sidebar .side-menu__item.active {
   font-weight: 400;
