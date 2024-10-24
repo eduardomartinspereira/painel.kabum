@@ -6,6 +6,7 @@ import {
 } from "../../../shared/data/tables/datatablesdata";
 import Pageheader from "../../../shared/layout-components/pageheader/pageheader";
 import Seo from "../../../shared/layout-components/seo/seo";
+import { CategoriesTable } from "@/shared/data/tables/datatablesdatacategories";
 const Datatables = () => {
   return (
     <Fragment>
@@ -43,10 +44,10 @@ const Datatables = () => {
         <Col xl={12}>
           <Card className="custom-card">
             <Card.Header>
-              <div className="card-title">CUPONS CADASTRADOS</div>
+              <div className="card-title">CATEGORIAS CADASTRADAS</div>
             </Card.Header>
             <Card.Body>
-              <Savetable />
+              <CategoriesTable />
             </Card.Body>
           </Card>
         </Col>
