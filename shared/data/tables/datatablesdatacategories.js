@@ -8,48 +8,49 @@ import {
   usePagination,
 } from "react-table";
 
-export const Savetable = () => {
+export const CategoriesTable = () => {
   const [modalShow, setModalShow] = useState(false);
   const data = [
     {
       id: "1",
-      code: "SUMMER2024",
-      discount: "20%",
-      expirationDate: "2024-12-31",
+      name: "Electronics",
+      description: "Devices and gadgets",
+      parentCategoryId: null,
       isActive: true,
     },
     {
       id: "2",
-      code: "WINTER2024",
-      discount: "15%",
-      expirationDate: "2024-11-30",
-      isActive: false,
+      name: "Mobile Phones",
+      description: "Smartphones and accessories",
+      parentCategoryId: "1",
+      isActive: true,
     },
     {
       id: "3",
-      code: "FREESHIP",
-      discount: "Frete Grátis",
-      expirationDate: "2024-10-30",
+      name: "Laptops",
+      description: "Personal and business laptops",
+      parentCategoryId: "1",
       isActive: true,
     },
+    // ... other categories
   ];
+  const [categories, setCategories] = useState(data);
 
-  const [contacts, setContacts] = useState(data);
   const [addFormData, setAddFormData] = useState({
-    code: "",
-    discount: "",
-    expirationDate: "",
+    name: "",
+    description: "",
+    parentCategoryId: "",
     isActive: false,
   });
 
   const [editFormData, setEditFormData] = useState({
-    code: "",
-    discount: "",
-    expirationDate: "",
+    name: "",
+    description: "",
+    parentCategoryId: "",
     isActive: false,
   });
 
-  const [editContactId, setEditContactId] = useState(null);
+  const [editCategoryId, setEditCategoryId] = useState(null);
 
   const handleAddFormChange = (event) => {
     event.preventDefault();
@@ -57,10 +58,10 @@ export const Savetable = () => {
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
 
-    const newFormData = { ...addFormData };
-    newFormData[fieldName] = fieldValue;
-
-    setAddFormData(newFormData);
+    setAddFormData((prevFormData) => ({
+      ...prevFormData,
+      [fieldName]: fieldValue,
+    }));
   };
 
   const handleEditFormChange = (event) => {
@@ -69,104 +70,96 @@ export const Savetable = () => {
     const fieldName = event.target.getAttribute("name");
     const fieldValue = event.target.value;
 
-    const newFormData = { ...editFormData };
-    newFormData[fieldName] = fieldValue;
-
-    setEditFormData(newFormData);
+    setEditFormData((prevFormData) => ({
+      ...prevFormData,
+      [fieldName]: fieldValue,
+    }));
   };
 
   const handleAddFormSubmit = (event) => {
     event.preventDefault();
 
-    const newCoupon = {
+    const newCategory = {
       id: nanoid(),
-      code: addFormData.code,
-      discount: addFormData.discount,
-      expirationDate: addFormData.expirationDate,
+      name: addFormData.name,
+      description: addFormData.description,
+      parentCategoryId: addFormData.parentCategoryId || null,
       isActive: addFormData.isActive,
     };
 
-    const newContacts = [...contacts, newCoupon];
-    setContacts(newContacts);
-    setModalShow(false); // Fecha o modal após adicionar o cupom
+    setCategories((prevCategories) => [...prevCategories, newCategory]);
+    setModalShow(false); // Close the modal after adding
   };
 
   const handleEditFormSubmit = (event) => {
     event.preventDefault();
 
-    const editedCoupon = {
-      id: editContactId,
-      code: editFormData.code,
-      discount: editFormData.discount,
-      expirationDate: editFormData.expirationDate,
+    const updatedCategory = {
+      id: editCategoryId,
+      name: editFormData.name,
+      description: editFormData.description,
+      parentCategoryId: editFormData.parentCategoryId || null,
       isActive: editFormData.isActive,
     };
 
-    const newContacts = [...contacts];
-    const index = contacts.findIndex((contact) => contact.id === editContactId);
-
-    newContacts[index] = editedCoupon;
-    setContacts(newContacts);
-    setEditContactId(null);
+    setCategories((prevCategories) =>
+      prevCategories.map((category) =>
+        category.id === editCategoryId ? updatedCategory : category
+      )
+    );
+    setEditCategoryId(null);
+    setModalShow(false); // Close the modal after editing
   };
 
-  const handleEditClick = (event, contact) => {
+  const handleEditClick = (event, category) => {
     event.preventDefault();
-    setEditContactId(contact.id);
+    setEditCategoryId(category.id);
 
-    const formValues = {
-      code: contact.code,
-      discount: contact.discount,
-      expirationDate: contact.expirationDate,
-      isActive: contact.isActive,
-    };
-
-    setEditFormData(formValues);
-    setModalShow(true); // Abre o modal para edição
+    setEditFormData({
+      name: category.name,
+      description: category.description,
+      parentCategoryId: category.parentCategoryId || "",
+      isActive: category.isActive,
+    });
+    setModalShow(true); // Open the modal for editing
   };
 
   const handleCancelClick = () => {
-    setEditContactId(null);
+    setEditCategoryId(null);
+    setModalShow(false); // Close the modal
   };
 
-  const handleDeleteClick = (contactId) => {
-    const newContacts = [...contacts];
-
-    const index = contacts.findIndex((contact) => contact.id === contactId);
-
-    newContacts.splice(index, 1);
-
-    setContacts(newContacts);
+  const handleDeleteClick = (categoryId) => {
+    setCategories((prevCategories) =>
+      prevCategories.filter((category) => category.id !== categoryId)
+    );
   };
 
   return (
     <div className="app-container">
       <Form onSubmit={handleEditFormSubmit}>
         <Button
-          variant=""
-          className="btn btn-primary mb-3"
+          variant="primary"
+          className="mb-3"
           onClick={() => setModalShow(true)}
         >
-          Adicionar novo cupom
+          Add New Category
         </Button>
         <div className="table-responsive">
-          <Table
-            id="delete-datatable"
-            className="table table-bordered text-nowrap border-bottom"
-          >
+          <Table className="table table-bordered text-nowrap border-bottom">
             <thead>
               <tr>
-                <th className="wd-5p text-center">Código</th>
-                <th>Desconto</th>
-                <th>Data de Expiração</th>
-                <th>Ativo</th>
-                <th>Ações</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Parent Category</th>
+                <th>Active</th>
+                <th>Actions</th>
               </tr>
             </thead>
             <tbody>
-              {contacts.map((contact) => (
-                <Fragment key={contact.id}>
-                  {editContactId === contact.id ? (
+              {categories.map((category) => (
+                <Fragment key={category.id}>
+                  {editCategoryId === category.id ? (
                     <EditableRow
                       editFormData={editFormData}
                       handleEditFormChange={handleEditFormChange}
@@ -174,7 +167,7 @@ export const Savetable = () => {
                     />
                   ) : (
                     <ReadOnlyRow
-                      contact={contact}
+                      category={category}
                       handleEditClick={handleEditClick}
                       handleDeleteClick={handleDeleteClick}
                     />
@@ -195,53 +188,76 @@ export const Savetable = () => {
       >
         <Modal.Header closeButton>
           <Modal.Title id="contained-modal-title-vcenter">
-            {editContactId ? "Editar Cupom" : "Adicionar Novo Cupom"}
+            {editCategoryId ? "Edit Category" : "Add New Category"}
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form
             onSubmit={
-              editContactId ? handleEditFormSubmit : handleAddFormSubmit
+              editCategoryId ? handleEditFormSubmit : handleAddFormSubmit
             }
           >
             <Form.Control
               type="text"
-              name="code"
+              name="name"
               required
-              placeholder="Código do Cupom..."
-              onChange={handleAddFormChange}
-              value={addFormData.code || ""}
+              placeholder="Category Name..."
+              onChange={
+                editCategoryId ? handleEditFormChange : handleAddFormChange
+              }
+              value={editCategoryId ? editFormData.name : addFormData.name}
+              className="form-control mb-2"
+            />
+            <Form.Control
+              as="textarea"
+              name="description"
+              required
+              placeholder="Description..."
+              onChange={
+                editCategoryId ? handleEditFormChange : handleAddFormChange
+              }
+              value={
+                editCategoryId
+                  ? editFormData.description
+                  : addFormData.description
+              }
               className="form-control mb-2"
             />
             <Form.Control
               type="text"
-              name="discount"
-              required
-              placeholder="Desconto..."
-              onChange={handleAddFormChange}
-              value={addFormData.discount || ""}
-              className="form-control mb-2"
-            />
-            <Form.Control
-              type="date"
-              name="expirationDate"
-              required
-              placeholder="Data de Expiração..."
-              onChange={handleAddFormChange}
-              value={addFormData.expirationDate || ""}
+              name="parentCategoryId"
+              placeholder="Parent Category ID..."
+              onChange={
+                editCategoryId ? handleEditFormChange : handleAddFormChange
+              }
+              value={
+                editCategoryId
+                  ? editFormData.parentCategoryId
+                  : addFormData.parentCategoryId
+              }
               className="form-control mb-2"
             />
             <Form.Check
               type="checkbox"
-              label="Ativo"
+              label="Active"
               name="isActive"
-              checked={addFormData.isActive}
+              checked={
+                editCategoryId ? editFormData.isActive : addFormData.isActive
+              }
               onChange={(e) =>
-                setAddFormData({ ...addFormData, isActive: e.target.checked })
+                editCategoryId
+                  ? setEditFormData({
+                      ...editFormData,
+                      isActive: e.target.checked,
+                    })
+                  : setAddFormData({
+                      ...addFormData,
+                      isActive: e.target.checked,
+                    })
               }
             />
             <Button variant="primary" type="submit">
-              {editContactId ? "Salvar" : "Adicionar"}
+              {editCategoryId ? "Save" : "Add"}
             </Button>
           </Form>
         </Modal.Body>
@@ -263,9 +279,20 @@ const EditableRow = ({
         <Form.Control
           type="text"
           required
-          placeholder="Código do Cupom"
-          name="code"
-          value={editFormData.code}
+          placeholder="Category Name"
+          name="name"
+          value={editFormData.name}
+          onChange={handleEditFormChange}
+          className="border"
+        />
+      </td>
+      <td>
+        <Form.Control
+          as="textarea"
+          required
+          placeholder="Description"
+          name="description"
+          value={editFormData.description}
           onChange={handleEditFormChange}
           className="border"
         />
@@ -273,20 +300,9 @@ const EditableRow = ({
       <td>
         <Form.Control
           type="text"
-          required
-          placeholder="Desconto"
-          name="discount"
-          value={editFormData.discount}
-          onChange={handleEditFormChange}
-          className="border"
-        />
-      </td>
-      <td>
-        <Form.Control
-          type="date"
-          required
-          name="expirationDate"
-          value={editFormData.expirationDate}
+          placeholder="Parent Category ID"
+          name="parentCategoryId"
+          value={editFormData.parentCategoryId}
           onChange={handleEditFormChange}
           className="border"
         />
@@ -318,21 +334,21 @@ const EditableRow = ({
   );
 };
 
-const ReadOnlyRow = ({ contact, handleEditClick, handleDeleteClick }) => {
+const ReadOnlyRow = ({ category, handleEditClick, handleDeleteClick }) => {
   return (
     <tr>
-      <td>{contact.code}</td>
-      <td>{contact.discount}</td>
-      <td>{contact.expirationDate}</td>
-      <td>{contact.isActive ? "Sim" : "Não"}</td>
+      <td>{category.name}</td>
+      <td>{category.description}</td>
+      <td>{category.parentCategoryId ? category.parentCategoryId : "None"}</td>
+      <td>{category.isActive ? "Yes" : "No"}</td>
       <td>
         <Button
           variant="primary"
-          onClick={(event) => handleEditClick(event, contact)}
+          onClick={(event) => handleEditClick(event, category)}
         >
           Edit
         </Button>
-        <Button variant="danger" onClick={() => handleDeleteClick(contact.id)}>
+        <Button variant="danger" onClick={() => handleDeleteClick(category.id)}>
           Delete
         </Button>
       </td>
