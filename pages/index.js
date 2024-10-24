@@ -9,6 +9,7 @@ import Seo from '../shared/layout-components/seo/seo';
 const Home = () => {
     const [passwordshow1, setpasswordshow1] = useState(false);
     const [err, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const [data, setData] = useState({
         email: '',
         password: '',
@@ -22,11 +23,13 @@ const Home = () => {
     const routeChange = () => {
         const path = '/admin/dashboard/';
         navigate.push(path);
+        setIsLoading(false);
     };
 
     async function handleLogin(e) {
         e.preventDefault();
         setError('');
+        setIsLoading(true);
 
         const result = await signIn('credentials', {
             redirect: false,
@@ -43,7 +46,10 @@ const Home = () => {
         } else {
             routeChange();
         }
+
+        // Define como false quando a requisição termina
     }
+
     useEffect(() => {
         if (document.body) {
             document
@@ -55,11 +61,11 @@ const Home = () => {
             document.body.classList.remove('ltr', 'error-page1', 'bg-primary');
         };
     }, []);
+
     return (
         <Fragment>
             <Seo title={'Login'} />
             <div className="square-box">
-                <div></div>
                 <div></div>
                 <div></div>
                 <div></div>
@@ -147,14 +153,6 @@ const Home = () => {
                                                                                     className=" d-block"
                                                                                 >
                                                                                     Password
-                                                                                    {/* <Link
-                                                                                        href="/admin/authentication/resetpassword/resetbasic/"
-                                                                                        className="float-end text-primary"
-                                                                                    >
-                                                                                        Forget
-                                                                                        password
-                                                                                        ?
-                                                                                    </Link> */}
                                                                                 </label>
                                                                                 <div className="input-group">
                                                                                     <Form.Control
@@ -200,196 +198,16 @@ const Home = () => {
                                                                                 onClick={
                                                                                     handleLogin
                                                                                 }
+                                                                                disabled={
+                                                                                    isLoading
+                                                                                }
                                                                             >
-                                                                                Login
+                                                                                {isLoading
+                                                                                    ? 'Carregando...'
+                                                                                    : 'Login'}
                                                                             </button>
                                                                         </form>
                                                                     </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </Tab.Pane>
-                                    <Tab.Pane
-                                        eventKey="firebase"
-                                        className="border-0"
-                                    >
-                                        <div className="row g-0">
-                                            {err && (
-                                                <Alert variant="danger">
-                                                    {err}
-                                                </Alert>
-                                            )}
-                                            <div className="col-12">
-                                                <div className="main-card-signin d-md-flex">
-                                                    <div className="wd-100p">
-                                                        <div className="d-flex mb-4">
-                                                            <Link href="/admin/dashboard">
-                                                                <img
-                                                                    src={`${
-                                                                        process
-                                                                            .env
-                                                                            .NODE_ENV ===
-                                                                        'production'
-                                                                            ? basePath
-                                                                            : ''
-                                                                    }/assets/images/brand-logos/toggle-logo.png`}
-                                                                    className="sign-favicon ht-40"
-                                                                    alt="logo"
-                                                                />
-                                                            </Link>
-                                                        </div>
-                                                        <div className="">
-                                                            <div className="main-signup-header">
-                                                                <h2>
-                                                                    Welcome
-                                                                    back!
-                                                                </h2>
-                                                                <h6 className="font-weight-semibold mb-4">
-                                                                    Please sign
-                                                                    in to
-                                                                    continue.
-                                                                </h6>
-                                                                <div className="panel panel-primary">
-                                                                    <div className="panel-body tabs-menu-body border-0 p-3">
-                                                                        <form action="#">
-                                                                            <div className="form-group">
-                                                                                <label>
-                                                                                    Email
-                                                                                </label>{' '}
-                                                                                <Form.Control
-                                                                                    type="email"
-                                                                                    placeholder="Email"
-                                                                                    name="email"
-                                                                                    defaultValue={
-                                                                                        email
-                                                                                    }
-                                                                                    onChange={
-                                                                                        changeHandler
-                                                                                    }
-                                                                                />
-                                                                            </div>
-                                                                            <div className="form-group">
-                                                                                <label
-                                                                                    htmlFor="signin-password"
-                                                                                    className="form-label text-default d-block"
-                                                                                >
-                                                                                    Password
-                                                                                    <Link
-                                                                                        href={
-                                                                                            '/admin/pages/authentication/forgot-password/'
-                                                                                        }
-                                                                                        className="float-end text-primary"
-                                                                                    >
-                                                                                        Forget
-                                                                                        password
-                                                                                        ?
-                                                                                    </Link>
-                                                                                </label>
-                                                                                <div className="input-group">
-                                                                                    <Form.Control
-                                                                                        className="form-control form-control-lg"
-                                                                                        id="signin-password"
-                                                                                        placeholder="Enter your password"
-                                                                                        name="password"
-                                                                                        type={
-                                                                                            passwordshow1
-                                                                                                ? 'text'
-                                                                                                : 'password'
-                                                                                        }
-                                                                                        value={
-                                                                                            password
-                                                                                        }
-                                                                                        onChange={
-                                                                                            changeHandler
-                                                                                        }
-                                                                                        required
-                                                                                    />
-                                                                                    <button
-                                                                                        className="btn btn-light bg-transparent"
-                                                                                        type="button"
-                                                                                        onClick={() =>
-                                                                                            setpasswordshow1(
-                                                                                                !passwordshow1
-                                                                                            )
-                                                                                        }
-                                                                                        id="button-addon2"
-                                                                                    >
-                                                                                        <i
-                                                                                            className={`${
-                                                                                                passwordshow1
-                                                                                                    ? 'ri-eye-line'
-                                                                                                    : 'ri-eye-off-line'
-                                                                                            } align-middle`}
-                                                                                        ></i>
-                                                                                    </button>
-                                                                                </div>
-                                                                            </div>
-                                                                            <div className="mt-4 d-flex text-center justify-content-center mb-2">
-                                                                                <Link
-                                                                                    href="#!"
-                                                                                    className=" me-3"
-                                                                                >
-                                                                                    <span className="btn-inner--icon">
-                                                                                        {' '}
-                                                                                        <i className="ri-facebook-fill social-btn-icons fs-18 tx-prime"></i>{' '}
-                                                                                    </span>
-                                                                                </Link>
-                                                                                <Link
-                                                                                    href="#!"
-                                                                                    className=" me-3"
-                                                                                >
-                                                                                    <span className="btn-inner--icon">
-                                                                                        {' '}
-                                                                                        <i className="ri-twitter-x-line social-btn-icons fs-18 tx-prime"></i>{' '}
-                                                                                    </span>
-                                                                                </Link>
-                                                                                <Link
-                                                                                    href="#!"
-                                                                                    className=" me-3"
-                                                                                >
-                                                                                    <span className="btn-inner--icon">
-                                                                                        {' '}
-                                                                                        <i className="ri-linkedin-fill social-btn-icons fs-18 tx-prime"></i>{' '}
-                                                                                    </span>
-                                                                                </Link>
-                                                                                <Link
-                                                                                    href="#!"
-                                                                                    className=" me-3"
-                                                                                >
-                                                                                    <span className="btn-inner--icon">
-                                                                                        {' '}
-                                                                                        <i className="ri-instagram-fill social-btn-icons fs-18 tx-prime"></i>{' '}
-                                                                                    </span>
-                                                                                </Link>
-                                                                            </div>
-                                                                        </form>
-                                                                    </div>
-                                                                </div>
-
-                                                                <div className="main-signin-footer text-center mt-3">
-                                                                    <p>
-                                                                        <Link
-                                                                            href="/admin/pages/authentication/forgot-password"
-                                                                            className="mb-3"
-                                                                        >
-                                                                            Forgot
-                                                                            password?
-                                                                        </Link>
-                                                                    </p>
-                                                                    <p>
-                                                                        Don't
-                                                                        have an
-                                                                        account?{' '}
-                                                                        <Link href="/admin/pages/authentication/sign-up">
-                                                                            Create
-                                                                            an
-                                                                            Account
-                                                                        </Link>
-                                                                    </p>
                                                                 </div>
                                                             </div>
                                                         </div>
