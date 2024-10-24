@@ -1,4 +1,4 @@
-import { endOfDay, startOfDay } from 'date-fns';
+import { endOfDay, startOfDay, subDays } from 'date-fns';
 import { prisma } from '../prisma';
 
 export async function getProductsSoldToday() {
@@ -12,8 +12,23 @@ export async function getProductsSoldToday() {
         AND \`createdAt\` <= ${todayEnd}
         AND \`status\` = 'APPROVED';
     `;
+    const totalProductsSoldToday = paymentsToday[0]?.totalProductsSold || 0;
 
-    const totalProductsSold = paymentsToday[0]?.totalProductsSold || 0;
+    const yesterdayStart = startOfDay(subDays(new Date(), 1));
+    const yesterdayEnd = endOfDay(subDays(new Date(), 1));
 
-    return totalProductsSold;
+    const paymentsYesterday = await prisma.$queryRaw`
+        SELECT SUM(\`productQuantity\`) as \`totalProductsSold\`
+        FROM \`Payment\`
+        WHERE \`createdAt\` >= ${yesterdayStart}
+        AND \`createdAt\` <= ${yesterdayEnd}
+        AND \`status\` = 'APPROVED';
+    `;
+    const totalProductsSoldYesterday =
+        paymentsYesterday[0]?.totalProductsSold || 0;
+
+    return {
+        totalProductsSoldToday,
+        totalProductsSoldYesterday,
+    };
 }
