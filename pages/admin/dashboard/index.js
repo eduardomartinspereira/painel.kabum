@@ -16,9 +16,13 @@ import { getProductsSoldToday } from '../../api/server/db/products/getProductsSo
 
 const Dashboard = ({
     totalSoldToday,
+    totalSoldYesterday,
     salesAmountToday,
-    productsSoldLastWeek,
+    salesAmountYesterday,
+    totalProductsSoldLastWeek,
+    totalProductsSoldWeekBeforeLast,
     totalSalesAmountLastWeek,
+    totalSalesAmountWeekBeforeLast,
     chartData,
     recentOrders,
     accessData,
@@ -37,6 +41,32 @@ const Dashboard = ({
     };
 
     const firstName = capitalizeFirstLetter(session?.user?.name?.split(' ')[0]);
+
+    const percentageChangeOrders =
+        totalSoldYesterday > 0
+            ? ((totalSoldToday - totalSoldYesterday) / totalSoldYesterday) * 100
+            : 0;
+
+    const percentageChangeSales =
+        salesAmountYesterday > 0
+            ? ((salesAmountToday - salesAmountYesterday) /
+                  salesAmountYesterday) *
+              100
+            : 0;
+
+    const percentageChangeLastWeekOrders =
+        totalProductsSoldWeekBeforeLast > 0
+            ? ((totalProductsSoldLastWeek - totalProductsSoldWeekBeforeLast) /
+                  totalProductsSoldWeekBeforeLast) *
+              100
+            : 0;
+
+    const percentageChangeLastWeekSales =
+        totalSalesAmountWeekBeforeLast > 0
+            ? ((totalSalesAmountLastWeek - totalSalesAmountWeekBeforeLast) /
+                  totalSalesAmountWeekBeforeLast) *
+              100
+            : 0;
 
     return (
         <>
@@ -96,10 +126,31 @@ const Dashboard = ({
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
                                                         Ontem
-                                                        <i className="bx bx-caret-up mx-2 text-success"></i>
-                                                        <span className="text-success fw-semibold">
-                                                            {' '}
-                                                            +427
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeOrders >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeOrders >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeOrders >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeOrders.toFixed(
+                                                                2
+                                                            )}
+                                                            %
                                                         </span>
                                                     </p>
                                                 </div>
@@ -139,10 +190,31 @@ const Dashboard = ({
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
                                                         Ontem
-                                                        <i className="bx bx-caret-down mx-2 text-danger"></i>
-                                                        <span className="fw-semibold text-danger">
-                                                            {' '}
-                                                            -453
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeSales >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeSales >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeSales >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeSales.toFixed(
+                                                                2
+                                                            )}
+                                                            %
                                                         </span>
                                                     </p>
                                                 </div>
@@ -174,15 +246,37 @@ const Dashboard = ({
                                                             {new Intl.NumberFormat(
                                                                 'pt-BR'
                                                             ).format(
-                                                                productsSoldLastWeek
+                                                                totalProductsSoldLastWeek
                                                             )}
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12 text-muted">
-                                                        Semana passada
-                                                        <i className="bx bx-caret-up mx-2 text-success"></i>
-                                                        <span className=" text-success fw-semibold">
-                                                            +788
+                                                        Últimos 14 dias
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeLastWeekOrders >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeLastWeekOrders >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeLastWeekOrders >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeLastWeekOrders.toFixed(
+                                                                2
+                                                            )}
+                                                            %
                                                         </span>
                                                     </p>
                                                 </div>
@@ -215,10 +309,32 @@ const Dashboard = ({
                                                         </h4>
                                                     </div>
                                                     <p className="mb-0 fs-12  text-muted">
-                                                        Semana passada
-                                                        <i className="bx bx-caret-down mx-2 text-danger"></i>
-                                                        <span className="text-danger fw-semibold">
-                                                            -693
+                                                        Semana anterior
+                                                        <i
+                                                            className={`bx bx-caret-${
+                                                                percentageChangeLastWeekSales >=
+                                                                0
+                                                                    ? 'up'
+                                                                    : 'down'
+                                                            } mx-2 text-${
+                                                                percentageChangeLastWeekSales >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        ></i>
+                                                        <span
+                                                            className={`fw-semibold text-${
+                                                                percentageChangeLastWeekSales >=
+                                                                0
+                                                                    ? 'success'
+                                                                    : 'danger'
+                                                            }`}
+                                                        >
+                                                            {percentageChangeLastWeekSales.toFixed(
+                                                                2
+                                                            )}
+                                                            %
                                                         </span>
                                                     </p>
                                                 </div>
@@ -268,6 +384,7 @@ const Dashboard = ({
                                                             'Mozilla Foundation, Inc.';
                                                         break;
                                                     case 'mobile safari':
+                                                    case 'safari':
                                                         iconPath =
                                                             '../../../assets/images/svgicons/safari.svg';
                                                         company =
@@ -316,7 +433,6 @@ const Dashboard = ({
                                                                     {count}{' '}
                                                                     acessos
                                                                 </span>
-                                                                {/* Aqui você pode adicionar a lógica de exibir a porcentagem ou outro dado adicional */}
                                                             </div>
                                                         </div>
                                                     </div>
@@ -356,8 +472,9 @@ const Dashboard = ({
                                     </Card.Header>
                                     <Card.Body className=" p-0 customers mt-1">
                                         <div className="list-group list-lg-group list-group-flush">
-                                            {recentOrders.map(
-                                                (order, index) => (
+                                            {recentOrders
+                                                .slice(0, 7)
+                                                .map((order, index) => (
                                                     <div
                                                         className="border-0"
                                                         key={index}
@@ -415,8 +532,7 @@ const Dashboard = ({
                                                             </div>
                                                         </div>
                                                     </div>
-                                                )
-                                            )}
+                                                ))}
                                         </div>
                                     </Card.Body>
                                 </Card>
@@ -472,172 +588,9 @@ const Dashboard = ({
                                     </Card.Body>
                                 </Card>
                             </Col>
-
-                            {/* <Col xl={6} lg={12}>
-                                <Card>
-                                    <Card.Header className=" pb-3">
-                                        <h3 className="card-title mb-2">
-                                            MAIN TASKS
-                                        </h3>
-                                    </Card.Header>
-                                    <Card.Body className=" p-0 customers mt-1">
-                                        <div className="">
-                                            <label className="p-2 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked1"
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    accurate information at any
-                                                    given point.
-                                                </span>
-                                                <span className="ms-auto">
-                                                    <span className="badge bg-primary-transparent fw-semibold px-2 py-1 fs-11 me-2">
-                                                        Today
-                                                    </span>
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked01"
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    sharing the information with
-                                                    clients or stakeholders.
-                                                </span>
-                                                <span className="ms-auto">
-                                                    <span className="badge bg-primary-transparent fw-semibold px-2 py-1 fs-11 me-2">
-                                                        Today
-                                                    </span>
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked2"
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    Hearing the information and
-                                                    responding .
-                                                </span>
-                                                <span className="ms-auto">
-                                                    <span className="badge bg-primary-transparent fw-semibold px-2 py-1 fs-11 me-2 float-end">
-                                                        22 hrs
-                                                    </span>
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked3"
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    Setting up and customizing
-                                                    your own sales.
-                                                </span>
-                                                <span className="ms-auto">
-                                                    {' '}
-                                                    <span className="badge bg-light-transparent fw-semibold px-2 py-1 fs-11 me-2">
-                                                        1 Day
-                                                    </span>
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked05"
-                                                        defaultChecked
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    To have a complete 360°
-                                                    overview of sales
-                                                    information, having.
-                                                </span>
-                                                <span className="ms-auto">
-                                                    {' '}
-                                                    <span className="badge bg-light-transparent fw-semibold px-2 py-1 fs-11 me-2">
-                                                        2 Days
-                                                    </span>
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked07"
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    sharing the information with
-                                                    clients or stakeholders.
-                                                </span>
-                                                <span className="ms-auto">
-                                                    <span className="badge bg-primary-transparent fw-semibold px-2 py-1 fs-11 me-2">
-                                                        Today
-                                                    </span>
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked06"
-                                                        defaultChecked
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    New Admin Launched.
-                                                </span>
-                                            </label>
-                                            <label className="p-2 mt-1 d-flex">
-                                                <span className="form-check mb-0 ms-2">
-                                                    <input
-                                                        className="form-check-input"
-                                                        type="checkbox"
-                                                        value=""
-                                                        id="flexCheckChecked08"
-                                                        defaultChecked
-                                                    />
-                                                </span>
-                                                <span className="mx-3 my-auto">
-                                                    To maximize profits and
-                                                    improve productivity.
-                                                </span>
-                                            </label>
-                                        </div>
-                                    </Card.Body>
-                                </Card>
-                            </Col> */}
                         </Row>
                     </Col>
                 </Row>
-                {/* <!-- row closed --> */}
-                {/* <!-- row --> */}
 
                 <Row>
                     <Col sm={12} className="col-12">
@@ -682,10 +635,22 @@ export const getServerSideProps = async (context) => {
         },
     };
 
-    const totalSoldToday = await getProductsSoldToday();
-    const salesAmountToday = await getSalesAmountToday();
-    const productsSoldLastWeek = await getProductsSoldLastWeek();
-    const totalSalesAmountLastWeek = await getSalesAmountLastWeek();
+    const {
+        totalProductsSoldToday: totalSoldToday,
+        totalProductsSoldYesterday: totalSoldYesterday,
+    } = await getProductsSoldToday();
+
+    const {
+        totalSalesAmountToday: salesAmountToday,
+        totalSalesAmountYesterday: salesAmountYesterday,
+    } = await getSalesAmountToday();
+
+    const { totalProductsSoldLastWeek, totalProductsSoldWeekBeforeLast } =
+        await getProductsSoldLastWeek();
+
+    const { totalSalesAmountLastWeek, totalSalesAmountWeekBeforeLast } =
+        await getSalesAmountLastWeek();
+
     const recentOrders = await getRecentPayments();
     const monthlySalesData = await getMonthlySalesData();
     const accessData = await getAccessData();
@@ -708,9 +673,13 @@ export const getServerSideProps = async (context) => {
         props: {
             session: safeSession,
             totalSoldToday,
+            totalSoldYesterday,
             salesAmountToday,
-            productsSoldLastWeek,
+            salesAmountYesterday,
+            totalProductsSoldLastWeek,
+            totalProductsSoldWeekBeforeLast,
             totalSalesAmountLastWeek,
+            totalSalesAmountWeekBeforeLast,
             chartData,
             recentOrders,
             accessData,

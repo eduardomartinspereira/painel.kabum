@@ -5,8 +5,14 @@ export async function getProductsSoldLastWeek() {
     const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), {
         weekStartsOn: 0,
     });
-
     const lastWeekEnd = endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 0 });
+
+    const weekBeforeLastStart = startOfWeek(subWeeks(new Date(), 2), {
+        weekStartsOn: 0,
+    });
+    const weekBeforeLastEnd = endOfWeek(subWeeks(new Date(), 2), {
+        weekStartsOn: 0,
+    });
 
     const paymentsLastWeek = await prisma.$queryRaw`
         SELECT SUM(\`productQuantity\`) as \`totalProductsSoldLastWeek\`
@@ -16,9 +22,24 @@ export async function getProductsSoldLastWeek() {
         AND \`status\` = 'APPROVED';
     `;
 
+    const paymentsWeekBeforeLast = await prisma.$queryRaw`
+        SELECT SUM(\`productQuantity\`) as \`totalProductsSoldWeekBeforeLast\`
+        FROM \`Payment\`
+        WHERE \`createdAt\` >= ${weekBeforeLastStart}
+        AND \`createdAt\` <= ${weekBeforeLastEnd}
+        AND \`status\` = 'APPROVED';
+    `;
+
     const totalProductsSoldLastWeek = Number(
         paymentsLastWeek[0]?.totalProductsSoldLastWeek || 0
     );
 
-    return totalProductsSoldLastWeek;
+    const totalProductsSoldWeekBeforeLast = Number(
+        paymentsWeekBeforeLast[0]?.totalProductsSoldWeekBeforeLast || 0
+    );
+
+    return {
+        totalProductsSoldLastWeek,
+        totalProductsSoldWeekBeforeLast,
+    };
 }
