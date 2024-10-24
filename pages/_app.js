@@ -1,4 +1,5 @@
 import { SessionProvider } from 'next-auth/react';
+import NextNProgress from 'nextjs-progressbar';
 import Authenticationlayout from '../shared/layout-components/layout/authentication-layout';
 import Contentlayout from '../shared/layout-components/layout/contentlayout';
 import '../styles/globals.scss';
@@ -15,6 +16,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             <Layout>
                 <Component {...pageProps} />
             </Layout>
+            <NextNProgress color="#38cab3" />
         </SessionProvider>
     );
 }
