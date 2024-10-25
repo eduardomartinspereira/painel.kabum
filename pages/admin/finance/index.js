@@ -1,7 +1,17 @@
+import axios from 'axios';
 import { getServerSession } from 'next-auth';
 import Link from 'next/link';
-import { Fragment } from 'react';
-import { Card, Col, ListGroup, ListGroupItem, Row } from 'react-bootstrap';
+import Papa from 'papaparse';
+import { Fragment, useState } from 'react';
+import {
+    Button,
+    Card,
+    Col,
+    ListGroup,
+    ListGroupItem,
+    Row,
+    Spinner,
+} from 'react-bootstrap';
 import * as Dashboard2data from '../../../shared/data/dashboards/dashboard2data';
 import { BasicTable } from '../../../shared/data/dashboards/dashboards1data';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
@@ -14,13 +24,12 @@ import { getSalesAmountToday } from '../../api/server/db/finance/getSalesAmountT
 import { getTotalApprovedPayments } from '../../api/server/db/finance/getTotalApprovedPayments';
 import { getProductsSoldLastWeek } from '../../api/server/db/products/getProductsSoldLastWeek';
 import { getProductsSoldToday } from '../../api/server/db/products/getProductsSoldToday';
+import styles from './styles.module.scss';
 const Finance = ({
     totalSoldToday,
     totalSoldYesterday,
     salesAmountToday,
     salesAmountYesterday,
-    totalProductsSoldLastWeek,
-    totalProductsSoldWeekBeforeLast,
     totalSalesAmountLastWeek,
     totalSalesAmountWeekBeforeLast,
     chartData,
@@ -30,11 +39,45 @@ const Finance = ({
     totalRevenueThisMonth,
     totalRevenueLastMonth,
 }) => {
+    const [isLoading, setIsLoading] = useState(false);
+
     const formatAmount = (amount) => {
         return new Intl.NumberFormat('pt-BR', {
             style: 'currency',
             currency: 'BRL',
         }).format(amount);
+    };
+
+    const exportOrdersToCSV = async () => {
+        setIsLoading(true);
+
+        try {
+            const response = await axios.get('/api/orders');
+
+            const ordersData = response.data;
+
+            const csvData = ordersData.map((order) => ({
+                Nome: order.name,
+                Data: new Date(order.date).toLocaleDateString('pt-BR'),
+                Status: order.status === 'APPROVED' ? 'Aprovado' : 'Pendente',
+                Valor: formatAmount(order.amount),
+            }));
+
+            const csv = Papa.unparse(csvData, { header: true });
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement('a');
+            const url = URL.createObjectURL(blob);
+
+            link.href = url;
+            link.setAttribute('download', 'Relatório completo.csv');
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            setIsLoading(false);
+        } finally {
+            setIsLoading(false);
+        }
     };
 
     const percentageChangeThisMonth =
@@ -53,13 +96,6 @@ const Finance = ({
         salesAmountYesterday > 0
             ? ((salesAmountToday - salesAmountYesterday) /
                   salesAmountYesterday) *
-              100
-            : 0;
-
-    const percentageChangeLastWeekOrders =
-        totalProductsSoldWeekBeforeLast > 0
-            ? ((totalProductsSoldLastWeek - totalProductsSoldWeekBeforeLast) /
-                  totalProductsSoldWeekBeforeLast) *
               100
             : 0;
 
@@ -82,6 +118,17 @@ const Finance = ({
         '#c0392b',
         '#8e44ad',
     ];
+
+    if (isLoading) {
+        return (
+            <div className="d-flex justify-content-center align-items-center vh-100">
+                <Spinner animation="border" variant="primary" role="status">
+                    <span className="visually-hidden">Carregando...</span>
+                </Spinner>
+                <span className="ms-2">Processando dados...</span>
+            </div>
+        );
+    }
 
     return (
         <Fragment>
@@ -507,10 +554,21 @@ const Finance = ({
                     </Col>
                 </Col>
                 <Col xs={12} lg={12} md={12} xl={12} xxl={3}>
+                    <div className={styles.buttonContainer}>
+                        <Button
+                            variant=""
+                            type="button"
+                            className="btn btn-primary"
+                            onClick={exportOrdersToCSV} // Botão que exporta os pedidos para CSV
+                        >
+                            <i className="fe fe-download me-1"></i> Extrair
+                            Relatório
+                        </Button>
+                    </div>
                     <Card className="overflow-hidden">
                         <Card.Header className=" pb-1">
                             <h3 className="card-title mb-2">
-                                Recent Transactions
+                                Transações Recentes
                             </h3>
                         </Card.Header>
                         <Card.Body className=" p-0 customers mt-1">

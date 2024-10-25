@@ -1,14 +1,7 @@
 import styles from '@/styles/404.module.scss';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 
 export default function NotFoundPage() {
-    const router = useRouter();
-
-    const handleButtonClick = () => {
-        router.push('/');
-    };
-
     return (
         <section className={styles.containerTotal}>
             <section className={styles.wrapper}>
