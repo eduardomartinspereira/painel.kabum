@@ -1,137 +1,129 @@
 generator client {
-  provider = "prisma-client-js"
+    provider = "prisma-client-js"
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+    provider = "mysql"
+    url      = env("DATABASE_URL")
 }
 
 model Product {
-  id          Int           @id @default(autoincrement())
-  img         String
-  title       String
-  categoryId  Int
-  description String        @db.Text
-  quantity    Int           @default(1)
-  status      ProductStatus
-  game        Game
-  price       Float
-  productKey  String        @default("kjfneuisfui")
-  type        Type          @default(PC)
-  payments    Payment[]
-  category    Category      @relation(fields: [categoryId], references: [id])
+    id          Int           @id @default(autoincrement())
+    img         String
+    title       String
+    categoryId  Int
+    description String        @db.Text
+    quantity    Int           @default(1)
+    status      ProductStatus
+    price       Float
+    productKey  String        @default("kjfneuisfui")
+    type        Type          @default(PC)
+    payments    Payment[]
+    category    Category      @relation(fields: [categoryId], references: [id])
 
-  @@index([categoryId], map: "Product_categoryId_fkey")
+    @@index([categoryId], map: "Product_categoryId_fkey")
 }
 
 model Category {
-  id       Int       @id @default(autoincrement())
-  name     String
-  game     Game
-  products Product[]
+    id       Int       @id @default(autoincrement())
+    name     String
+    products Product[]
 }
 
 model User {
-  id        Int         @id @default(autoincrement())
-  name      String?
-  email     String      @unique
-  password  String
-  image_url String?
-  role      Role        @default(SUBSCRIBER)
-  AccessLog AccessLog[]
-  payments  Payment[]
+    id        Int         @id @default(autoincrement())
+    name      String?
+    email     String      @unique
+    password  String
+    image_url String?
+    role      Role        @default(SUBSCRIBER)
+    AccessLog AccessLog[]
+    payments  Payment[]
 
-  @@index([role], map: "User_role_fkey")
+    @@index([role], map: "User_role_fkey")
 }
 
 model Payment {
-  id              Int           @id @default(autoincrement())
-  userId          Int
-  productId       Int
-  productQuantity Int
-  amount          Float
-  paymentMethod   PaymentMethod
-  status          PaymentStatus
-  gatewayId       String        @unique
-  license         String?
-  createdAt       DateTime      @default(now())
-  couponCode      String?
-  product         Product       @relation(fields: [productId], references: [id])
-  user            User          @relation(fields: [userId], references: [id])
+    id              Int           @id @default(autoincrement())
+    userId          Int
+    productId       Int
+    productQuantity Int
+    amount          Float
+    paymentMethod   PaymentMethod
+    status          PaymentStatus
+    gatewayId       String        @unique
+    license         String?
+    createdAt       DateTime      @default(now())
+    couponCode      String?
+    product         Product       @relation(fields: [productId], references: [id])
+    user            User          @relation(fields: [userId], references: [id])
 
-  @@index([productId], map: "Payment_productId_fkey")
-  @@index([userId], map: "Payment_userId_fkey")
+    @@index([productId], map: "Payment_productId_fkey")
+    @@index([userId], map: "Payment_userId_fkey")
 }
 
 model Coupon {
-  id              String              @id
-  code            String              @unique
-  discount        Float
-  discountType    Coupon_discountType
-  maxUses         Int                 @default(-1)
-  startAmount     Int                 @default(-1)
-  availableAmount Int                 @default(-1)
-  isActive        Boolean             @default(true)
-  createdAt       DateTime            @default(now())
-  updatedAt       DateTime
-  productId       Int?
+    id              String              @id
+    code            String              @unique
+    discount        Float
+    discountType    Coupon_discountType
+    maxUses         Int                 @default(-1)
+    startAmount     Int                 @default(-1)
+    availableAmount Int                 @default(-1)
+    isActive        Boolean             @default(true)
+    createdAt       DateTime            @default(now())
+    updatedAt       DateTime
+    productId       Int?
 }
 
 model AccessLog {
-  id          Int        @id @default(autoincrement())
-  userId      Int?
-  ip          String
-  city        String?
-  browser     String
-  deviceType  DeviceType
-  isIphone    Boolean
-  createdAt   DateTime   @default(now())
-  deviceBrand String?
-  deviceModel String?
-  user        User?      @relation(fields: [userId], references: [id])
+    id          Int        @id @default(autoincrement())
+    userId      Int?
+    ip          String
+    city        String?
+    browser     String
+    deviceType  DeviceType
+    isIphone    Boolean
+    createdAt   DateTime   @default(now())
+    deviceBrand String?
+    deviceModel String?
+    user        User?      @relation(fields: [userId], references: [id])
 
-  @@index([userId], map: "AccessLog_userId_fkey")
+    @@index([userId], map: "AccessLog_userId_fkey")
 }
 
 enum DeviceType {
-  MOBILE
-  DESKTOP
+    MOBILE
+    DESKTOP
 }
 
 enum ProductStatus {
-  IN_STOCK
-  OUT_STOCK
-}
-
-enum Game {
-  PLANO_MENSAL
-  PLANO_SEMANAL
-  PLANO_PERMANENTE
+    IN_STOCK
+    OUT_STOCK
 }
 
 enum Type {
-  PC
-  MOBILE
+    PC
+    MOBILE
 }
 
 enum PaymentMethod {
-  PIX
-  CREDITO
-  DEBITO
+    PIX
+    CREDITO
+    DEBITO
 }
 
 enum PaymentStatus {
-  APPROVED
-  PENDING
+    APPROVED
+    PENDING
 }
 
 enum Role {
-  SUBSCRIBER
-  ADMIN
+    SUBSCRIBER
+    ADMIN
 }
 
 enum Coupon_discountType {
-  PERCENTAGE
-  FIXED
+    PERCENTAGE
+    FIXED
 }

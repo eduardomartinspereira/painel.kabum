@@ -1,13 +1,38 @@
-import { prisma } from "../prisma";
+import { prisma } from '../prisma';
 
 export const getAllProducts = async () => {
-  return await prisma.product.findMany({
-    include: {
-      category: {
-        select: {
-          name: true,
+    const products = await prisma.$queryRaw`
+    SELECT 
+      p.id AS \`productId\`, 
+      p.title, 
+      p.description, 
+      p.price, 
+      p.quantity, 
+      p.status, 
+      p.game, 
+      p.productKey, 
+      p.type, 
+      p.img, 
+      p.categoryId,
+      c.name AS \`categoryName\`
+    FROM \`Product\` p
+    LEFT JOIN \`Category\` c ON p.\`categoryId\` = c.id
+    ORDER BY p.\`title\` ASC
+  `;
+
+    return products.map((product) => ({
+        id: product.productId,
+        title: product.title,
+        description: product.description,
+        price: product.price,
+        quantity: product.quantity,
+        status: product.status,
+        game: product.game,
+        productKey: product.productKey,
+        type: product.type,
+        img: product.img,
+        category: {
+            name: product.categoryName,
         },
-      },
-    },
-  });
+    }));
 };

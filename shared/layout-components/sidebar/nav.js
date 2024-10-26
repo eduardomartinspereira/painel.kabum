@@ -58,7 +58,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/admin/pages/e-commerce/shop/',
+        path: '/admin/products/',
     },
     {
         title: 'Cupom',

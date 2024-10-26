@@ -559,7 +559,7 @@ const Finance = ({
                             variant=""
                             type="button"
                             className="btn btn-primary"
-                            onClick={exportOrdersToCSV} // Botão que exporta os pedidos para CSV
+                            onClick={exportOrdersToCSV}
                         >
                             <i className="fe fe-download me-1"></i> Extrair
                             Relatório

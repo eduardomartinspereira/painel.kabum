@@ -29,7 +29,9 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
             (lowerPath.includes('finance') &&
                 title?.toLowerCase() === 'financeiro') ||
             (lowerPath.includes('dashboard') &&
-                title?.toLowerCase() === 'dashboard')
+                title?.toLowerCase() === 'dashboard') ||
+            (lowerPath.includes('product') &&
+                title?.toLowerCase() === 'produtos')
         );
     };
 
@@ -364,7 +366,6 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         if (!event?.ctrlKey) {
             for (const item of MENUITEMS) {
                 if (item === targetObject) {
-                    console.log(item === targetObject, item, targetObject);
                     item.active = true;
                     item.selected = true;
                     setMenuAncestorsActive(item);
