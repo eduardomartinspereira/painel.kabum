@@ -1,5 +1,6 @@
 import { getAllCategories } from '@/pages/api/server/db/products/getAllCategories';
 import { getAllProducts } from '@/pages/api/server/db/products/getAllProducts';
+import { getServerSession } from 'next-auth';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
@@ -12,9 +13,11 @@ import {
     OverlayTrigger,
     Pagination,
     Row,
+    Spinner,
     Tooltip,
 } from 'react-bootstrap';
 import { useDispatch, useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
 import {
@@ -48,6 +51,7 @@ const ProductCard = ({
     handleItemClick,
     handleAddToWishlist,
     handleAddToCart,
+    handleEditProduct,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -116,22 +120,18 @@ const ProductCard = ({
                                     </OverlayTrigger>
                                 </Link>
                             </li>
-                            <li>
-                                <Link
-                                    href={
-                                        '/admin/pages/e-commerce/product-details/'
-                                    }
-                                    onClick={() => handleItemClick(item)}
+                            <li style={{ cursor: 'pointer' }}>
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Editar Produto</Tooltip>}
                                 >
-                                    <OverlayTrigger
-                                        placement="top"
-                                        overlay={<Tooltip>Visualizar</Tooltip>}
+                                    <div
+                                        className="info-gradient"
+                                        onClick={() => handleEditProduct(item)}
                                     >
-                                        <div className="info-gradient">
-                                            <i className="fas fa-eye"></i>
-                                        </div>
-                                    </OverlayTrigger>
-                                </Link>
+                                        <i className="fas fa-edit"></i>
+                                    </div>
+                                </OverlayTrigger>
                             </li>
                         </ul>
                     </div>
@@ -150,7 +150,7 @@ const ProductCard = ({
                             {formatCurrency(item.price)}
                             <del className="text-secondary font-weight-normal fs-13 d-inline-block ms-1 prev-price"></del>
                         </h4>
-                        <p style={{ marginTop: '10px' }}>
+                        <p style={{ marginTop: '10px', minHeight: '70px' }}>
                             {truncateDescription(item.description)}
                             {item.description.length > DESCRIPTION_LIMIT && (
                                 <span
@@ -162,7 +162,7 @@ const ProductCard = ({
                                 </span>
                             )}
                         </p>
-                        <p>Categoria: {item.category.name}</p>
+                        <p>Categoria: {item.category?.name}</p>
                     </div>
                 </Card.Body>
             </Card>
@@ -180,13 +180,160 @@ const Shop = ({ initialProducts, categories }) => {
     const [searchResults, setSearchResults] = useState(products);
     const [currentPage, setCurrentPage] = useState(1);
     const [showModal, setShowModal] = useState(false);
+    const [loading, setLoading] = useState(false);
     const [newProduct, setNewProduct] = useState({
         title: '',
         description: '',
         price: '',
         img: '',
-        category: '',
+        category: { name: '', id: '' },
+        quantity: 0,
     });
+
+    const [imagePreview, setImagePreview] = useState(null);
+    const [isEditing, setIsEditing] = useState(false);
+    const [productToEdit, setProductToEdit] = useState(null);
+
+    const resetForm = () => {
+        setNewProduct({
+            title: '',
+            description: '',
+            price: '',
+            img: '',
+            category: '',
+            quantity: 0,
+        });
+        setImagePreview(null);
+        setIsEditing(false);
+        setProductToEdit(null);
+    };
+
+    const validateFields = () => {
+        const { title, description, price, img, category } = newProduct;
+        if (!title) return 'Nome do Produto';
+        if (!description) return 'Descrição';
+        if (!price) return 'Preço';
+        if (!img) return 'Imagem';
+        if (!category) return 'Categoria';
+        return null;
+    };
+
+    const handleEditProduct = (product) => {
+        setProductToEdit(product);
+        setNewProduct({
+            title: product.title,
+            description: product.description,
+            price: formatCurrency(product.price),
+            img: product.img,
+            category: product.category,
+            quantity: product.quantity,
+        });
+        setIsEditing(true);
+        setShowModal(true);
+    };
+
+    const handleFileChange = (e) => {
+        const file = e.target.files[0];
+        setNewProduct({ ...newProduct, img: file });
+
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreview(reader.result);
+        };
+        if (file) {
+            reader.readAsDataURL(file);
+        }
+    };
+
+    const handleSaveProduct = async () => {
+        const missingField = validateFields();
+        if (missingField) {
+            toast.error(`Campo obrigatório: ${missingField}`);
+            return;
+        }
+
+        setLoading(true);
+
+        if (isEditing && productToEdit) {
+            // Atualizar produto existente
+            try {
+                const formData = new FormData();
+                formData.append('title', newProduct.title);
+                formData.append('description', newProduct.description);
+                formData.append(
+                    'price',
+                    parseFloat(
+                        newProduct.price.replace('R$', '').replace(',', '.')
+                    )
+                );
+                formData.append('quantity', newProduct.quantity);
+                formData.append('categoryId', newProduct.category.id);
+
+                if (typeof newProduct.img !== 'string') {
+                    formData.append('img', newProduct.img);
+                }
+
+                const response = await fetch(
+                    `/api/product/updateProduct?id=${productToEdit.id}`,
+                    {
+                        method: 'PUT',
+                        body: formData,
+                    }
+                );
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setProducts((prevProducts) =>
+                        prevProducts.map((p) =>
+                            p.id === productToEdit.id ? data.product : p
+                        )
+                    );
+                    toast.success('Produto atualizado com sucesso!');
+                } else {
+                    toast.error('Falha ao atualizar o produto');
+                }
+            } catch (error) {
+                toast.error('Erro na requisição');
+            } finally {
+                setLoading(false);
+                handleCloseModal();
+            }
+        } else {
+            const formData = new FormData();
+            formData.append('title', newProduct.title);
+            formData.append('description', newProduct.description);
+            formData.append(
+                'price',
+                parseFloat(newProduct.price.replace('R$', '').replace(',', '.'))
+            );
+            formData.append('img', newProduct.img);
+            formData.append('quantity', newProduct.quantity);
+            formData.append('categoryId', newProduct.category.id);
+
+            try {
+                const response = await fetch('/api/product/createProduct', {
+                    method: 'POST',
+                    body: formData,
+                });
+
+                if (response.ok) {
+                    const data = await response.json();
+                    setProducts((prevProducts) => [
+                        ...prevProducts,
+                        data.product,
+                    ]);
+                    toast.success('Produto criado com sucesso!');
+                } else {
+                    toast.error('Falha na criação do produto');
+                }
+            } catch (error) {
+                toast.error('Erro na requisição');
+            } finally {
+                setLoading(false);
+                handleCloseModal();
+            }
+        }
+    };
 
     const handleItemClick = (item) => {
         dispatch(setSelectedItem(item));
@@ -224,11 +371,50 @@ const Shop = ({ initialProducts, categories }) => {
     const totalPages = Math.ceil(searchResults.length / ITEMS_PER_PAGE);
 
     const handleShowModal = () => setShowModal(true);
-    const handleCloseModal = () => setShowModal(false);
+    const handleCloseModal = () => {
+        resetForm();
+        setShowModal(false);
+    };
 
-    const handleCreateProduct = () => {
-        console.log('Creating product:', newProduct);
-        handleCloseModal();
+    const handleCreateProduct = async () => {
+        const missingField = validateFields();
+        if (missingField) {
+            toast.error(`Campo obrigatório: ${missingField}`);
+            return;
+        }
+
+        setLoading(true);
+
+        const formData = new FormData();
+        formData.append('title', newProduct.title);
+        formData.append('description', newProduct.description);
+        formData.append(
+            'price',
+            parseFloat(newProduct.price.replace('R$', '').replace(',', '.'))
+        );
+        formData.append('img', newProduct.img);
+        formData.append('quantity', newProduct.quantity);
+        formData.append('categoryId', newProduct.category);
+
+        try {
+            const response = await fetch('/api/product/createProduct', {
+                method: 'POST',
+                body: formData,
+            });
+
+            if (response.ok) {
+                const data = await response.json();
+                setProducts((prevProducts) => [...prevProducts, data.product]);
+                handleCloseModal();
+                toast.success('Produto criado com Sucesso! 🚀');
+            } else {
+                toast.error('Falha na criação do Produto! Tente novamente ❌');
+            }
+        } catch (error) {
+            toast.error('Erro na requisição');
+        } finally {
+            setLoading(false);
+        }
     };
 
     const handlePriceChange = (e) => {
@@ -268,8 +454,10 @@ const Shop = ({ initialProducts, categories }) => {
                                     className="btn btn-primary ms-2"
                                     onClick={handleShowModal}
                                 >
-                                    <i className="fe fe-plus me-1"></i> Criar
-                                    Produto
+                                    <i className="fe fe-plus me-1"></i>{' '}
+                                    {isEditing
+                                        ? 'Editar Produto'
+                                        : 'Criar Produto'}
                                 </Button>
                             </div>
                         </InputGroup>
@@ -290,6 +478,7 @@ const Shop = ({ initialProducts, categories }) => {
                                     handleItemClick={handleItemClick}
                                     handleAddToWishlist={handleAddToWishlist}
                                     handleAddToCart={handleAddToCart}
+                                    handleEditProduct={handleEditProduct}
                                 />
                             ))
                         )}
@@ -329,7 +518,9 @@ const Shop = ({ initialProducts, categories }) => {
 
             <Modal show={showModal} onHide={handleCloseModal} centered>
                 <Modal.Header closeButton>
-                    <Modal.Title>Criar Novo Produto</Modal.Title>
+                    <Modal.Title>
+                        {isEditing ? 'Editar Produto' : 'Criar Novo Produto'}
+                    </Modal.Title>
                 </Modal.Header>
                 <Modal.Body style={{ maxHeight: '70vh', overflowY: 'auto' }}>
                     <Form>
@@ -379,7 +570,6 @@ const Shop = ({ initialProducts, categories }) => {
                                 onChange={handlePriceChange}
                             />
                         </Form.Group>
-
                         <Form.Group
                             controlId="productQuantity"
                             style={{ marginTop: '10px' }}
@@ -401,36 +591,64 @@ const Shop = ({ initialProducts, categories }) => {
                         <Form.Group
                             controlId="productImage"
                             style={{ marginTop: '10px' }}
+                            onChange={handleFileChange}
                         >
                             <Form.Label>Imagem</Form.Label>
                             <Form.Control
                                 type="file"
                                 accept="image/*"
-                                onChange={(e) =>
-                                    setNewProduct({
-                                        ...newProduct,
-                                        img: e.target.files[0],
-                                    })
-                                }
+                                onChange={handleFileChange}
                             />
+                            {isEditing &&
+                                (typeof newProduct.img === 'string' &&
+                                !imagePreview ? (
+                                    <img
+                                        src={newProduct.img}
+                                        alt="Imagem atual do produto"
+                                        style={{
+                                            width: '100%',
+                                            marginTop: '10px',
+                                            height: '300px',
+                                            objectFit: 'cover',
+                                        }}
+                                    />
+                                ) : (
+                                    imagePreview && (
+                                        <img
+                                            src={imagePreview}
+                                            alt="Prévia da nova imagem"
+                                            style={{
+                                                width: '100%',
+                                                marginTop: '10px',
+                                                height: '300px',
+                                                objectFit: 'cover',
+                                            }}
+                                        />
+                                    )
+                                ))}
                         </Form.Group>
-
                         <Form.Group
                             controlId="productCategory"
                             style={{ marginTop: '10px' }}
                         >
                             <Form.Label>Categoria</Form.Label>
                             <Form.Select
-                                value={newProduct.category}
-                                onChange={(e) =>
+                                value={newProduct.category.id}
+                                onChange={(e) => {
+                                    const selectedCategory = categories.find(
+                                        (cat) =>
+                                            cat.id === parseInt(e.target.value)
+                                    );
                                     setNewProduct({
                                         ...newProduct,
-                                        category: e.target.value,
-                                    })
-                                }
+                                        category: selectedCategory,
+                                    });
+                                }}
                             >
                                 <option value="">
-                                    Selecione uma categoria
+                                    {!isEditing
+                                        ? 'Selecione uma categoria'
+                                        : newProduct.category.name}
                                 </option>
                                 {categories.map((cat) => (
                                     <option key={cat.id} value={cat.id}>
@@ -445,8 +663,18 @@ const Shop = ({ initialProducts, categories }) => {
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Cancelar
                     </Button>
-                    <Button variant="primary" onClick={handleCreateProduct}>
-                        Criar Produto
+                    <Button
+                        variant="primary"
+                        onClick={handleSaveProduct}
+                        disabled={loading}
+                    >
+                        {loading ? (
+                            <Spinner as="span" animation="border" size="sm" />
+                        ) : isEditing ? (
+                            'Salvar Alterações'
+                        ) : (
+                            'Criar Produto'
+                        )}
                     </Button>
                 </Modal.Footer>
             </Modal>
@@ -454,7 +682,18 @@ const Shop = ({ initialProducts, categories }) => {
     );
 };
 
-export const getServerSideProps = async () => {
+export const getServerSideProps = async (context) => {
+    const session = await getServerSession(context.req, context.res);
+
+    if (!session) {
+        return {
+            redirect: {
+                destination: '/auth/signin',
+                permanent: false,
+            },
+        };
+    }
+
     const products = await getAllProducts();
     const categories = await getAllCategories();
 

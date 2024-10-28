@@ -1,8 +1,11 @@
 import { SessionProvider } from 'next-auth/react';
 import NextNProgress from 'nextjs-progressbar';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import Authenticationlayout from '../shared/layout-components/layout/authentication-layout';
 import Contentlayout from '../shared/layout-components/layout/contentlayout';
 import '../styles/globals.scss';
+
 const layouts = {
     Contentlayout: Contentlayout,
     Authenticationlayout: Authenticationlayout,
@@ -17,6 +20,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
                 <Component {...pageProps} />
             </Layout>
             <NextNProgress color="#38cab3" />
+            <ToastContainer theme="colored" />
         </SessionProvider>
     );
 }

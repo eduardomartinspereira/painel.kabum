@@ -9,7 +9,6 @@ export const getAllProducts = async () => {
       p.price, 
       p.quantity, 
       p.status, 
-      p.game, 
       p.productKey, 
       p.type, 
       p.img, 
@@ -19,6 +18,7 @@ export const getAllProducts = async () => {
     LEFT JOIN \`Category\` c ON p.\`categoryId\` = c.id
     ORDER BY p.\`title\` ASC
   `;
+    console.log(products, 'productssss');
 
     return products.map((product) => ({
         id: product.productId,
@@ -27,11 +27,11 @@ export const getAllProducts = async () => {
         price: product.price,
         quantity: product.quantity,
         status: product.status,
-        game: product.game,
         productKey: product.productKey,
         type: product.type,
         img: product.img,
         category: {
+            id: product.categoryId,
             name: product.categoryName,
         },
     }));

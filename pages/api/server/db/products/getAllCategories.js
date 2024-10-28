@@ -5,7 +5,6 @@ export const getAllCategories = async () => {
     SELECT 
       c.id AS \`categoryId\`, 
       c.name AS \`categoryName\`,
-      c.game AS \`categoryGame\`,
       p.id AS \`productId\`,
       p.title AS \`productTitle\`,
       p.price AS \`productPrice\`,
@@ -22,7 +21,6 @@ export const getAllCategories = async () => {
             categoryMap[entry.categoryId] = {
                 id: entry.categoryId,
                 name: entry.categoryName,
-                game: entry.categoryGame,
                 products: [],
             };
         }

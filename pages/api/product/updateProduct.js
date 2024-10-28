@@ -12,7 +12,7 @@ export const config = {
 
 const upload = multer({
     storage: multer.memoryStorage(),
-    limits: { fileSize: 5 * 1024 * 1024 }, // 5 MB limit
+    limits: { fileSize: 5 * 1024 * 1024 },
 });
 
 const uploadImageToStorage = async (fileName, fileBuffer) => {
@@ -31,31 +31,41 @@ const router = createRouter();
 
 router.use(expressWrapper(upload.single('img')));
 
-router.post(async (req, res) => {
+router.put(async (req, res) => {
     try {
-        const file = req.file;
+        const { id } = req.query;
+
         const { title, description, price, quantity, categoryId } = req.body;
 
-        if (!title || !description || !price || !quantity || !categoryId) {
+        if (
+            !id ||
+            !title ||
+            !description ||
+            !price ||
+            !quantity ||
+            !categoryId
+        ) {
+            console.log('Missing required fields');
             return res.status(400).json({ error: 'Missing required fields' });
         }
 
-        let imgUrl = '';
-        if (file) {
-            const fileName = file.originalname.split('.')[0];
-            const imgBuffer = file.buffer; // Buffer from multer
+        let imgUrl = null;
+
+        if (req.file) {
+            const fileName = req.file.originalname.split('.')[0];
+            const imgBuffer = req.file.buffer;
             imgUrl = await uploadImageToStorage(fileName, imgBuffer);
         }
 
-        const product = await prisma.product.create({
+        const updatedProduct = await prisma.product.update({
+            where: { id: parseInt(id, 10) },
             data: {
                 title,
                 description,
                 price: parseFloat(price),
                 quantity: parseInt(quantity, 10),
-                img: imgUrl,
+                img: imgUrl || undefined,
                 categoryId: parseInt(categoryId, 10),
-                status: 'IN_STOCK',
             },
             include: {
                 category: {
@@ -66,10 +76,12 @@ router.post(async (req, res) => {
             },
         });
 
-        res.status(201).json({ success: true, product });
+        console.log(updatedProduct);
+
+        res.status(200).json({ success: true, product: updatedProduct });
     } catch (error) {
-        console.error('Error creating product:', error);
-        res.status(500).json({ error: 'Error creating product' });
+        console.error('Error updating product:', error);
+        res.status(500).json({ error: 'Error updating product' });
     }
 });
 
