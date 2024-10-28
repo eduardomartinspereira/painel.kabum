@@ -71,12 +71,11 @@ router.put(async (req, res) => {
                 category: {
                     select: {
                         name: true,
+                        id: true,
                     },
                 },
             },
         });
-
-        console.log(updatedProduct);
 
         res.status(200).json({ success: true, product: updatedProduct });
     } catch (error) {

@@ -52,6 +52,7 @@ const ProductCard = ({
     handleAddToWishlist,
     handleAddToCart,
     handleEditProduct,
+    handleDeleteProduct,
 }) => {
     const [isExpanded, setIsExpanded] = useState(false);
 
@@ -82,44 +83,6 @@ const ProductCard = ({
                             </Link>
                         </div>
                         <ul className="icons">
-                            <li>
-                                <Link
-                                    href={'/admin/pages/e-commerce/wish-list/'}
-                                    onClick={() => handleAddToWishlist(item)}
-                                >
-                                    <OverlayTrigger
-                                        placement="top"
-                                        overlay={
-                                            <Tooltip>
-                                                Adicionar à lista de desejos
-                                            </Tooltip>
-                                        }
-                                    >
-                                        <div className="primary-gradient me-2">
-                                            <i className="fa fa-heart"></i>
-                                        </div>
-                                    </OverlayTrigger>
-                                </Link>
-                            </li>
-                            <li>
-                                <Link
-                                    href={'/admin/pages/e-commerce/cart/'}
-                                    onClick={() => handleAddToCart(item)}
-                                >
-                                    <OverlayTrigger
-                                        placement="top"
-                                        overlay={
-                                            <Tooltip>
-                                                Adicionar ao carrinho
-                                            </Tooltip>
-                                        }
-                                    >
-                                        <div className="secondary-gradient me-2">
-                                            <i className="fa fa-shopping-cart"></i>
-                                        </div>
-                                    </OverlayTrigger>
-                                </Link>
-                            </li>
                             <li style={{ cursor: 'pointer' }}>
                                 <OverlayTrigger
                                     placement="top"
@@ -130,6 +93,23 @@ const ProductCard = ({
                                         onClick={() => handleEditProduct(item)}
                                     >
                                         <i className="fas fa-edit"></i>
+                                    </div>
+                                </OverlayTrigger>
+                            </li>
+                            <li
+                                style={{ cursor: 'pointer', marginLeft: '8px' }}
+                            >
+                                <OverlayTrigger
+                                    placement="top"
+                                    overlay={<Tooltip>Deletar produto</Tooltip>}
+                                >
+                                    <div
+                                        className="secondary-gradient me-2"
+                                        onClick={() =>
+                                            handleDeleteProduct(item)
+                                        }
+                                    >
+                                        <i className="fa fa-trash"></i>
                                     </div>
                                 </OverlayTrigger>
                             </li>
@@ -218,6 +198,30 @@ const Shop = ({ initialProducts, categories }) => {
         return null;
     };
 
+    const handleDeleteProduct = async (product) => {
+        try {
+            const response = await fetch(
+                `/api/product/deleteProduct?id=${product.id}`,
+                { method: 'DELETE' }
+            );
+
+            const responseData = await response.json();
+
+            if (response.ok) {
+                setProducts((prevProducts) =>
+                    prevProducts.filter((p) => p.id !== product.id)
+                );
+                toast.success(
+                    responseData.message || 'Produto deletado com sucesso!'
+                );
+            } else {
+                toast.error(responseData.error || 'Falha ao deletar o produto');
+            }
+        } catch (error) {
+            toast.error('Erro ao deletar o produto');
+        }
+    };
+
     const handleEditProduct = (product) => {
         setProductToEdit(product);
         setNewProduct({
@@ -283,6 +287,9 @@ const Shop = ({ initialProducts, categories }) => {
 
                 if (response.ok) {
                     const data = await response.json();
+
+                    console.log(data, 'data from return');
+
                     setProducts((prevProducts) =>
                         prevProducts.map((p) =>
                             p.id === productToEdit.id ? data.product : p
@@ -476,7 +483,7 @@ const Shop = ({ initialProducts, categories }) => {
                                     key={index}
                                     item={item}
                                     handleItemClick={handleItemClick}
-                                    handleAddToWishlist={handleAddToWishlist}
+                                    handleDeleteProduct={handleDeleteProduct}
                                     handleAddToCart={handleAddToCart}
                                     handleEditProduct={handleEditProduct}
                                 />
