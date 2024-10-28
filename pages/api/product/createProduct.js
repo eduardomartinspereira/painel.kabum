@@ -61,6 +61,7 @@ router.post(async (req, res) => {
                 category: {
                     select: {
                         name: true,
+                        id: true,
                     },
                 },
             },
