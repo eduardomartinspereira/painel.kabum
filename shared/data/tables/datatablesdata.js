@@ -26,7 +26,7 @@ export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {coupons.map((contact) => (
+                        {coupons?.map((contact) => (
                             <Fragment key={contact.id}>
                                 <ReadOnlyRow
                                     contact={contact}
@@ -730,7 +730,7 @@ export const BasicTable = () => {
                     value={pageSize}
                     onChange={(e) => setPageSize(Number(e.target.value))}
                 >
-                    {[10, 25, 50].map((pageSize) => (
+                    {[10, 25, 50]?.map((pageSize) => (
                         <option key={pageSize} value={pageSize}>
                             Show {pageSize}
                         </option>
@@ -746,12 +746,12 @@ export const BasicTable = () => {
                 className="table table-hover mb-0 table-bordered"
             >
                 <thead>
-                    {headerGroups.map((headerGroup) => (
+                    {headerGroups?.map((headerGroup) => (
                         <tr
                             {...headerGroup.getHeaderGroupProps()}
                             key={Math.random()}
                         >
-                            {headerGroup.headers.map((column) => (
+                            {headerGroup.headers?.map((column) => (
                                 <th
                                     {...column.getHeaderProps(
                                         column.getSortByToggleProps()
@@ -781,11 +781,11 @@ export const BasicTable = () => {
                     ))}
                 </thead>
                 <tbody {...getTableBodyProps()}>
-                    {page.map((row) => {
+                    {page?.map((row) => {
                         prepareRow(row);
                         return (
                             <tr {...row.getRowProps()} key={Math.random()}>
-                                {row.cells.map((cell) => {
+                                {row.cells?.map((cell) => {
                                     return (
                                         <td
                                             className="borderrigth"
@@ -913,12 +913,12 @@ export const ResponsiveDataTable = () => {
                         className="table-bordered text-nowrap border-bottom"
                     >
                         <thead>
-                            {headerGroups.map((headerGroup) => (
+                            {headerGroups?.map((headerGroup) => (
                                 <tr
                                     key={Math.random()}
                                     {...headerGroup.getHeaderGroupProps()}
                                 >
-                                    {headerGroup.headers.map((column) => (
+                                    {headerGroup.headers?.map((column) => (
                                         <th
                                             key={Math.random()}
                                             {...column.getHeaderProps(
@@ -946,7 +946,7 @@ export const ResponsiveDataTable = () => {
                             ))}
                         </thead>
                         <tbody {...getTableBodyProps()}>
-                            {page.map((row) => {
+                            {page?.map((row) => {
                                 prepareRow(row);
                                 return (
                                     <tr
@@ -954,7 +954,7 @@ export const ResponsiveDataTable = () => {
                                         className="text-center"
                                         {...row.getRowProps()}
                                     >
-                                        {row.cells.map((cell) => {
+                                        {row.cells?.map((cell) => {
                                             return (
                                                 <td
                                                     key={Math.random()}
