@@ -1,6 +1,5 @@
 import NextAuth from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
-
 export const authOptions = {
     providers: [
         CredentialsProvider({
@@ -26,6 +25,8 @@ export const authOptions = {
                     }
 
                     const response = await res.json();
+
+                    if (response.user.role === 'SUBSCRIBER') return null;
 
                     if (
                         response.user &&
