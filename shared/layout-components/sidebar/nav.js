@@ -83,7 +83,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/admin/tables/datatables/',
+        path: '/admin/coupon/',
     },
     {
         title: 'Categorias',

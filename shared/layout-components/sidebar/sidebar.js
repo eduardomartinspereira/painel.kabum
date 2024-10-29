@@ -31,7 +31,8 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
             (lowerPath.includes('dashboard') &&
                 title?.toLowerCase() === 'dashboard') ||
             (lowerPath.includes('product') &&
-                title?.toLowerCase() === 'produtos')
+                title?.toLowerCase() === 'produtos') ||
+            (lowerPath.includes('coupon') && title?.toLowerCase() === 'cupom')
         );
     };
 
