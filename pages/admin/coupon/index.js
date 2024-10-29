@@ -10,22 +10,12 @@ import Pageheader from '../../../shared/layout-components/pageheader/pageheader'
 import Seo from '../../../shared/layout-components/seo/seo';
 import styles from './styles.module.scss';
 
-const formatCurrency = (value) => {
-    return new Intl.NumberFormat('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-    }).format(value);
-};
-
 const Datatables = ({ coupons }) => {
     const [contacts, setContacts] = useState(
         coupons.map((coupon) => ({
             id: coupon.id,
             code: coupon.code,
-            discount:
-                coupon.discountType === 'PERCENTAGE'
-                    ? `${coupon.discount}%`
-                    : formatCurrency(coupon.discount),
+            discount: coupon.discount,
             createdAt: new Date(coupon.createdAt).toLocaleDateString(),
             discountType: coupon.discountType,
             isActive: coupon.isActive,
@@ -54,18 +44,9 @@ const Datatables = ({ coupons }) => {
 
     const handleFormChange = (event) => {
         const { name, value } = event.target;
-
-        let formattedValue = value;
-        if (name === 'discount' && formData.discountType === 'FIXED') {
-            const numericValue = value.replace(/\D/g, '');
-            formattedValue = numericValue
-                ? formatCurrency(numericValue / 100)
-                : '';
-        }
-
         setFormData((prevData) => ({
             ...prevData,
-            [name]: formattedValue,
+            [name]: value,
         }));
     };
 
@@ -97,11 +78,11 @@ const Datatables = ({ coupons }) => {
             return;
         }
 
-        setIsLoading(true); // Ativa o carregamento
+        setIsLoading(true);
 
         if (editMode) {
             try {
-                const response = await fetch(`/api/coupon/${formData.id}`, {
+                const response = await fetch(`/api/coupon/updateCoupon`, {
                     method: 'PUT',
                     headers: {
                         'Content-Type': 'application/json',
@@ -112,26 +93,12 @@ const Datatables = ({ coupons }) => {
                     toast.success('Cupom atualizado com sucesso!🚀');
                     setContacts((prevContacts) =>
                         prevContacts.map((c) =>
-                            c.id === formData.id
-                                ? {
-                                      ...formData,
-                                      discount:
-                                          formData.discountType === 'PERCENTAGE'
-                                              ? `${formData.discount}%`
-                                              : formatCurrency(
-                                                    parseFloat(
-                                                        formData.discount.replace(
-                                                            /[^\d]/g,
-                                                            ''
-                                                        )
-                                                    ) / 100
-                                                ),
-                                  }
-                                : c
+                            c.id === formData.id ? formData : c
                         )
                     );
                 }
             } catch (error) {
+                toast.error('Erro ao atualizar o cupom!');
                 console.error('Error updating coupon:', error);
             }
         } else {
@@ -144,28 +111,12 @@ const Datatables = ({ coupons }) => {
                     body: JSON.stringify(formData),
                 });
                 if (response.ok) {
-                    toast.success('Cupom criado com Sucesso!🚀');
+                    toast.success('Cupom criado com sucesso!🚀');
                     const newCoupon = await response.json();
-                    setContacts((prevContacts) => [
-                        ...prevContacts,
-                        {
-                            ...newCoupon,
-                            discount:
-                                formData.discountType === 'PERCENTAGE'
-                                    ? `${formData.discount}%`
-                                    : formatCurrency(
-                                          parseFloat(
-                                              formData.discount.replace(
-                                                  /[^\d]/g,
-                                                  ''
-                                              )
-                                          ) / 100
-                                      ),
-                        },
-                    ]);
+                    setContacts((prevContacts) => [...prevContacts, newCoupon]);
                 }
             } catch (error) {
-                toast.error('Algo deu errado.Tente novamente!❌');
+                toast.error('Erro ao criar o cupom! Tente novamente!❌');
                 console.error('Error creating coupon:', error);
             }
         }
@@ -244,13 +195,9 @@ const Datatables = ({ coupons }) => {
                             required
                         />
                         <Form.Control
-                            type="text"
+                            type="number"
                             name="discount"
-                            placeholder={
-                                formData.discountType === 'PERCENTAGE'
-                                    ? 'Desconto (%)'
-                                    : 'Desconto (R$)'
-                            }
+                            placeholder="Desconto"
                             onChange={handleFormChange}
                             value={formData.discount}
                             className="mb-2"
@@ -272,10 +219,6 @@ const Datatables = ({ coupons }) => {
                                             'PERCENTAGE'
                                                 ? 'FIXED'
                                                 : 'PERCENTAGE',
-                                        discount: prevData.discount.replace(
-                                            /[R$%]/g,
-                                            ''
-                                        ),
                                     }))
                                 }
                             />
@@ -286,7 +229,6 @@ const Datatables = ({ coupons }) => {
                             </Form.Text>
                         </Form.Group>
 
-                        {/* Switch para Ativo */}
                         <Form.Group className="d-flex align-items-center mb-2">
                             <Form.Label className="me-2">Ativo:</Form.Label>
                             <Switch

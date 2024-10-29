@@ -18,7 +18,6 @@ export const getAllProducts = async () => {
     LEFT JOIN \`Category\` c ON p.\`categoryId\` = c.id
     ORDER BY p.\`title\` ASC
   `;
-    console.log(products, 'productssss');
 
     return products.map((product) => ({
         id: product.productId,

@@ -1,4 +1,4 @@
-import { Fragment } from 'react';
+import { Fragment, useState } from 'react';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import {
     useGlobalFilter,
@@ -44,16 +44,33 @@ export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
 };
 
 const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
+    const [isCopied, setIsCopied] = useState(false);
+
+    const formatDiscount = (discount, discountType) => {
+        return discountType === 'PERCENTAGE'
+            ? `${discount}%`
+            : `R$ ${Number(discount).toFixed(2).replace('.', ',')}`;
+    };
+
+    const formatDateToBR = (date) => {
+        const parsedDate = new Date(date);
+        return parsedDate.toLocaleDateString('pt-BR', {
+            day: '2-digit',
+            month: '2-digit',
+            year: 'numeric',
+        });
+    };
+
     return (
         <tr>
-            <td>{contact.code}</td>
-            <td>{contact.discount}</td>
-            <td>{contact.createdAt}</td>
+            <td>{contact.code.toUpperCase()}</td>
+            <td>{formatDiscount(contact.discount, contact.discountType)}</td>
+            <td>{formatDateToBR(contact.createdAt)}</td>
             <td>
                 {contact.discountType === 'PERCENTAGE' ? 'Porcentagem' : 'Fixo'}
             </td>
             <td>{contact.isActive ? 'Sim' : 'Não'}</td>
-            <td style={{ width: '10%' }}>
+            <td style={{ width: '20%' }}>
                 <div
                     style={{
                         display: 'flex',
@@ -62,9 +79,10 @@ const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
                     }}
                 >
                     <Button variant="success" onClick={onEdit}>
-                        Editar
+                        <i class="bi bi-pencil"></i> Editar
                     </Button>
                     <Button variant="danger" onClick={onDelete}>
+                        <i class="bi bi-trash"></i>{' '}
                         {isDeleting ? (
                             <Spinner
                                 as="span"
