@@ -5,7 +5,7 @@ import { getServerSession } from 'next-auth';
 import { Fragment, useState } from 'react';
 import { Button, Card, Col, Form, Modal, Row, Spinner } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { Savetable } from '../../../shared/data/tables/datatablesdata';
+import { Savetable } from '../../../shared/data/tables/dataTableCoupon';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
 import styles from './styles.module.scss';
