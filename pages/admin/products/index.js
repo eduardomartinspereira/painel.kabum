@@ -1,7 +1,6 @@
 import { getAllCategories } from '@/pages/api/server/db/products/getAllCategories';
 import { getAllProducts } from '@/pages/api/server/db/products/getAllProducts';
 import { getServerSession } from 'next-auth';
-import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import {
     Button,
@@ -69,18 +68,13 @@ const ProductCard = ({
                 <Card.Body className="h-100 product-grid6">
                     <div className="pro-img-box product-image">
                         <div>
-                            <Link
-                                href={
-                                    '/admin/pages/e-commerce/product-details/'
-                                }
-                                onClick={() => handleItemClick(item)}
-                            >
+                            <div onClick={() => handleItemClick(item)}>
                                 <img
                                     className={styles.img}
                                     src={item.img}
                                     alt={item.title}
                                 />
-                            </Link>
+                            </div>
                         </div>
                         <ul className="icons">
                             <li style={{ cursor: 'pointer' }}>
