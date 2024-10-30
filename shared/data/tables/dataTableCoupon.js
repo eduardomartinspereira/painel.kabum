@@ -1,4 +1,4 @@
-import { Fragment, useState } from 'react';
+import { Fragment } from 'react';
 import { Button, Spinner, Table } from 'react-bootstrap';
 import {
     useGlobalFilter,
@@ -22,6 +22,8 @@ export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
                             <th>Data de Criação</th>
                             <th>Tipo de desconto</th>
                             <th>Ativo</th>
+                            <th>Utilizado</th>
+                            <th>Vendido</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
@@ -44,8 +46,6 @@ export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
 };
 
 const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
-    const [isCopied, setIsCopied] = useState(false);
-
     const formatDiscount = (discount, discountType) => {
         return discountType === 'PERCENTAGE'
             ? `${discount}%`
@@ -61,6 +61,13 @@ const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
         });
     };
 
+    const formatCurrency = (value) => {
+        return new Intl.NumberFormat('pt-BR', {
+            style: 'currency',
+            currency: 'BRL',
+        }).format(value);
+    };
+
     return (
         <tr>
             <td>{contact.code.toUpperCase()}</td>
@@ -70,6 +77,8 @@ const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
                 {contact.discountType === 'PERCENTAGE' ? 'Porcentagem' : 'Fixo'}
             </td>
             <td>{contact.isActive ? 'Sim' : 'Não'}</td>
+            <td>{contact.totalQuantitySold}</td>
+            <td>{formatCurrency(contact.totalSalesAmount)}</td>
             <td style={{ width: '20%' }}>
                 <div
                     style={{

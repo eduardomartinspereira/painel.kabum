@@ -19,6 +19,8 @@ const Datatables = ({ coupons }) => {
             createdAt: new Date(coupon.createdAt).toLocaleDateString(),
             discountType: coupon.discountType,
             isActive: coupon.isActive,
+            totalQuantitySold: coupon.totalQuantitySold,
+            totalSalesAmount: coupon.totalSalesAmount,
         }))
     );
 
@@ -33,6 +35,8 @@ const Datatables = ({ coupons }) => {
         createdAt: '',
         isActive: true,
         discountType: 'PERCENTAGE',
+        totalQuantitySold: 0,
+        totalSalesAmount: 0,
     });
 
     const validateFields = () => {
@@ -58,6 +62,8 @@ const Datatables = ({ coupons }) => {
             createdAt: '',
             isActive: true,
             discountType: 'PERCENTAGE',
+            totalQuantitySold: 0,
+            totalSalesAmount: 0,
         });
         setEditMode(false);
         setModalShow(true);
@@ -290,6 +296,8 @@ export const getServerSideProps = async (context) => {
     }
 
     const coupons = await getAllCoupons();
+
+    console.log(coupons);
 
     return {
         props: {
