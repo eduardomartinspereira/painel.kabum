@@ -12,7 +12,10 @@ export async function getProductsSoldToday() {
         AND \`createdAt\` <= ${todayEnd}
         AND \`status\` = 'APPROVED';
     `;
-    const totalProductsSoldToday = paymentsToday[0]?.totalProductsSold || 0;
+
+    const totalProductsSoldToday = paymentsToday[0]?.totalProductsSold
+        ? Number(paymentsToday[0].totalProductsSold)
+        : 0;
 
     const yesterdayStart = startOfDay(subDays(new Date(), 1));
     const yesterdayEnd = endOfDay(subDays(new Date(), 1));
@@ -24,8 +27,12 @@ export async function getProductsSoldToday() {
         AND \`createdAt\` <= ${yesterdayEnd}
         AND \`status\` = 'APPROVED';
     `;
-    const totalProductsSoldYesterday =
-        paymentsYesterday[0]?.totalProductsSold || 0;
+
+    const totalProductsSoldYesterday = paymentsYesterday[0]?.totalProductsSold
+        ? Number(paymentsYesterday[0].totalProductsSold)
+        : 0;
+
+    console.log(totalProductsSoldToday, totalProductsSoldYesterday);
 
     return {
         totalProductsSoldToday,

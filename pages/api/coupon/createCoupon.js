@@ -22,8 +22,6 @@ export default async function handler(req, res) {
 
     const formattedDiscount = formatDiscount(discount);
 
-    console.log(code, formattedDiscount, createdAt, isActive, discountType);
-
     try {
         const newCoupon = await prisma.coupon.create({
             data: {

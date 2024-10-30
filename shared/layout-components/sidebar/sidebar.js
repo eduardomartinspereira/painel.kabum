@@ -28,6 +28,8 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
         return (
             (lowerPath.includes('finance') &&
                 title?.toLowerCase() === 'financeiro') ||
+            (lowerPath.includes('users') &&
+                title?.toLowerCase() === 'usuários') ||
             (lowerPath.includes('dashboard') &&
                 title?.toLowerCase() === 'dashboard') ||
             (lowerPath.includes('product') &&

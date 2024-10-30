@@ -14,16 +14,6 @@ export default async function handler(req, res) {
 
     const { id, code, discount, createdAt, isActive, discountType } = req.body;
 
-    console.log(
-        id,
-        code,
-        discount,
-        createdAt,
-        isActive,
-        discountType,
-        'QKWLJEKLQWJEWKLQ'
-    );
-
     try {
         const updatedCoupon = await prisma.coupon.update({
             where: { id },

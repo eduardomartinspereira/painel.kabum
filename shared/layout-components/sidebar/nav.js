@@ -121,6 +121,6 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/admin/icons/icons',
+        path: '/admin/users',
     },
 ];

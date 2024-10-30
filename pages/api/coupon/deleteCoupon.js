@@ -15,8 +15,6 @@ export default async function handler(req, res) {
                 where: { id: id },
             });
 
-            console.log(deletedCoupon);
-
             return res.status(200).json({
                 message: 'Coupon deletado com sucesso',
                 deletedCoupon,

@@ -288,8 +288,6 @@ const Shop = ({ initialProducts, categories }) => {
                 if (response.ok) {
                     const data = await response.json();
 
-                    console.log(data, 'data from return');
-
                     setProducts((prevProducts) =>
                         prevProducts.map((p) =>
                             p.id === productToEdit.id ? data.product : p

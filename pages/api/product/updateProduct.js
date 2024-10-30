@@ -45,7 +45,6 @@ router.put(async (req, res) => {
             !quantity ||
             !categoryId
         ) {
-            console.log('Missing required fields');
             return res.status(400).json({ error: 'Missing required fields' });
         }
 

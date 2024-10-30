@@ -55,7 +55,6 @@ const ProductDetails = () => {
         setImg(image); // Set the clicked image as active
     };
     const handleImageClick1 = (image) => {
-        console.log('Clicked image:', image); // Check if this log appears in the console
         setImg1(image); // Update state with the clicked image URL or data
     };
     const images = [

@@ -1,5 +1,5 @@
-import { Fragment, useState } from 'react';
-import { Button, Spinner, Table } from 'react-bootstrap';
+import { Fragment } from 'react';
+import { Button, Table } from 'react-bootstrap';
 import {
     useGlobalFilter,
     usePagination,
@@ -7,7 +7,7 @@ import {
     useTable,
 } from 'react-table';
 
-export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
+export const Savetable = ({ users, onEdit, onDelete, deletingId }) => {
     return (
         <div className="app-container">
             <div className="table-responsive">
@@ -17,24 +17,22 @@ export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
                 >
                     <thead>
                         <tr>
-                            <th className="wd-5p text-center">Código</th>
-                            <th>Desconto</th>
+                            <th>Nome</th>
+                            <th>Email</th>
+                            <th>Nível de acesso</th>
                             <th>Data de Criação</th>
-                            <th>Tipo de desconto</th>
-                            <th>Ativo</th>
                             <th>Ações</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {coupons?.map((contact) => (
-                            <Fragment key={contact.id}>
-                                <ReadOnlyRow
-                                    contact={contact}
-                                    onEdit={() => onEdit(contact)}
-                                    onDelete={() => onDelete(contact.id)}
-                                    isDeleting={deletingId === contact.id}
-                                />
-                            </Fragment>
+                        {users?.map((contact) => (
+                            <ReadOnlyRow
+                                key={contact.id}
+                                user={contact}
+                                onEdit={() => onEdit(contact)}
+                                onDelete={() => onDelete(contact.id)}
+                                isDeleting={deletingId === contact.id}
+                            />
                         ))}
                     </tbody>
                 </Table>
@@ -43,15 +41,7 @@ export const Savetable = ({ coupons, onEdit, onDelete, deletingId }) => {
     );
 };
 
-const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
-    const [isCopied, setIsCopied] = useState(false);
-
-    const formatDiscount = (discount, discountType) => {
-        return discountType === 'PERCENTAGE'
-            ? `${discount}%`
-            : `R$ ${Number(discount).toFixed(2).replace('.', ',')}`;
-    };
-
+const ReadOnlyRow = ({ user, onEdit, onDelete, isDeleting }) => {
     const formatDateToBR = (date) => {
         const parsedDate = new Date(date);
         return parsedDate.toLocaleDateString('pt-BR', {
@@ -61,15 +51,18 @@ const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
         });
     };
 
+    const formatRole = (role) => {
+        if (role === 'SUBSCRIBER') return 'Assinante';
+        if (role === 'ADMIN') return 'Administrador';
+        return role;
+    };
+
     return (
         <tr>
-            <td>{contact.code.toUpperCase()}</td>
-            <td>{formatDiscount(contact.discount, contact.discountType)}</td>
-            <td>{formatDateToBR(contact.createdAt)}</td>
-            <td>
-                {contact.discountType === 'PERCENTAGE' ? 'Porcentagem' : 'Fixo'}
-            </td>
-            <td>{contact.isActive ? 'Sim' : 'Não'}</td>
+            <td>{user.name}</td>
+            <td>{user.email}</td>
+            <td>{formatRole(user.role)}</td>
+            <td>{user.createdAt ? formatDateToBR(user.createdAt) : 'N/A'}</td>
             <td style={{ width: '20%' }}>
                 <div
                     style={{
@@ -78,11 +71,11 @@ const ReadOnlyRow = ({ contact, onEdit, onDelete, isDeleting }) => {
                         gap: '10px',
                     }}
                 >
-                    <Button variant="success" onClick={onEdit}>
-                        <i class="bi bi-pencil"></i> Editar
+                    <Button variant="outline-success" onClick={onEdit}>
+                        <i className="bi bi-pencil"></i> Editar
                     </Button>
-                    <Button variant="danger" onClick={onDelete}>
-                        <i class="bi bi-trash"></i>{' '}
+                    <Button variant="outline-danger" onClick={onDelete}>
+                        <i className="bi bi-trash"></i>{' '}
                         {isDeleting ? (
                             <Spinner
                                 as="span"
@@ -179,504 +172,6 @@ export const DATATABLE = [
         Age: '61',
         date: '2009-09-15',
         Salary: '$372,000',
-    },
-    {
-        Id: '7',
-        Name: 'Herrod Chandler',
-        Position: 'Sales Assistant',
-        Office: 'San Francisco',
-        Age: '59',
-        date: '2008-12-13',
-
-        Salary: '$137,500',
-    },
-
-    {
-        Id: '8',
-        Name: 'Rhona Davidson',
-        Position: 'Integration Specialist',
-        Office: 'Tokyo',
-        Age: '55',
-        date: '2008-12-19',
-        Salary: '$327,900',
-    },
-    {
-        Id: '9',
-        Name: 'Colleen Hurst',
-        Position: 'Javascript Developer',
-        Office: 'San Francisco',
-        Age: '39',
-        date: '2013-03-03',
-        Salary: '$205,500',
-    },
-    {
-        Id: '10',
-        Name: 'Sonya Frost',
-        Position: 'Software Engineer',
-        Office: 'Edinburgh',
-        Age: '23',
-        date: '2013-03-03',
-        Salary: '$103,600',
-    },
-    {
-        Id: '11',
-        Name: 'Jena Gaines',
-        Position: 'Office Manager',
-        Office: 'London',
-        Age: '30',
-        date: '2008-10-16',
-        Salary: '$90,560',
-    },
-    {
-        Id: '12',
-        Name: 'Quinn Flynn',
-        Position: 'Support Lead',
-        Office: 'Edinburgh',
-        Age: '22',
-        date: '2012-12-18',
-        Salary: '$342,000',
-    },
-    {
-        Id: '13',
-        Name: 'Charde Marshall',
-        Position: 'Regional Director',
-        Office: 'San Francisco',
-        Age: '36',
-        date: '2010-06-09',
-        Salary: '$470,600',
-    },
-    {
-        Id: '14',
-        Name: 'Haley Kennedy',
-        Position: 'Senior Marketing Designer',
-        Office: 'London',
-        Age: '43',
-        date: '2009-04-10',
-        Salary: '$313,500',
-    },
-    {
-        Id: '15',
-        Name: 'Tatyana Fitzpatrick',
-        Position: 'Regional Director',
-        Office: 'London',
-        Age: '19',
-        date: '2012-10-13',
-        Salary: '$385,750',
-    },
-    {
-        Id: '16',
-        Name: 'Michael Silva',
-        Position: 'Marketing Designer',
-        Office: 'London',
-        Age: '66',
-        date: '2012-09-26',
-        Salary: '$198,500',
-    },
-    {
-        Id: '17',
-        Name: 'Paul Byrd',
-        Position: 'Chief Financial Officer (CFO)',
-        Office: 'New York',
-        Age: '64',
-        date: '2011-09-03',
-        Salary: '$725,000',
-    },
-    {
-        Id: '18',
-        Name: 'Gloria Little',
-        Position: 'Systems Administrator',
-        Office: 'New York',
-        Age: '59',
-        date: '2009-06-25',
-        Salary: '$237,500',
-    },
-    {
-        Id: '19',
-        Name: 'Bradley Greer',
-        Position: 'Software Engineer',
-        Office: 'London',
-        Age: '41',
-        date: '2011-12-12',
-        Salary: '$132,000',
-    },
-    {
-        Id: '20',
-        Name: 'Dai Rios',
-        Position: 'Personnel Lead',
-        Office: 'Edinburgh',
-        Age: '35',
-        date: '2010-09-20',
-        Salary: '$217,500',
-    },
-    {
-        Id: '21',
-        Name: 'Jenette Caldwell',
-        Position: 'Development Lead',
-        Office: 'New York',
-        Age: '30',
-        date: '2009-10-09',
-        Salary: '$345,000',
-    },
-    {
-        Id: '22',
-        Name: 'Yuri Berry',
-        Position: 'Chief Marketing Officer (CMO)',
-        Office: 'New York',
-        Age: '40',
-        date: '2010-12-22',
-        Salary: '$675,000',
-    },
-    {
-        Id: '23',
-        Name: 'Caesar Vance',
-        Position: 'Pre-Sales Support',
-        Office: 'New York',
-        Age: '21',
-        date: '2010-11-14',
-        Salary: '$106,450',
-    },
-    {
-        Id: '24',
-        Name: 'Doris Wilder',
-        Position: 'Sales Assistant',
-        Office: 'Sidney',
-        Age: '23',
-        date: '2011-06-07',
-        Salary: '$85,600',
-    },
-    {
-        Id: '25',
-        Name: 'Angelica Ramos',
-        Position: 'Chief Executive Officer (CEO)',
-        Office: 'London',
-        Age: '47',
-        date: '2010-03-11',
-        Salary: '$1,200,000',
-    },
-    {
-        Id: '26',
-        Name: 'Gavin Joyce',
-        Position: 'Developer',
-        Office: 'Edinburgh',
-        Age: '42',
-        date: '2011-08-14',
-        Salary: '$92,575',
-    },
-    {
-        Id: '27',
-        Name: 'Jennifer Chang',
-        Position: 'Regional Director',
-        Office: 'Singapore',
-        Age: '28',
-        date: '2011-05-07',
-        Salary: '$357,650',
-    },
-    {
-        Id: '28',
-        Name: 'Brenden Wagner',
-        Position: 'Software Engineer',
-        Office: 'San Francisco',
-        Age: '28',
-        date: '2011-08-14',
-        Salary: '$206,850',
-    },
-    {
-        Id: '29',
-        Name: 'Fiona Green',
-        Position: 'Chief Operating Officer (COO)',
-        Office: 'San Francisco',
-        Age: '48',
-        date: '2009-10-09',
-        Salary: '$850,000',
-    },
-    {
-        Id: '30',
-        Name: 'Shou Itou',
-        Position: 'Regional Marketing',
-        Office: 'Tokyo',
-        Age: '20',
-        date: '2011-09-03',
-        Salary: '$163,000',
-    },
-    {
-        Id: '31',
-        Name: 'Michelle House',
-        Position: 'Integration Specialist',
-        Office: 'Sidney',
-        Age: '37',
-        date: '2011-04-25',
-        Salary: '$95,400',
-    },
-    {
-        Id: '32',
-        Name: 'Suki Burks',
-        Position: 'Developer',
-        Office: 'London',
-        Age: '53',
-        date: '2012-11-27',
-        Salary: '$114,500',
-    },
-    {
-        Id: '33',
-        Name: 'Prescott Bartlett',
-        Position: 'Technical Author',
-        Office: 'London',
-        Age: '27',
-        date: '2009-06-25',
-        Salary: '$145,000',
-    },
-    {
-        Id: '34',
-        Name: 'Gavin Cortez',
-        Position: 'Team Leader',
-        Office: 'San Francisco',
-        Age: '22',
-        date: '2008-11-13',
-        Salary: '$235,500',
-    },
-    {
-        Id: '35',
-        Name: 'Martena Mccray',
-        Position: 'Post-Sales support',
-        Office: 'Edinburgh',
-        Age: '46',
-        date: '2013-02-01',
-        Salary: '$324,050',
-    },
-    {
-        Id: '36',
-        Name: 'Unity Butler',
-        Position: 'Marketing Designer',
-        Office: 'San Francisco',
-        Age: '47',
-        date: '2012-09-26',
-        Salary: '$85,675',
-    },
-    {
-        Id: '37',
-        Name: 'Howard Hatfield',
-        Position: 'Office Manager',
-        Office: 'San Francisco',
-        Age: '51',
-        date: '2011-06-02',
-        Salary: '$164,500',
-    },
-    {
-        Id: '38',
-        Name: 'Hope Fuentes',
-        Position: 'Secretary',
-        Office: 'San Francisco',
-        Age: '41',
-        date: '2008-10-26',
-        Salary: '$109,850',
-    },
-    {
-        Id: '39',
-        Name: 'Vivian Harrell',
-        Position: 'Financial Controller',
-        Office: 'San Francisco',
-        Age: '62',
-        date: '2009-02-14',
-
-        Salary: '$452,500',
-    },
-    {
-        Id: '40',
-        Name: 'Timothy Mooney',
-        Position: 'Office Manager',
-        Office: 'London',
-        Age: '37',
-        date: '2008-12-16',
-        Salary: '$136,200',
-    },
-    {
-        Id: '41',
-        Name: 'Jackson Bradshaw',
-        Position: 'Director',
-        Office: 'New York',
-        Age: '65',
-        date: '2009-10-22',
-        Salary: '$645,750',
-    },
-    {
-        Id: '42',
-        Name: 'Olivia Liang',
-        Position: 'Support Engineer',
-        Office: 'Singapore',
-        Age: '64',
-        date: '2009-10-22',
-        Salary: '$234,500',
-    },
-    {
-        Id: '43',
-        Name: 'Bruno Nash',
-        Position: 'Software Engineer',
-        Office: 'London',
-        Age: '38',
-        date: '2008-12-11',
-
-        Salary: '$163,500',
-    },
-    {
-        Id: '44',
-        Name: 'Sakura Yamamoto',
-        Position: 'Support Engineer',
-        Office: 'Tokyo',
-        Age: '37',
-        date: '2010-03-11',
-        Salary: '$139,575',
-    },
-    {
-        Id: '45',
-        Name: 'Thor Walton',
-        Position: 'Developer',
-        Office: 'New York',
-        Age: '61',
-        date: '2011-05-07',
-        Salary: '$98,540',
-    },
-    {
-        Id: '46',
-        Name: 'Finn Camacho',
-        Position: 'Support Engineer',
-        Office: 'San Francisco',
-        Age: '47',
-        date: '2009-10-22',
-
-        Salary: '$87,500',
-    },
-    {
-        Id: '47',
-        Name: 'Serge Baldwin',
-        Position: 'Data Coordinator',
-        Office: 'Singapore',
-        Age: '64',
-        date: '2008-10-26',
-        Salary: '$138,575',
-    },
-    {
-        Id: '48',
-        Name: 'Zenaida Frank',
-        Position: 'Software Engineer',
-        Office: 'New York',
-        Age: '63',
-        date: '2009-10-09',
-
-        Salary: '$125,250',
-    },
-    {
-        Id: '49',
-        Name: 'Zorita Serrano',
-        Position: 'Software Engineer',
-        Office: 'San Francisco',
-        Age: '56',
-        date: '2011-05-07',
-        Salary: '$115,000',
-    },
-    {
-        Id: '50',
-        Name: 'Jennifer Acosta',
-        Position: 'Junior Javascript Developer',
-        Office: 'Edinburgh',
-        Age: '43',
-        date: '2011-06-07',
-        Salary: '$75,650',
-    },
-    {
-        Id: '51',
-        Name: 'Cara Stevens',
-        Position: 'Sales Assistant',
-        Office: 'New York',
-        Age: '46',
-        date: '2009-02-14',
-
-        Salary: '$145,600',
-    },
-    {
-        Id: '52',
-        Name: 'Hermione Butler',
-        Position: 'Regional Director',
-        Office: 'London',
-        Age: '47',
-        date: '2011-03-09',
-
-        Salary: '$356,250',
-    },
-    {
-        Id: '53',
-        Name: 'Lael Greer',
-        Position: 'Systems Administrator',
-        Office: 'London',
-        Age: '21',
-        date: '2009-02-14',
-
-        Salary: '$103,500',
-    },
-    {
-        Id: '54',
-        Name: 'Jonas Alexander',
-        Position: 'Developer',
-        Office: 'San Francisco',
-        Age: '30',
-        date: '2011-12-06',
-
-        Salary: '$86,500',
-    },
-    {
-        Id: '55',
-        Name: 'Shad Decker',
-        Position: 'Regional Director',
-        Office: 'Edinburgh',
-        Age: '51',
-        date: '2011-03-21',
-
-        Salary: '$183,000',
-    },
-    {
-        Id: '56',
-        Name: 'Michael Bruce',
-        Position: 'Javascript Developer',
-        Office: 'Singapore',
-        Age: '29',
-        date: '2009-02-27',
-
-        Salary: '$183,000',
-    },
-    {
-        Id: '57',
-        Name: 'Donna Snider',
-        Position: 'Customer Support',
-        Office: 'New York',
-        Age: '27',
-        date: '2010-07-14',
-        Salary: '$112,000',
-    },
-    {
-        Id: '58',
-        Name: 'Fiona Green',
-        Position: 'Chief Operating Officer (COO)',
-        Office: 'San Francisco',
-        Age: '48',
-        date: '2008-11-13',
-        Salary: '$850,000',
-    },
-    {
-        Id: '59',
-        Name: 'Shou Itou',
-        Position: 'Regional Marketing',
-        Office: 'Tokyo',
-        Age: '20',
-        date: '2011-06-27',
-        Salary: '$163,000',
-    },
-    {
-        Id: '60',
-        Name: 'Prescott Bartlett',
-        Position: 'Technical Author',
-        Office: 'London',
-        Age: '27',
-        date: '2011-01-25',
-        Salary: '$145,000',
     },
 ];
 export const GlobalFilter = ({ filter, setFilter }) => {

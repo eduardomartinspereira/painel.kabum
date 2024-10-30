@@ -669,6 +669,8 @@ export const getServerSideProps = async (context) => {
         categories: monthlySalesData.map((data) => data.month),
     };
 
+    console.log(totalSoldToday);
+
     return {
         props: {
             session: safeSession,
