@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Spinner, Table } from 'react-bootstrap';
 import {
     useGlobalFilter,
     usePagination,
