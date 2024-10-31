@@ -38,10 +38,10 @@ export class Statistics1 extends React.Component {
                     borderColor: '#f2f6f7',
                     show: true,
                 },
-                colors: ['var(--primary-color)', '#e4e7ed'],
+                colors: ['var(--primary-color)', '#a64cfa'],
                 plotOptions: {
                     bar: {
-                        borderradius: '5px',
+                        borderRadius: 5,
                         colors: {
                             ranges: [
                                 {
@@ -151,11 +151,11 @@ export class Viewers extends React.Component {
             series: [
                 {
                     name: 'Celular',
-                    data: this.props.accessData.mobile, // Use mobile data from props
+                    data: this.props.accessData.mobile,
                 },
                 {
                     name: 'Computador',
-                    data: this.props.accessData.desktop, // Use desktop data from props
+                    data: this.props.accessData.desktop,
                 },
             ],
             options: {
@@ -171,7 +171,7 @@ export class Viewers extends React.Component {
                 grid: {
                     borderColor: '#f2f6f7',
                 },
-                colors: ['var(--primary-color)', '#e4e7ed'],
+                colors: ['var(--primary-color)', '#a64cfa'], // Updated color for "Computador" series
                 background: 'transparent',
                 dataLabels: {
                     enabled: false,

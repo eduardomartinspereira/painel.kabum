@@ -585,9 +585,11 @@ const Dashboard = ({
                                                 </div>
                                                 <div className="d-flex justify-content-center align-items-center flex-wrap">
                                                     <span className="me-3 fs-26 fw-semibold">
-                                                        {
+                                                        {new Intl.NumberFormat(
+                                                            'pt-BR'
+                                                        ).format(
                                                             accessData.totalMobileAccesses
-                                                        }
+                                                        )}
                                                     </span>
                                                     <span className="text-success fw-semibold">
                                                         <i className="fa fa-caret-up me-2"></i>
@@ -601,9 +603,11 @@ const Dashboard = ({
                                                 </div>
                                                 <div className="d-flex justify-content-center align-items-center flex-wrap">
                                                     <span className="me-3 fs-26 fw-semibold">
-                                                        {
+                                                        {new Intl.NumberFormat(
+                                                            'pt-BR'
+                                                        ).format(
                                                             accessData.totalDesktopAccesses
-                                                        }
+                                                        )}
                                                     </span>
                                                     <span className="text-danger fw-semibold">
                                                         <i className="fa fa-caret-down me-2"></i>
