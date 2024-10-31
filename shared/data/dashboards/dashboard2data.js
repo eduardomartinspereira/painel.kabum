@@ -45,7 +45,7 @@ export class Statistics2 extends React.Component {
                 grid: {
                     borderColor: '#f2f6f7',
                 },
-                colors: ['#28a745', '#ffffff'],
+                colors: ['#a64cfa', '#28a745'], // Purple for "Total de Pedidos" and Green for "Total Faturado"
                 xaxis: {
                     type: 'category',
                     categories: this.props.categories || [],
