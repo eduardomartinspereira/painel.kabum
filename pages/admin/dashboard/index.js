@@ -363,7 +363,7 @@ const Dashboard = ({
                                                     ([, countA], [, countB]) =>
                                                         countB - countA
                                                 )
-                                                .slice(0, 8)
+                                                .slice(0, 7)
                                                 .map(([browser, count]) => {
                                                     let iconPath = '';
                                                     let company = '';
