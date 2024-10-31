@@ -358,86 +358,118 @@ const Dashboard = ({
                                     </Card.Header>
                                     <Card.Body className="card-body p-0">
                                         <div className="browser-stats">
-                                            {Object.entries(
-                                                accessData?.browser
-                                            ).map(([browser, count]) => {
-                                                let iconPath = '';
-                                                let company = '';
+                                            {Object.entries(accessData?.browser)
+                                                .sort(
+                                                    ([, countA], [, countB]) =>
+                                                        countB - countA
+                                                )
+                                                .slice(0, 8)
+                                                .map(([browser, count]) => {
+                                                    let iconPath = '';
+                                                    let company = '';
 
-                                                switch (browser.toLowerCase()) {
-                                                    case 'chrome':
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/chrome.svg';
-                                                        company =
-                                                            'Google, Inc.';
-                                                        break;
-                                                    case 'edge':
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/edge.svg';
-                                                        company =
-                                                            'Microsoft Corporation, Inc.';
-                                                        break;
-                                                    case 'firefox':
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/firefox.svg';
-                                                        company =
-                                                            'Mozilla Foundation, Inc.';
-                                                        break;
-                                                    case 'mobile safari':
-                                                    case 'safari':
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/safari.svg';
-                                                        company =
-                                                            'Apple Corporation, Inc.';
-                                                        break;
-                                                    case 'opera':
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/opera.svg';
-                                                        company = 'Opera, Inc.';
-                                                        break;
-                                                    case 'samsung internet':
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/ss-internet.svg';
-                                                        company = 'Opera, Inc.';
-                                                        break;
-                                                    default:
-                                                        iconPath =
-                                                            '../../../assets/images/svgicons/opera.svg';
-                                                        company = 'Outros';
-                                                        break;
-                                                }
+                                                    switch (
+                                                        browser.toLowerCase()
+                                                    ) {
+                                                        case 'chrome':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/chrome.svg';
+                                                            company =
+                                                                'Google, Inc.';
+                                                            break;
+                                                        case 'edge':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/edge.svg';
+                                                            company =
+                                                                'Microsoft Corporation, Inc.';
+                                                            break;
+                                                        case 'firefox':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/firefox.svg';
+                                                            company =
+                                                                'Mozilla Foundation, Inc.';
+                                                            break;
+                                                        case 'mobile safari':
+                                                        case 'safari':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/safari.svg';
+                                                            company =
+                                                                'Apple Corporation, Inc.';
+                                                            break;
+                                                        case 'opera':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/opera.svg';
+                                                            company =
+                                                                'Opera, Inc.';
+                                                            break;
+                                                        case 'samsung internet':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/ss-internet.svg';
+                                                            company =
+                                                                'Samsung Electronics';
+                                                            break;
+                                                        case 'instagram':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/insta.webp';
+                                                            company =
+                                                                'Instagram, Inc.';
+                                                            break;
+                                                        case 'facebook':
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/facebook.png';
+                                                            company =
+                                                                'Facebook, Inc.';
+                                                            break;
+                                                        default:
+                                                            iconPath =
+                                                                '../../../assets/images/svgicons/opera.svg';
+                                                            company = 'Outros';
+                                                            break;
+                                                    }
 
-                                                return (
-                                                    <div
-                                                        className="d-flex align-items-center item border-bottom my-2"
-                                                        key={browser}
-                                                    >
-                                                        <div className="d-flex">
-                                                            <img
-                                                                src={iconPath}
-                                                                alt={browser}
-                                                                className="ht-30 wd-30 me-2"
-                                                            />
-                                                            <div className="truncate">
-                                                                <h6 className="">
-                                                                    {browser}
-                                                                </h6>
-                                                                <span className="text-muted fs-12">
-                                                                    {company}
-                                                                </span>
-                                                            </div>
-                                                        </div>
-                                                        <div className="ms-auto my-auto">
+                                                    return (
+                                                        <div
+                                                            className="d-flex align-items-center item border-bottom my-2"
+                                                            key={browser}
+                                                        >
                                                             <div className="d-flex">
-                                                                <span className="me-4 mt-1 fw-semibold fs-16">
-                                                                    {count}{' '}
-                                                                    acessos
-                                                                </span>
+                                                                <img
+                                                                    src={
+                                                                        iconPath
+                                                                    }
+                                                                    alt={
+                                                                        browser
+                                                                    }
+                                                                    className="ht-30 wd-30 me-2"
+                                                                />
+                                                                <div className="truncate">
+                                                                    <h6 className="">
+                                                                        {
+                                                                            browser
+                                                                        }
+                                                                    </h6>
+                                                                    <span className="text-muted fs-12">
+                                                                        {
+                                                                            company
+                                                                        }
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                            <div className="ms-auto my-auto">
+                                                                <div className="d-flex">
+                                                                    <span className="me-4 mt-1 fw-semibold fs-16">
+                                                                        {new Intl.NumberFormat(
+                                                                            'pt-BR'
+                                                                        ).format(
+                                                                            count
+                                                                        )}{' '}
+                                                                        acessos
+                                                                    </span>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
-                                                );
-                                            })}
+                                                    );
+                                                })}
                                         </div>
                                     </Card.Body>
                                 </Card>
