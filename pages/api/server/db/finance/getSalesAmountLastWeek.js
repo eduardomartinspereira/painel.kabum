@@ -1,12 +1,16 @@
-import { endOfWeek, startOfWeek, subWeeks } from 'date-fns';
+import {
+    endOfDay,
+    endOfWeek,
+    startOfDay,
+    startOfWeek,
+    subDays,
+    subWeeks,
+} from 'date-fns';
 import { prisma } from '../prisma';
 
 export async function getSalesAmountLastWeek() {
-    const lastWeekStart = startOfWeek(subWeeks(new Date(), 1), {
-        weekStartsOn: 0,
-    });
-
-    const lastWeekEnd = endOfWeek(subWeeks(new Date(), 1), { weekStartsOn: 0 });
+    const lastWeekStart = startOfDay(subDays(new Date(), 7));
+    const lastWeekEnd = endOfDay(subDays(new Date(), 1));
 
     const weekBeforeLastStart = startOfWeek(subWeeks(new Date(), 2), {
         weekStartsOn: 0,
