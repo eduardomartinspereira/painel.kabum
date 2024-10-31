@@ -25,6 +25,16 @@ import {
     pane3,
 } from '../../data/header/header';
 import store from '../../redux/store';
+
+const getInitials = (name) => {
+    if (!name) return '';
+    const nameArray = name.split(' ');
+    const initials = nameArray
+        .map((word) => word.charAt(0).toUpperCase())
+        .join('');
+    return initials.slice(0, 2);
+};
+
 function Header({ local_varaiable, ThemeChanger, session }) {
     const handleLogout = () => {
         signOut({ redirect: true, callbackUrl: '/' });
@@ -949,16 +959,32 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             >
                                 <div className="d-flex align-items-center">
                                     <div className="me-sm-2 me-0">
-                                        <img
-                                            src={
-                                                session?.user?.image_url ||
-                                                '/assets/images/faces/2.jpg'
-                                            }
-                                            alt="img"
-                                            width="32"
-                                            height="32"
-                                            className="rounded-circle"
-                                        />
+                                        {session?.user?.image_url ? (
+                                            <img
+                                                src={session.user.image_url}
+                                                alt="img"
+                                                width="32"
+                                                height="32"
+                                                className="rounded-circle"
+                                            />
+                                        ) : (
+                                            <div
+                                                style={{
+                                                    width: 32,
+                                                    height: 32,
+                                                    borderRadius: '50%',
+                                                    backgroundColor: '#6c757d',
+                                                    display: 'flex',
+                                                    alignItems: 'center',
+                                                    justifyContent: 'center',
+                                                    color: 'white',
+                                                }}
+                                            >
+                                                {getInitials(
+                                                    session?.user?.name
+                                                )}
+                                            </div>
+                                        )}
                                     </div>
                                     <div className="d-xl-block d-none">
                                         <p className="fw-semibold mb-0 lh-1">
@@ -967,7 +993,6 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                                     session?.user.name
                                                 )}
                                         </p>
-
                                         <span className="op-7 fw-normal d-block fs-11">
                                             Administrador
                                         </span>
