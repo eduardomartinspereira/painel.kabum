@@ -38,7 +38,7 @@ export class Statistics1 extends React.Component {
                     borderColor: '#f2f6f7',
                     show: true,
                 },
-                colors: ['var(--primary-color)', '#a64cfa'],
+                colors: ['#FF0000', '#FFC107'], // Total de Pedidos em vermelho e Total Faturado em amarelo
                 plotOptions: {
                     bar: {
                         borderRadius: 5,
@@ -171,7 +171,7 @@ export class Viewers extends React.Component {
                 grid: {
                     borderColor: '#f2f6f7',
                 },
-                colors: ['var(--primary-color)', '#a64cfa'], // Updated color for "Computador" series
+                colors: ['var(--primary-color)', '#FFC107'], // Alterado para amarelo
                 background: 'transparent',
                 dataLabels: {
                     enabled: false,
@@ -185,7 +185,7 @@ export class Viewers extends React.Component {
                     position: 'top',
                 },
                 xaxis: {
-                    categories: this.props.accessData.dates, // Use dates from props
+                    categories: this.props.accessData.dates,
                     axisBorder: {
                         show: false,
                         color: 'rgba(119, 119, 142, 0.05)',

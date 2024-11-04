@@ -454,7 +454,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                             'production'
                                                 ? basePath
                                                 : ''
-                                        }/assets/images/brand-logos/desktop-logo.png`}
+                                        }/assets/images/brand-logos/desktop.png`}
                                         alt="logo"
                                         className="desktop-logo"
                                     />
@@ -474,7 +474,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                             'production'
                                                 ? basePath
                                                 : ''
-                                        }/assets/images/brand-logos/desktop-dark.png`}
+                                        }/assets/images/brand-logos/desktop.png`}
                                         alt="logo"
                                         className="desktop-dark"
                                     />
@@ -790,7 +790,6 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             </Link>
                         </div>
 
-                        {/* notifiation */}
                         <Dropdown
                             className="header-element notifications-dropdown"
                             autoClose="outside"
@@ -931,7 +930,6 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             </Dropdown.Menu>
                         </Dropdown>
 
-                        {/* Fullscreen icon */}
                         <div className="header-element header-fullscreen">
                             <Link
                                 onClick={toggleFullScreen}

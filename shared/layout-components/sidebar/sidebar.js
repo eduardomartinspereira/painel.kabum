@@ -774,7 +774,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                 process.env.NODE_ENV === 'production'
                                     ? basePath
                                     : ''
-                            }/assets/images/brand-logos/desktop-logo.png`}
+                            }/assets/images/brand-logos/desktop.png`}
                             alt="logo"
                             className="desktop-logo"
                         />
@@ -783,7 +783,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                 process.env.NODE_ENV === 'production'
                                     ? basePath
                                     : ''
-                            }/assets/images/brand-logos/toggle-logo.png`}
+                            }/assets/images/brand-logos/desktop.png`}
                             alt="logo"
                             className="toggle-logo"
                         />
@@ -792,7 +792,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                 process.env.NODE_ENV === 'production'
                                     ? basePath
                                     : ''
-                            }/assets/images/brand-logos/desktop-dark.png`}
+                            }/assets/images/brand-logos/desktop.png`}
                             alt="logo"
                             className="desktop-dark"
                         />
@@ -801,7 +801,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                 process.env.NODE_ENV === 'production'
                                     ? basePath
                                     : ''
-                            }/assets/images/brand-logos/toggle-dark.png`}
+                            }/assets/images/brand-logos/desktop.png`}
                             alt="logo"
                             className="toggle-dark"
                         />
@@ -810,7 +810,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                 process.env.NODE_ENV === 'production'
                                     ? basePath
                                     : ''
-                            }/assets/images/brand-logos/desktop-white.png`}
+                            }/assets/images/brand-logos/desktop.png`}
                             alt="logo"
                             className="desktop-white"
                         />
@@ -819,7 +819,7 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                                 process.env.NODE_ENV === 'production'
                                     ? basePath
                                     : ''
-                            }/assets/images/brand-logos/toggle-white.png`}
+                            }/assets/images/brand-logos/desktop.png`}
                             alt="logo"
                             className="toggle-white"
                         />

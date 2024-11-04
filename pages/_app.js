@@ -19,7 +19,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }) {
             <Layout>
                 <Component {...pageProps} />
             </Layout>
-            <NextNProgress color="#38cab3" />
+            <NextNProgress color="#fff" />
             <ToastContainer theme="colored" />
         </SessionProvider>
     );

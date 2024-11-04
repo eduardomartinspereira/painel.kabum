@@ -110,7 +110,7 @@ const Home = () => {
                                                                         'production'
                                                                             ? basePath
                                                                             : ''
-                                                                    }/assets/images/brand-logos/desktop-logo.png`}
+                                                                    }/assets/images/brand-logos/logo.png`}
                                                                     className="sign-favicon ht-40"
                                                                     alt="logo"
                                                                 />
