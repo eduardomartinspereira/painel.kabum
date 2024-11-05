@@ -5,6 +5,13 @@ export async function getProductsSoldToday() {
     const todayStart = startOfDay(new Date());
     const todayEnd = endOfDay(new Date());
 
+    console.log(
+        todayStart.toISOString(),
+        todayEnd.toISOString(),
+        'TODAY START (UTC)',
+        'TODAY END (UTC)'
+    );
+
     const paymentsToday = await prisma.$queryRaw`
         SELECT SUM(\`productQuantity\`) as \`totalProductsSold\`
         FROM \`Payment\`

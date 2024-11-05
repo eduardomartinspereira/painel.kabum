@@ -12,8 +12,6 @@ export async function getProductsSoldLastWeek() {
     const lastWeekStart = startOfDay(subDays(new Date(), 7)); // 7 days ago, start of the day
     const lastWeekEnd = endOfDay(subDays(new Date(), 1));
 
-    console.log(lastWeekStart, lastWeekEnd, 'LKQWHELJKQWHEKLJQHEW');
-
     const weekBeforeLastStart = startOfWeek(subWeeks(new Date(), 2), {
         weekStartsOn: 0,
     });
