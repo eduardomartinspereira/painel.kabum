@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Button, Table } from 'react-bootstrap';
+import { Button, Spinner, Table } from 'react-bootstrap';
 import {
     useGlobalFilter,
     usePagination,
@@ -12,6 +12,7 @@ export const CategoriesTable = ({
     categoriesProps,
     handleEditClick,
     handleDeleteClick,
+    deletingId,
 }) => {
     return (
         <div className="app-container">
@@ -48,7 +49,17 @@ export const CategoriesTable = ({
                                                     )
                                                 }
                                             >
-                                                Deletar
+                                                {deletingId === category.id ? (
+                                                    <Spinner
+                                                        as="span"
+                                                        animation="border"
+                                                        size="sm"
+                                                        role="status"
+                                                        aria-hidden="true"
+                                                    />
+                                                ) : (
+                                                    'Deletar'
+                                                )}
                                             </Button>
                                         </div>
                                     </td>
@@ -59,33 +70,6 @@ export const CategoriesTable = ({
                 </Table>
             </div>
         </div>
-    );
-};
-
-const ReadOnlyRow = ({ category, handleEditClick, handleDeleteClick }) => {
-    return (
-        <tr>
-            <td>{category.name}</td>
-            <td>{category.description}</td>
-            <td>
-                {category.parentCategoryId ? category.parentCategoryId : 'None'}
-            </td>
-            <td>{category.isActive ? 'Yes' : 'No'}</td>
-            <td>
-                <Button
-                    variant="primary"
-                    onClick={(event) => handleEditClick(event, category)}
-                >
-                    Edit
-                </Button>
-                <Button
-                    variant="danger"
-                    onClick={() => handleDeleteClick(category.id)}
-                >
-                    Delete
-                </Button>
-            </td>
-        </tr>
     );
 };
 
