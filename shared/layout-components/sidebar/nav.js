@@ -100,7 +100,7 @@ export const MENUITEMS = [
         ),
         type: 'link',
         selected: false,
-        path: '/admin/tables/categories/',
+        path: '/admin/categories/',
     },
 
     {

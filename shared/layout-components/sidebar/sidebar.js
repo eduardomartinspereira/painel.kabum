@@ -32,6 +32,8 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                 title?.toLowerCase() === 'usuários') ||
             (lowerPath.includes('dashboard') &&
                 title?.toLowerCase() === 'dashboard') ||
+            (lowerPath.includes('categories') &&
+                title?.toLowerCase() === 'categorias') ||
             (lowerPath.includes('product') &&
                 title?.toLowerCase() === 'produtos') ||
             (lowerPath.includes('coupon') && title?.toLowerCase() === 'cupom')
