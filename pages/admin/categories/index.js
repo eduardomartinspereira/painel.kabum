@@ -264,12 +264,6 @@ const CategoryTable = ({ categories }) => {
                             />
                         </Modal.Body>
                         <Modal.Footer>
-                            <Button
-                                variant="secondary"
-                                onClick={handleCancelClick}
-                            >
-                                Fechar
-                            </Button>
                             <Button variant="primary" type="submit">
                                 {isLoading ? (
                                     <>

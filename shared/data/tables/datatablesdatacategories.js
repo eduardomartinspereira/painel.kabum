@@ -34,7 +34,7 @@ export const CategoriesTable = ({
                                     <td>
                                         <div className={styles.container}>
                                             <Button
-                                                variant="primary"
+                                                variant="success"
                                                 onClick={() =>
                                                     handleEditClick(category)
                                                 }
