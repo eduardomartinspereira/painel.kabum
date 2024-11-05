@@ -659,9 +659,6 @@ const Shop = ({ initialProducts, categories }) => {
                     </Form>
                 </Modal.Body>
                 <Modal.Footer>
-                    <Button variant="secondary" onClick={handleCloseModal}>
-                        Cancelar
-                    </Button>
                     <Button
                         variant="primary"
                         onClick={handleSaveProduct}
