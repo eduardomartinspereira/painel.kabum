@@ -253,7 +253,6 @@ const Shop = ({ initialProducts, categories }) => {
         setLoading(true);
 
         if (isEditing && productToEdit) {
-            // Atualizar produto existente
             try {
                 const formData = new FormData();
                 formData.append('title', newProduct.title);
