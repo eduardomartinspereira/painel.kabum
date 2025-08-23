@@ -26,6 +26,8 @@ import {
 } from '../../../shared/redux/action';
 import styles from './styles.module.scss';
 
+import { uploadImageAndGetUrl } from '../../../shared/firebase/uploadClient';
+
 const DESCRIPTION_LIMIT = 150;
 const ITEMS_PER_PAGE = 8;
 
@@ -249,87 +251,29 @@ const Shop = ({ initialProducts, categories }) => {
             toast.error(`Campo obrigatório: ${missingField}`);
             return;
         }
-
+        if (!isEditing || !productToEdit) return;
         setLoading(true);
-
-        if (isEditing && productToEdit) {
-            try {
-                const formData = new FormData();
-                formData.append('title', newProduct.title);
-                formData.append('description', newProduct.description);
-                formData.append(
-                    'price',
-                    parseFloat(
-                        newProduct.price.replace('R$', '').replace(',', '.')
-                    )
-                );
-                formData.append('quantity', newProduct.quantity);
-                formData.append('categoryId', newProduct.category.id);
-
-                if (typeof newProduct.img !== 'string') {
-                    formData.append('img', newProduct.img);
+        try {
+            const payload = await buildPayload(newProduct);
+            const response = await fetch(
+                `/api/product/updateProduct?id=${productToEdit.id}`,
+                {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload),
                 }
-
-                const response = await fetch(
-                    `/api/product/updateProduct?id=${productToEdit.id}`,
-                    {
-                        method: 'PUT',
-                        body: formData,
-                    }
-                );
-
-                if (response.ok) {
-                    const data = await response.json();
-
-                    setProducts((prevProducts) =>
-                        prevProducts.map((p) =>
-                            p.id === productToEdit.id ? data.product : p
-                        )
-                    );
-                    toast.success('Produto atualizado com sucesso!');
-                } else {
-                    toast.error('Falha ao atualizar o produto');
-                }
-            } catch (error) {
-                toast.error('Erro na requisição');
-            } finally {
-                setLoading(false);
-                handleCloseModal();
-            }
-        } else {
-            const formData = new FormData();
-            formData.append('title', newProduct.title);
-            formData.append('description', newProduct.description);
-            formData.append(
-                'price',
-                parseFloat(newProduct.price.replace('R$', '').replace(',', '.'))
             );
-            formData.append('img', newProduct.img);
-            formData.append('quantity', newProduct.quantity);
-            formData.append('categoryId', newProduct.category.id);
-
-            try {
-                const response = await fetch('/api/product/createProduct', {
-                    method: 'POST',
-                    body: formData,
-                });
-
-                if (response.ok) {
-                    const data = await response.json();
-                    setProducts((prevProducts) => [
-                        ...prevProducts,
-                        data.product,
-                    ]);
-                    toast.success('Produto criado com sucesso!');
-                } else {
-                    toast.error('Falha na criação do produto');
-                }
-            } catch (error) {
-                toast.error('Erro na requisição');
-            } finally {
-                setLoading(false);
-                handleCloseModal();
-            }
+            if (!response.ok) throw new Error('Falha ao atualizar');
+            const data = await response.json();
+            setProducts((prev) =>
+                prev.map((p) => (p.id === productToEdit.id ? data.product : p))
+            );
+            toast.success('Produto atualizado com sucesso!');
+            handleCloseModal();
+        } catch (e) {
+            toast.error('Falha ao atualizar o produto');
+        } finally {
+            setLoading(false);
         }
     };
 
@@ -374,42 +318,61 @@ const Shop = ({ initialProducts, categories }) => {
         setShowModal(false);
     };
 
+    async function resolveImageUrl(img) {
+        if (typeof img === 'string') return img;
+        return await uploadImageAndGetUrl(img);
+    }
+
+    const parseBRLToNumber = (s) => {
+        // "R$ 1.234,56" -> 1234.56
+        return Number(
+            s
+                .replace(/\s/g, '')
+                .replace('R$', '')
+                .replace(/\./g, '')
+                .replace(',', '.')
+        );
+    };
+
+    const buildPayload = async (state) => {
+        const imgUrl = await resolveImageUrl(state.img);
+        return {
+            title: state.title,
+            description: state.description,
+            price:
+                typeof state.price === 'string'
+                    ? parseBRLToNumber(state.price)
+                    : state.price,
+            quantity: Number(state.quantity),
+            categoryId:
+                typeof state.category === 'object'
+                    ? state.category.id
+                    : Number(state.category),
+            img: imgUrl,
+        };
+    };
+
     const handleCreateProduct = async () => {
         const missingField = validateFields();
         if (missingField) {
             toast.error(`Campo obrigatório: ${missingField}`);
             return;
         }
-
         setLoading(true);
-
-        const formData = new FormData();
-        formData.append('title', newProduct.title);
-        formData.append('description', newProduct.description);
-        formData.append(
-            'price',
-            parseFloat(newProduct.price.replace('R$', '').replace(',', '.'))
-        );
-        formData.append('img', newProduct.img);
-        formData.append('quantity', newProduct.quantity);
-        formData.append('categoryId', newProduct.category);
-
         try {
+            const payload = await buildPayload(newProduct);
             const response = await fetch('/api/product/createProduct', {
                 method: 'POST',
-                body: formData,
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(payload),
             });
-
-            if (response.ok) {
-                const data = await response.json();
-                setProducts((prevProducts) => [...prevProducts, data.product]);
-                handleCloseModal();
-                toast.success('Produto criado com Sucesso! 🚀');
-            } else {
-                toast.error('Falha na criação do Produto! Tente novamente ❌');
-            }
-        } catch (error) {
-            toast.error('Erro na requisição');
+            if (!response.ok) throw new Error('Falha ao criar');
+            const data = await response.json();
+            setProducts((prev) => [...prev, data.product]);
+            toast.success('Produto criado com Sucesso! 🚀');
+            handleCloseModal();
+        } catch (e) {
+            toast.error('Falha na criação do produto');
         } finally {
             setLoading(false);
         }
