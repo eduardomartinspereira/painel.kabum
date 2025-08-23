@@ -176,7 +176,7 @@ const Shop = ({ initialProducts, categories }) => {
             description: '',
             price: '',
             img: '',
-            category: '',
+            category: { name: '', id: '' }, // manter objeto
             quantity: 0,
         });
         setImagePreview(null);
@@ -602,7 +602,10 @@ const Shop = ({ initialProducts, categories }) => {
                                     );
                                     setNewProduct({
                                         ...newProduct,
-                                        category: selectedCategory,
+                                        category: selectedCategory || {
+                                            name: '',
+                                            id: '',
+                                        },
                                     });
                                 }}
                             >
@@ -623,7 +626,9 @@ const Shop = ({ initialProducts, categories }) => {
                 <Modal.Footer>
                     <Button
                         variant="primary"
-                        onClick={handleSaveProduct}
+                        onClick={
+                            isEditing ? handleSaveProduct : handleCreateProduct
+                        }
                         disabled={loading}
                     >
                         {loading ? (
