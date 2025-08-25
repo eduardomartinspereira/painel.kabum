@@ -115,32 +115,36 @@ export class Visitors extends React.Component {
 	constructor(props) {
 		super(props);
 
+		// Usar dados reais de accessData se disponível
+		const accessData = props.accessData || {};
+		const mobileData = accessData.mobile || new Array(7).fill(0);
+		const desktopData = accessData.desktop || new Array(7).fill(0);
+		const dates = accessData.dates || ["Segunda", "Terça", "Quarta", "Quinta", "Sexta", "Sábado", "Domingo"];
+
 		this.state = {
 			series: [{
-				name: "Male",
-				data: [44, 42, 57, 86, 58, 55, 70],
-				// color:['#766df9']
+				name: "Celular",
+				data: mobileData,
+				color: ['#3b82f6'] // Azul para mobile
 			}, {
-				name: "Female",
-				data: [34, 22, 47, 56, 21, 35, 60],
-				// color:['#ebeff5']
+				name: "Computador",
+				data: desktopData,
+				color: ['#f59e0b'] // Amarelo para desktop
 			}
 			],
 
 			options: {
 				chart: {
-					type: "bar",
-					stacked: true,
+					type: "line",
 					height: 338,
 				},
 				grid: {
 					borderColor: "#eff2f6",
 				},
-				colors: ["var(--primary-color)", "#e4e7ed"],
+				colors: ["#3b82f6", "#f59e0b"],
 				plotOptions: {
-					bar: {
+					line: {
 						horizontal: false,
-						columnWidth: "30%",
 					},
 				},
 
@@ -149,8 +153,8 @@ export class Visitors extends React.Component {
 				},
 				stroke: {
 					show: true,
-					width: 2,
-					colors: ["transparent"]
+					width: 3,
+					curve: 'smooth'
 				},
 				states: {
 					hover: {
@@ -158,10 +162,11 @@ export class Visitors extends React.Component {
 							type: "none"
 						}
 					}
-				}, yaxis: {
+				}, 
+				yaxis: {
 					title: {
 						style: {
-							color: "	#adb5be",
+							color: "#adb5be",
 							fontSize: "14px",
 							fontFamily: "poppins, sans-serif",
 							fontWeight: 600,
@@ -175,7 +180,7 @@ export class Visitors extends React.Component {
 					}
 				},
 				xaxis: {
-					categories: ["Mon", "Tue", "Web", "Thu", "Fri", "Sat", "Sun"],
+					categories: dates,
 					axisBorder: {
 						show: true,
 						color: "rgba(119, 119, 142, 0.05)",
@@ -192,11 +197,14 @@ export class Visitors extends React.Component {
 					},
 				},
 				fill: {
-					opacity: 1
+					opacity: 0.1
 				},
 				legend: {
 					position: "top"
 				},
+				tooltip: {
+					theme: 'dark'
+				}
 			},
 
 		};
@@ -205,7 +213,7 @@ export class Visitors extends React.Component {
 	render() {
 		return (
 			<div id="chart">
-				<ReactApexChart options={this.state.options} series={this.state.series} type="bar" height={340} />
+				<ReactApexChart options={this.state.options} series={this.state.series} type="line" height={340} />
 			</div>
 		);
 	}
