@@ -5,9 +5,9 @@ export default async function handler(req, res) {
         return res.status(405).json({ message: 'Método não permitido' });
     }
 
-    const { name, email, role, password, imageUrl } = req.body;
+    const { firstName, lastName, email, cpf, phone, role, password } = req.body;
 
-    console.log(name, email, role, password, imageUrl);
+    console.log('Criando usuário:', { firstName, lastName, email, cpf, phone, role });
 
     try {
         // Verifica se o email já existe
@@ -22,11 +22,13 @@ export default async function handler(req, res) {
         // Cria o novo usuário se o email não existir
         const newUser = await prisma.user.create({
             data: {
-                name,
+                firstName: firstName || null,
+                lastName: lastName || null,
                 email,
+                cpf: cpf || null,
+                phone: phone || null,
                 role,
-                password,
-                image_url: imageUrl || null,
+                password: password || null,
             },
         });
 

@@ -1,4 +1,4 @@
-import { getAllCategories } from '@/pages/api/server/db/products/getAllCategories';
+import { getAllCategories } from '@/pages/api/server/db/categories/getAllCategories';
 import { getAllProducts } from '@/pages/api/server/db/products/getAllProducts';
 import { getServerSession } from 'next-auth';
 import { useEffect, useState } from 'react';
@@ -191,6 +191,19 @@ const Shop = ({ initialProducts, categories }) => {
         setProductToEdit(null);
     };
 
+    const refreshProductList = async () => {
+        try {
+            const response = await fetch('/api/products/getAllProducts');
+            if (response.ok) {
+                const data = await response.json();
+                setProducts(data);
+                setSearchResults(data);
+            }
+        } catch (error) {
+            console.error('Erro ao recarregar produtos:', error);
+        }
+    };
+
     const validateFields = () => {
         const { title, description, price, img, category } = newProduct;
         if (!title) return 'Nome do Produto';
@@ -272,9 +285,10 @@ const Shop = ({ initialProducts, categories }) => {
             );
             if (!response.ok) throw new Error('Falha ao atualizar');
             const data = await response.json();
-            setProducts((prev) =>
-                prev.map((p) => (p.id === productToEdit.id ? data.product : p))
-            );
+            
+            // Recarregar lista de produtos para obter dados completos
+            await refreshProductList();
+            
             toast.success('Produto atualizado com sucesso!');
             handleCloseModal();
         } catch (e) {
@@ -375,7 +389,10 @@ const Shop = ({ initialProducts, categories }) => {
             });
             if (!response.ok) throw new Error('Falha ao criar');
             const data = await response.json();
-            setProducts((prev) => [...prev, data.product]);
+            
+            // Recarregar lista de produtos para obter dados completos (com imagens e categorias)
+            await refreshProductList();
+            
             toast.success('Produto criado com Sucesso! 🚀');
             handleCloseModal();
         } catch (e) {

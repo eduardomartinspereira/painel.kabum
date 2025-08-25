@@ -5,29 +5,35 @@ export default async function handler(req, res) {
         return res.status(405).json({ message: 'Método não permitido' });
     }
 
-    const { id, name, email, role, imageUrl } = req.body;
+    const { id, firstName, lastName, email, cpf, phone, role, password } = req.body;
 
-    console.log(id, name, email, role, imageUrl);
-
-    // return null;
+    console.log('Atualizando usuário:', { id, firstName, lastName, email, cpf, phone, role });
 
     try {
         const existingUser = await prisma.user.findUnique({
-            where: { id },
+            where: { id: Number(id) },
         });
 
         if (!existingUser) {
             return res.status(404).json({ message: 'Usuário não encontrado' });
         }
 
+        // Construir objeto de dados apenas com campos válidos
+        const updateData = {
+            email: email || existingUser.email,
+            role: role || existingUser.role,
+        };
+
+        // Adicionar campos opcionais apenas se fornecidos
+        if (firstName !== undefined) updateData.firstName = firstName;
+        if (lastName !== undefined) updateData.lastName = lastName;
+        if (cpf !== undefined) updateData.cpf = cpf;
+        if (phone !== undefined) updateData.phone = phone;
+        if (password !== undefined && password.trim() !== '') updateData.password = password;
+
         const updatedUser = await prisma.user.update({
-            where: { id },
-            data: {
-                name,
-                email,
-                role,
-                image_url: imageUrl || existingUser.image_url,
-            },
+            where: { id: Number(id) },
+            data: updateData,
         });
 
         res.status(200).json(updatedUser);

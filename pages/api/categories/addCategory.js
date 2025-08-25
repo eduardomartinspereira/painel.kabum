@@ -14,18 +14,54 @@ export default async function handler(req, res) {
 
     const { name, description } = req.body;
 
-    console.log(name, description);
+    if (!name) {
+        return res.status(400).json({
+            success: false,
+            message: 'Nome da categoria é obrigatório'
+        });
+    }
+
+    console.log('Criando categoria:', name, description);
 
     try {
+        // Verificar se categoria já existe
+        const existingCategory = await prisma.category.findFirst({
+            where: {
+                name: name
+            }
+        });
+
+        if (existingCategory) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'Categoria já existe!' 
+            });
+        }
+
+        // Criar nova categoria
         const newCategory = await prisma.category.create({
             data: {
-                name,
-                description,
-            },
+                name: name,
+                description: description || `Categoria: ${name}`
+            }
         });
-        res.status(201).json(newCategory);
+
+        res.status(201).json({
+            success: true,
+            category: {
+                id: newCategory.id,
+                name: newCategory.name,
+                description: newCategory.description,
+                createdAt: newCategory.createdAt.toISOString()
+            },
+            message: 'Categoria criada com sucesso!'
+        });
     } catch (error) {
-        console.error('Error creating coupon:', error);
-        res.status(500).json({ message: 'Failed to create coupon' });
+        console.error('Error creating category:', error);
+        res.status(500).json({ 
+            success: false,
+            message: 'Erro ao criar categoria',
+            error: error.message 
+        });
     }
 }

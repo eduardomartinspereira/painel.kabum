@@ -772,56 +772,32 @@ const Sidebar = ({ local_varaiable, ThemeChanger }) => {
                         href={'/admin/dashboard/'}
                     >
                         <img
-                            src={`${
-                                process.env.NODE_ENV === 'production'
-                                    ? basePath
-                                    : ''
-                            }/assets/images/brand-logos/desktop.png`}
+                            src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                             alt="logo"
                             className="desktop-logo"
                         />
                         <img
-                            src={`${
-                                process.env.NODE_ENV === 'production'
-                                    ? basePath
-                                    : ''
-                            }/assets/images/brand-logos/desktop.png`}
+                            src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                             alt="logo"
                             className="toggle-logo"
                         />
                         <img
-                            src={`${
-                                process.env.NODE_ENV === 'production'
-                                    ? basePath
-                                    : ''
-                            }/assets/images/brand-logos/desktop.png`}
+                            src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                             alt="logo"
                             className="desktop-dark"
                         />
                         <img
-                            src={`${
-                                process.env.NODE_ENV === 'production'
-                                    ? basePath
-                                    : ''
-                            }/assets/images/brand-logos/desktop.png`}
+                            src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                             alt="logo"
                             className="toggle-dark"
                         />
                         <img
-                            src={`${
-                                process.env.NODE_ENV === 'production'
-                                    ? basePath
-                                    : ''
-                            }/assets/images/brand-logos/desktop.png`}
+                            src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                             alt="logo"
                             className="desktop-white"
                         />
                         <img
-                            src={`${
-                                process.env.NODE_ENV === 'production'
-                                    ? basePath
-                                    : ''
-                            }/assets/images/brand-logos/desktop.png`}
+                            src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                             alt="logo"
                             className="toggle-white"
                         />

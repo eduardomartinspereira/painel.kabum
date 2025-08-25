@@ -22,14 +22,15 @@ const UsersComponent = ({ users }) => {
     const [contacts, setContacts] = useState(
         users?.map((user) => ({
             id: user.id,
-            name: user.name,
-            email: user.email,
-            role: user.role,
+            name: user.name || 'Sem nome',
+            email: user.email || 'Sem email',
+            role: user.role || 'CUSTOMER',
+            cpf: user.cpf || 'Não informado',
+            phone: user.phone || 'Não informado',
             createdAt: user.createdAt
-                ? new Date(user.createdAt).toLocaleDateString()
+                ? new Date(user.createdAt).toLocaleDateString('pt-BR')
                 : 'N/A',
-            imageUrl: user.imageUrl || '',
-        }))
+        })) || []
     );
 
     const [searchTerm, setSearchTerm] = useState(''); // Estado para o valor da barra de pesquisa
@@ -39,11 +40,13 @@ const UsersComponent = ({ users }) => {
     const [deletingId, setDeletingId] = useState(null);
     const [formData, setFormData] = useState({
         id: '',
-        name: '',
+        firstName: '',
+        lastName: '',
         email: '',
-        role: 'SUBSCRIBER',
+        cpf: '',
+        phone: '',
+        role: 'CUSTOMER',
         password: nanoid(12), // Gera uma senha aleatória padrão com 12 caracteres
-        imageUrl: '',
     });
 
     const [currentPage, setCurrentPage] = useState(1);
@@ -72,10 +75,32 @@ const UsersComponent = ({ users }) => {
     const handlePageChange = (page) => setCurrentPage(page);
 
     const validateFields = () => {
-        const { name, email } = formData;
-        if (!name) return 'Nome';
+        const { firstName, email } = formData;
+        if (!firstName) return 'Primeiro Nome';
         if (!email) return 'Email';
         return null;
+    };
+
+    const refreshUserList = async () => {
+        try {
+            const response = await fetch('/api/users/getAllUsers');
+            if (response.ok) {
+                const userData = await response.json();
+                setContacts(userData?.map((user) => ({
+                    id: user.id,
+                    name: user.name || 'Sem nome',
+                    email: user.email || 'Sem email',
+                    role: user.role || 'CUSTOMER',
+                    cpf: user.cpf || 'Não informado',
+                    phone: user.phone || 'Não informado',
+                    createdAt: user.createdAt
+                        ? new Date(user.createdAt).toLocaleDateString('pt-BR')
+                        : 'N/A',
+                })) || []);
+            }
+        } catch (error) {
+            console.error('Erro ao recarregar usuários:', error);
+        }
     };
 
     const handleFormChange = (event) => {
@@ -89,18 +114,32 @@ const UsersComponent = ({ users }) => {
     const handleAdd = () => {
         setFormData({
             id: nanoid(),
-            name: '',
+            firstName: '',
+            lastName: '',
             email: '',
-            role: 'SUBSCRIBER',
+            cpf: '',
+            phone: '',
+            role: 'CUSTOMER',
             password: nanoid(12), // Gera uma nova senha aleatória ao abrir o modal
-            imageUrl: '',
         });
         setEditMode(false);
         setModalShow(true);
     };
 
     const handleEdit = (contact) => {
-        setFormData(contact);
+        // Mapear dados do contact para o formato do formulário
+        const mappedData = {
+            id: contact.id,
+            firstName: contact.name ? contact.name.split(' ')[0] : '',
+            lastName: contact.name ? contact.name.split(' ').slice(1).join(' ') : '',
+            email: contact.email,
+            cpf: contact.cpf || '',
+            phone: contact.phone || '',
+            role: contact.role,
+            password: '', // Não pré-preencher senha
+        };
+        
+        setFormData(mappedData);
         setEditMode(true);
         setModalShow(true);
     };
@@ -131,22 +170,26 @@ const UsersComponent = ({ users }) => {
             if (response.ok) {
                 const updatedUser = await response.json();
 
+                // Recarregar lista de usuários para obter dados completos
+                await refreshUserList();
+
                 if (editMode) {
-                    setContacts((prevContacts) =>
-                        prevContacts.map((contact) =>
-                            contact.id === updatedUser.id
-                                ? updatedUser
-                                : contact
-                        )
-                    );
                     toast.success('Usuário atualizado com sucesso! 🚀');
                 } else {
-                    setContacts((prevContacts) => [
-                        ...prevContacts,
-                        updatedUser,
-                    ]);
                     toast.success('Usuário criado com sucesso! 🚀');
                 }
+
+                // Resetar formulário
+                setFormData({
+                    id: '',
+                    firstName: '',
+                    lastName: '',
+                    email: '',
+                    cpf: '',
+                    phone: '',
+                    role: 'CUSTOMER',
+                    password: nanoid(12),
+                });
 
                 setModalShow(false);
             } else {
@@ -181,9 +224,8 @@ const UsersComponent = ({ users }) => {
 
             if (response.ok) {
                 toast.success('Usuário excluído com sucesso!🚀');
-                setContacts((prevContacts) =>
-                    prevContacts.filter((c) => c.id !== id)
-                );
+                // Recarregar lista de usuários
+                await refreshUserList();
             } else {
                 toast.error('Falha ao excluir o usuário. Tente novamente!');
             }
@@ -278,18 +320,35 @@ const UsersComponent = ({ users }) => {
                 </Modal.Header>
                 <Modal.Body>
                     <Form onSubmit={handleSaveChanges}>
-                        <Form.Group controlId="formName">
-                            <Form.Label>Nome</Form.Label>
-                            <Form.Control
-                                type="text"
-                                name="name"
-                                placeholder="Nome"
-                                onChange={handleFormChange}
-                                value={formData.name}
-                                className="mb-2"
-                                required
-                            />
-                        </Form.Group>
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group controlId="formFirstName">
+                                    <Form.Label>Primeiro Nome</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="firstName"
+                                        placeholder="Primeiro Nome"
+                                        onChange={handleFormChange}
+                                        value={formData.firstName}
+                                        className="mb-2"
+                                        required
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group controlId="formLastName">
+                                    <Form.Label>Sobrenome</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="lastName"
+                                        placeholder="Sobrenome"
+                                        onChange={handleFormChange}
+                                        value={formData.lastName}
+                                        className="mb-2"
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
 
                         <Form.Group controlId="formEmail">
                             <Form.Label>Email</Form.Label>
@@ -304,6 +363,35 @@ const UsersComponent = ({ users }) => {
                             />
                         </Form.Group>
 
+                        <Row>
+                            <Col md={6}>
+                                <Form.Group controlId="formCpf">
+                                    <Form.Label>CPF</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="cpf"
+                                        placeholder="000.000.000-00"
+                                        onChange={handleFormChange}
+                                        value={formData.cpf}
+                                        className="mb-2"
+                                    />
+                                </Form.Group>
+                            </Col>
+                            <Col md={6}>
+                                <Form.Group controlId="formPhone">
+                                    <Form.Label>Telefone</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        name="phone"
+                                        placeholder="(11) 99999-9999"
+                                        onChange={handleFormChange}
+                                        value={formData.phone}
+                                        className="mb-2"
+                                    />
+                                </Form.Group>
+                            </Col>
+                        </Row>
+
                         <Form.Group controlId="formRole">
                             <Form.Label>Nível de Acesso</Form.Label>
                             <Form.Select
@@ -313,6 +401,7 @@ const UsersComponent = ({ users }) => {
                                 className="mb-2"
                                 required
                             >
+                                <option value="CUSTOMER">Cliente</option>
                                 <option value="SUBSCRIBER">Assinante</option>
                                 <option value="ADMIN">Administrador</option>
                             </Form.Select>

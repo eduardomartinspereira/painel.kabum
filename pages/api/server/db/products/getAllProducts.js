@@ -1,24 +1,36 @@
 import { prisma } from '../prisma';
 
 export const getAllProducts = async () => {
-    const products = await prisma.$queryRaw`
-    SELECT 
-      p.id AS \`productId\`, 
-      p.name AS \`title\`, 
-      p.description, 
-      p.basePrice AS \`price\`, 
-      p.isActive AS \`status\`, 
-      p.category AS \`categoryName\`
-    FROM \`Product\` p
-    ORDER BY p.\`name\` ASC
-  `;
+    // Usar Prisma Client para incluir as imagens e categoria relacionadas
+    const products = await prisma.product.findMany({
+        include: {
+            images: {
+                where: {
+                    isPrimary: true
+                },
+                take: 1
+            },
+            category: true
+        },
+        orderBy: {
+            name: 'asc'
+        }
+    });
 
     return products.map((product) => ({
-        id: product.productId,
-        title: product.title,
+        id: product.id,
+        title: product.name,
+        name: product.name,
         description: product.description,
-        price: Number(product.price),
-        status: product.status,
-        category: product.categoryName,
+        price: Number(product.basePrice),
+        basePrice: Number(product.basePrice),
+        status: product.isActive,
+        category: product.category ? {
+            id: product.category.id,
+            name: product.category.name
+        } : null,
+        categoryId: product.categoryId,
+        img: product.images.length > 0 ? product.images[0].url : null,
+        image: product.images.length > 0 ? product.images[0].url : null,
     }));
 };

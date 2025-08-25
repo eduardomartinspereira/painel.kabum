@@ -2748,7 +2748,7 @@ const Profile = () => {
                                                                     </Row>
                                                                 </div>
                                                                 <div>
-                                                                    <div className="mb-4 main-content-label">
+                                                                   /* <div className="mb-4 main-content-label">
                                                                         Notifications
                                                                     </div>
                                                                     <div className="form-group mb-0">

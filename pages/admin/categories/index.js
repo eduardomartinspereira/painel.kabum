@@ -90,9 +90,23 @@ const CategoryTable = ({ categories }) => {
 
         const addedCategory = await addCategory(newCategory);
         if (addedCategory) {
-            setCategoriesData((prev) => [...prev, addedCategory]);
+            // Extrair os dados da categoria da resposta
+            const categoryData = addedCategory.category || addedCategory;
+            
+            setCategoriesData((prev) => [...prev, {
+                id: categoryData.id,
+                name: categoryData.name,
+                description: categoryData.description
+            }]);
             setModalShow(false);
             setIsLoading(false);
+            // Resetar formulário de adicionar
+            setAddFormData({
+                name: '',
+                description: '',
+                parentCategoryId: '',
+                isActive: false,
+            });
         }
     };
 
@@ -109,14 +123,28 @@ const CategoryTable = ({ categories }) => {
             updatedCategory
         );
         if (editedCategory) {
+            // Extrair os dados da categoria da resposta
+            const categoryData = editedCategory.category || editedCategory;
+            
             setCategoriesData((prev) =>
                 prev.map((category) =>
-                    category.id === editCategoryId ? editedCategory : category
+                    category.id === editCategoryId ? {
+                        id: categoryData.id,
+                        name: categoryData.name,
+                        description: categoryData.description
+                    } : category
                 )
             );
             setEditCategoryId(null);
             setModalShow(false);
             setIsLoading(false);
+            // Resetar formulário de editar
+            setEditFormData({
+                name: '',
+                description: '',
+                parentCategoryId: '',
+                isActive: false,
+            });
         }
     };
 
@@ -133,13 +161,30 @@ const CategoryTable = ({ categories }) => {
 
     const handleDeleteClick = async (categoryId) => {
         setDeletingId(categoryId);
-        const deletedCategory = await deleteCategory(categoryId);
-        if (deletedCategory) {
-            setCategoriesData((prev) =>
-                prev.filter((category) => category.id !== categoryId)
-            );
+        
+        try {
+            // Encontrar a categoria para obter o nome
+            const categoryToDelete = categoriesData.find(cat => cat.id === categoryId);
+            
+            if (!categoryToDelete) {
+                toast.error('Categoria não encontrada!');
+                setDeletingId(null);
+                return;
+            }
+            
+            const deletedCategory = await deleteCategory(categoryId, categoryToDelete.name);
+            
+            if (deletedCategory && deletedCategory.success) {
+                setCategoriesData((prev) =>
+                    prev.filter((category) => category.id !== categoryId)
+                );
+            }
+        } catch (error) {
+            console.error('Erro ao deletar categoria:', error);
+            toast.error('Erro inesperado ao deletar categoria!');
+        } finally {
+            setDeletingId(null);
         }
-        setDeletingId(null);
     };
 
     const handleCancelClick = () => {
@@ -147,25 +192,32 @@ const CategoryTable = ({ categories }) => {
         setModalShow(false);
     };
 
-    const deleteCategory = async (categoryId) => {
+    const deleteCategory = async (categoryId, categoryName) => {
         try {
-            const response = await fetch(
-                `/api/categories/deleteCategory?id=${categoryId}`,
-                {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
-                }
-            );
+            const url = categoryName 
+                ? `/api/categories/deleteCategory?id=${categoryId}&name=${encodeURIComponent(categoryName)}`
+                : `/api/categories/deleteCategory?id=${categoryId}`;
+                
+            const response = await fetch(url, {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+            
+            const result = await response.json();
+            
             if (!response.ok) {
-                toast.error('Erro ao excluir a categoria! Tente novamente!❌');
-                throw new Error('Erro ao excluir categoria');
+                toast.error(result.error || 'Erro ao excluir a categoria! Tente novamente!❌');
+                throw new Error(result.error || 'Erro ao excluir categoria');
             }
-            toast.success('Categoria excluída com sucesso!🚀');
-            return await response.json();
+            
+            toast.success(result.message || 'Categoria excluída com sucesso!🚀');
+            return result;
         } catch (error) {
             console.error('Erro ao excluir categoria:', error);
+            // Toast de erro já foi mostrado acima
+            return null;
         }
     };
 

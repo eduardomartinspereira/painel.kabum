@@ -14,13 +14,13 @@ export const getAllCoupons = async () => {
             c.createdAt,
             c.updatedAt,
             c.productId,
-            p.title AS \`productTitle\`,
-            COALESCE(SUM(pay.productQuantity), 0) AS \`totalQuantitySold\`,
+            p.name AS \`productTitle\`,
+            COUNT(pay.id) AS \`totalQuantitySold\`,
             COALESCE(SUM(pay.amount), 0) AS \`totalSalesAmount\`
         FROM \`Coupon\` c
         LEFT JOIN \`Product\` p ON c.\`productId\` = p.id
-        LEFT JOIN \`Payment\` pay ON pay.\`couponCode\` = c.code AND pay.\`status\` = 'APPROVED'
-        GROUP BY c.id
+        LEFT JOIN \`payments\` pay ON JSON_EXTRACT(pay.items, '$.couponCode') = c.code AND pay.\`status\` = 'APPROVED'
+        GROUP BY c.id, c.code, c.discount, c.discountType, c.maxUses, c.startAmount, c.availableAmount, c.isActive, c.createdAt, c.updatedAt, c.productId, p.name
         ORDER BY c.\`createdAt\` DESC
     `;
 
@@ -41,7 +41,7 @@ export const getAllCoupons = async () => {
                   title: coupon.productTitle,
               }
             : null,
-        totalQuantitySold: parseInt(coupon.totalQuantitySold || 0, 10),
-        totalSalesAmount: parseFloat(coupon.totalSalesAmount || 0),
+        totalQuantitySold: Number(coupon.totalQuantitySold || 0),
+        totalSalesAmount: Number(coupon.totalSalesAmount || 0),
     }));
 };

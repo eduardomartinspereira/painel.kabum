@@ -449,62 +449,32 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                     href={'/admin/dashboard/'}
                                 >
                                     <img
-                                        src={`${
-                                            process.env.NODE_ENV ===
-                                            'production'
-                                                ? basePath
-                                                : ''
-                                        }/assets/images/brand-logos/desktop.png`}
+                                        src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                         alt="logo"
                                         className="desktop-logo"
                                     />
                                     <img
-                                        src={`${
-                                            process.env.NODE_ENV ===
-                                            'production'
-                                                ? basePath
-                                                : ''
-                                        }/assets/images/brand-logos/toggle-logo.png`}
+                                        src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                         alt="logo"
                                         className="toggle-logo"
                                     />
                                     <img
-                                        src={`${
-                                            process.env.NODE_ENV ===
-                                            'production'
-                                                ? basePath
-                                                : ''
-                                        }/assets/images/brand-logos/desktop.png`}
+                                        src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                         alt="logo"
                                         className="desktop-dark"
                                     />
                                     <img
-                                        src={`${
-                                            process.env.NODE_ENV ===
-                                            'production'
-                                                ? basePath
-                                                : ''
-                                        }/assets/images/brand-logos/toggle-dark.png`}
+                                        src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                         alt="logo"
                                         className="toggle-dark"
                                     />
                                     <img
-                                        src={`${
-                                            process.env.NODE_ENV ===
-                                            'production'
-                                                ? basePath
-                                                : ''
-                                        }/assets/images/brand-logos/desktop-white.png`}
+                                        src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                         alt="logo"
                                         className="desktop-white"
                                     />
                                     <img
-                                        src={`${
-                                            process.env.NODE_ENV ===
-                                            'production'
-                                                ? basePath
-                                                : ''
-                                        }/assets/images/brand-logos/toggle-white.png`}
+                                        src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                         alt="logo"
                                         className="toggle-white"
                                     />

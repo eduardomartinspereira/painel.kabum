@@ -26,13 +26,14 @@ model Product {
   name        String
   description String
   basePrice   Decimal            @db.Decimal(10, 2)
-  category    String
   brand       String?
   isActive    Boolean            @default(true)
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @default(now()) @updatedAt
   images      ProductImage[]
   variations  ProductVariation[]
+  categoryId  Int?
+  category    Category?          @relation(fields: [categoryId], references: [id], onDelete: SetNull)
 }
 
 model ProductVariation {
@@ -55,7 +56,7 @@ model ProductVariation {
 model ProductImage {
   id        Int      @id @default(autoincrement())
   productId Int
-  url       String
+  url       String   @db.Text
   alt       String?
   isPrimary Boolean  @default(false)
   order     Int      @default(0)
@@ -142,4 +143,30 @@ model AccessLog {
   user        User?       @relation(fields: [userId], references: [id])
 
   @@index([userId], map: "AccessLog_userId_fkey")
+}
+
+model Coupon {
+    id              String              @id
+    code            String              @unique
+    discount        Float
+    discountType    Coupon_discountType
+    maxUses         Int                 @default(-1)
+    startAmount     Int                 @default(-1)
+    availableAmount Int                 @default(-1)
+    isActive        Boolean             @default(true)
+    createdAt       DateTime            @default(now())
+    updatedAt       DateTime
+    productId       Int?
+}
+
+enum Coupon_discountType {
+    PERCENTAGE
+    FIXED
+}
+model Category {
+    id          Int       @id @default(autoincrement())
+    name        String
+    description String?
+    createdAt   DateTime  @default(now())
+    products    Product[]
 }

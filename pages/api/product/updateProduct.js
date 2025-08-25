@@ -19,8 +19,9 @@ export default async function handler(req, res) {
         // Mapear campos antigos para novos se necessário
         const finalName = name || title;
         const finalBasePrice = basePrice || price;
-        const finalCategory = category || (categoryId ? `Category ${categoryId}` : undefined);
+        const finalCategoryId = categoryId || (category?.id) || null;
         const finalDescription = description;
+        const finalImg = img;
 
         if (
             !finalName ||
@@ -46,7 +47,7 @@ export default async function handler(req, res) {
             name: finalName,
             description: finalDescription,
             basePrice: Number(finalBasePrice),
-            category: finalCategory || 'Sem categoria',
+            categoryId: finalCategoryId ? Number(finalCategoryId) : null,
         };
 
         if (brand !== undefined) data.brand = brand;
@@ -68,6 +69,39 @@ export default async function handler(req, res) {
             where: { id: Number(id) },
             data,
         });
+
+        // Se há nova imagem, atualizar/criar registro na tabela ProductImage
+        if (finalImg) {
+            // Primeiro, verificar se já existe uma imagem primária
+            const existingImage = await prisma.productImage.findFirst({
+                where: {
+                    productId: Number(id),
+                    isPrimary: true
+                }
+            });
+
+            if (existingImage) {
+                // Atualizar imagem existente
+                await prisma.productImage.update({
+                    where: { id: existingImage.id },
+                    data: {
+                        url: finalImg,
+                        alt: finalName,
+                    }
+                });
+            } else {
+                // Criar nova imagem
+                await prisma.productImage.create({
+                    data: {
+                        productId: Number(id),
+                        url: finalImg,
+                        alt: finalName,
+                        isPrimary: true,
+                        order: 0,
+                    }
+                });
+            }
+        }
 
         console.log('Product updated successfully:', updatedProduct);
         return res.status(200).json({ success: true, product: updatedProduct });

@@ -13,20 +13,75 @@ export default async function handler(req, res) {
     }
 
     const { id } = req.query;
-
     const { name, description } = req.body;
 
     try {
+        if (!name) {
+            return res.status(400).json({ 
+                success: false,
+                message: 'Nome é obrigatório' 
+            });
+        }
+
+        // Buscar categoria atual pelo ID
+        const currentCategory = await prisma.category.findUnique({
+            where: { id: parseInt(id) }
+        });
+        
+        if (!currentCategory) {
+            return res.status(404).json({
+                success: false,
+                message: 'Categoria não encontrada'
+            });
+        }
+
+        // Verificar se o novo nome já existe (exceto a categoria atual)
+        const nameExists = await prisma.category.findFirst({
+            where: {
+                name: name,
+                id: {
+                    not: parseInt(id)
+                }
+            }
+        });
+
+        if (nameExists) {
+            return res.status(400).json({
+                success: false,
+                message: 'Já existe uma categoria com este nome'
+            });
+        }
+
+        // Atualizar categoria
         const updatedCategory = await prisma.category.update({
             where: { id: parseInt(id) },
             data: {
-                name,
-                description,
-            },
+                name: name,
+                description: description || `Categoria: ${name}`
+            }
         });
-        res.status(200).json(updatedCategory);
+
+        // Contar produtos associados
+        const productsCount = await prisma.product.count({
+            where: { categoryId: parseInt(id) }
+        });
+
+        console.log(`Updated category "${currentCategory.name}" to "${name}"`);
+        
+        res.status(200).json({
+            success: true,
+            id: updatedCategory.id,
+            name: updatedCategory.name,
+            description: updatedCategory.description,
+            productsCount: productsCount,
+            message: `Categoria atualizada com sucesso. ${productsCount} produto(s) associados.`
+        });
     } catch (error) {
-        console.error('Error updating coupon:', error);
-        res.status(500).json({ message: 'Failed to update coupon' });
+        console.error('Error updating category:', error);
+        res.status(500).json({ 
+            success: false,
+            message: 'Erro ao atualizar categoria',
+            error: error.message 
+        });
     }
 }
