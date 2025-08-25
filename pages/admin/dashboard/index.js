@@ -588,7 +588,7 @@ const Dashboard = ({
                                                         {new Intl.NumberFormat(
                                                             'pt-BR'
                                                         ).format(
-                                                            accessData.totalMobileAccesses
+                                                            accessData?.totalMobileAccesses || 0
                                                         )}
                                                     </span>
                                                     <span className="text-success fw-semibold">
@@ -606,7 +606,7 @@ const Dashboard = ({
                                                         {new Intl.NumberFormat(
                                                             'pt-BR'
                                                         ).format(
-                                                            accessData.totalDesktopAccesses
+                                                            accessData?.totalDesktopAccesses || 0
                                                         )}
                                                     </span>
                                                     <span className="text-danger fw-semibold">
@@ -617,9 +617,16 @@ const Dashboard = ({
                                             </div>
                                         </div>
                                         <div id="Viewers">
-                                            <Dashboarddata.Viewers
-                                                accessData={accessData}
-                                            />
+                                            {accessData && (accessData.totalMobileAccesses > 0 || accessData.totalDesktopAccesses > 0) ? (
+                                                <Dashboarddata.Viewers
+                                                    accessData={accessData || {}}
+                                                />
+                                            ) : (
+                                                <div className="text-center py-4">
+                                                    <p className="text-muted">Nenhum dado de acesso disponível</p>
+                                                    <small className="text-muted">Os dados aparecerão aqui quando houver visitas registradas</small>
+                                                </div>
+                                            )}
                                         </div>
                                     </Card.Body>
                                 </Card>

@@ -147,15 +147,21 @@ export class Viewers extends React.Component {
     constructor(props) {
         super(props);
 
+        // Garantir que accessData existe e tem as propriedades necessárias
+        const accessData = props.accessData || {};
+        const mobileData = accessData.mobile || new Array(7).fill(0);
+        const desktopData = accessData.desktop || new Array(7).fill(0);
+        const dates = accessData.dates || ['Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado', 'Domingo'];
+
         this.state = {
             series: [
                 {
                     name: 'Celular',
-                    data: this.props.accessData.mobile,
+                    data: mobileData,
                 },
                 {
                     name: 'Computador',
-                    data: this.props.accessData.desktop,
+                    data: desktopData,
                 },
             ],
             options: {
@@ -171,21 +177,21 @@ export class Viewers extends React.Component {
                 grid: {
                     borderColor: '#f2f6f7',
                 },
-                colors: ['var(--primary-color)', '#FFC107'], // Alterado para amarelo
+                colors: ['#3b82f6', '#f59e0b'], // Azul para mobile, amarelo para desktop
                 background: 'transparent',
                 dataLabels: {
                     enabled: false,
                 },
                 stroke: {
                     curve: 'smooth',
-                    width: 2,
+                    width: 3,
                 },
                 legend: {
                     show: true,
                     position: 'top',
                 },
                 xaxis: {
-                    categories: this.props.accessData.dates,
+                    categories: dates,
                     axisBorder: {
                         show: false,
                         color: 'rgba(119, 119, 142, 0.05)',
@@ -214,6 +220,7 @@ export class Viewers extends React.Component {
                     },
                 },
                 tooltip: {
+                    theme: 'dark',
                     x: {
                         format: 'dd/MM/yy HH:mm',
                     },
