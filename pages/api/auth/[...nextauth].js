@@ -8,7 +8,7 @@ import { prisma } from '@/pages/api/server/db/prisma';
 
 export const authOptions = {
   session: { strategy: 'jwt' },
-  secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-for-development-only',
+  secret: process.env.NEXTAUTH_SECRET,
   providers: [
     Credentials({
       name: 'Email e senha',
@@ -16,104 +16,64 @@ export const authOptions = {
         email: { label: 'Email', type: 'email' },
         password: { label: 'Senha', type: 'password' },
       },
+      // ✅ Tipagem correta do retorno
       async authorize(credentials) {
-        try {
-          console.log('🔐 Tentativa de login para:', credentials?.email);
-          
-          if (!credentials?.email || !credentials?.password) {
-            console.log('❌ Credenciais incompletas');
-            return null;
-          }
+        if (!credentials?.email || !credentials?.password) return null;
 
-          const db = await prisma.user.findUnique({ 
-            where: { email: credentials.email },
-            select: {
-              id: true,
-              email: true,
-              password: true,
-              firstName: true,
-              lastName: true,
-              role: true
-            }
-          });
-          
-          if (!db) {
-            console.log('❌ Usuário não encontrado:', credentials.email);
-            return null;
-          }
-          
-          if (!db.password) {
-            console.log('❌ Usuário sem senha configurada:', credentials.email);
-            return null;
-          }
+        const db = await prisma.user.findUnique({ where: { email: credentials.email } });
+        if (!db?.password) return null;
 
-          const ok = await bcrypt.compare(credentials.password, db.password);
-          if (!ok) {
-            console.log('❌ Senha incorreta para:', credentials.email);
-            return null;
-          }
+        const ok = await bcrypt.compare(credentials.password, db.password);
+        if (!ok) return null;
 
-          if (db.role !== 'ADMIN') {
-            console.log('❌ Usuário não é ADMIN:', credentials.email, 'Role:', db.role);
-            return null;
-          }
+        if (db.role !== 'ADMIN') return null;
 
-          console.log('✅ Login bem-sucedido para:', credentials.email);
-          
-          const authUser = {
-            id: String(db.id),
-            email: db.email,
-            name: db.firstName || db.email.split('@')[0],
-            firstName: db.firstName,
-            lastName: db.lastName,
-            role: db.role,
-          };
+        // ✅ id como string, e campos extras permitidos via augmentation
+        const authUser = {
+          id: String(db.id),
+          email: db.email,
+          name: db.firstName ?? undefined,
+          lastName: db.lastName ?? undefined,
+          role: db.role, // 'CUSTOMER' | 'ADMIN' | etc.
+        };
 
-          return authUser;
-        } catch (error) {
-          console.error('❌ Erro na autenticação:', error);
-          return null;
-        }
+        return authUser;
       },
     }),
 
-    // Comentar Google Provider se não estiver sendo usado
-    // GoogleProvider({
-    //   clientId: process.env.GOOGLE_CLIENT_ID ?? '',
-    //   clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
-    // }),
+    GoogleProvider({
+      clientId: process.env.GOOGLE_CLIENT_ID ?? '',
+      clientSecret: process.env.GOOGLE_CLIENT_SECRET ?? '',
+    }),
   ],
 
   callbacks: {
-    async jwt({ token, user, account }) {
-      // Se é um novo login
-      if (user) {
-        token.id = user.id;
-        token.role = user.role;
-        token.firstName = user.firstName;
-        token.lastName = user.lastName;
+    async jwt({ token, user, account, profile }) {
+      // Se logou agora (credentials ou google), garanta id/role
+      if (user?.email) {
+        const dbUser = await prisma.user.findUnique({ where: { email: user.email } });
+        if (dbUser) {
+          token.id = String(dbUser.id);
+          token.role = dbUser.role; // string/union é compatível
+        }
+      }
+
+      // Access token do Google
+      if (account?.provider === 'google' && account.access_token) {
+        token.accessToken = account.access_token;
       }
 
       return token;
     },
 
     async session({ session, token }) {
-      if (session.user && token) {
-        session.user.id = token.id;
+      if (session.user) {
+        session.user.id = token.id ?? '';
         session.user.role = token.role;
-        session.user.firstName = token.firstName;
-        session.user.lastName = token.lastName;
-        session.user.name = token.firstName || session.user.email?.split('@')[0] || 'Admin';
       }
+      session.accessToken = token.accessToken;
       return session;
     },
   },
-
-  pages: {
-    signIn: '/',
-    error: '/',
-  },
-
-  debug: process.env.NODE_ENV === 'development',
 };
 export default NextAuth(authOptions);

@@ -11,11 +11,16 @@ export async function getAccessData() {
   const start7 = dayjs().startOf('day').subtract(6, 'day');
   const start7Date = start7.toDate();
 
-  // busca logs reais no período
-  const logs = await prisma.accessLog.findMany({
-    where: { createdAt: { gte: start7Date } },
-    select: { createdAt: true, deviceType: true, browser: true, city: true },
-  });
+  // busca logs no período
+  // Tabela accessLog não existe no schema atual
+  // Retornando dados mockados até que a tabela seja criada
+  const logs = [];
+  
+  // TODO: Implementar quando a tabela accessLog for criada no schema
+  // const logs = await prisma.accessLog.findMany({
+  //   where: { createdAt: { gte: start7Date } },
+  //   select: { createdAt: true, deviceType: true, browser: true, city: true },
+  // });
 
   // labels curtas em pt-BR
   const shortWeekdays = {
@@ -62,7 +67,7 @@ export async function getAccessData() {
   const totalDesktopAccesses = sum(desktop);
 
   const cityStats = Object.keys(cityCounts)
-    .map(city => {
+    .map((city) => {
       const accessCount = cityCounts[city];
       const percentage =
         totalAccesses === 0
