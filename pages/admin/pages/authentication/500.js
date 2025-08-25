@@ -35,7 +35,7 @@ const Error500 = () => (
                         You may have mistyped the address or the page may have
                         moved.
                     </h6>
-                    <Link className="btn btn-light" href={'/admin/dashboard//'}>
+                    <Link className="btn btn-light" href={'/admin/dashboard/'}>
                         Back to Home
                     </Link>
                 </div>

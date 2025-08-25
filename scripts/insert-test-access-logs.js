@@ -90,12 +90,7 @@ async function insertTestAccessLogs() {
       },
     ];
 
-    for (const log of testLogs) {
-      await prisma.accessLog.create({
-        data: log,
-      });
-      console.log(`Log criado: ${log.deviceType} - ${log.browser} - ${log.city}`);
-    }
+    
 
     console.log('Logs de teste inseridos com sucesso!');
   } catch (error) {

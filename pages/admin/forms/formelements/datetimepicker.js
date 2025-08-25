@@ -1,8 +1,13 @@
 import { Fragment, useState } from 'react';
 import { Card, Col, InputGroup, Row } from 'react-bootstrap';
 import DatePicker from 'react-datepicker';
+import { registerLocale } from 'react-datepicker';
+import ptBR from 'date-fns/locale/pt-BR';
 import Pageheader from '../../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../../shared/layout-components/seo/seo';
+
+// Registrar o locale português brasileiro
+registerLocale('pt-BR', ptBR);
 
 const Datetimepicker = () => {
     const [startDate, setStartDate] = useState(new Date());

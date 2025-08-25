@@ -12,15 +12,17 @@ export async function getAccessData() {
   const start7Date = start7.toDate();
 
   // busca logs no período
-  // Tabela accessLog não existe no schema atual
-  // Retornando dados mockados até que a tabela seja criada
-  const logs = [];
-  
-  // TODO: Implementar quando a tabela accessLog for criada no schema
-  // const logs = await prisma.accessLog.findMany({
-  //   where: { createdAt: { gte: start7Date } },
-  //   select: { createdAt: true, deviceType: true, browser: true, city: true },
-  // });
+  const logs = await prisma.accessLog.findMany({
+    where: { createdAt: { gte: start7Date } },
+    select: { 
+      createdAt: true, 
+      deviceType: true, 
+      browser: true, 
+      city: true,
+      ip: true,
+      userId: true
+    },
+  });
 
   // labels curtas em pt-BR
   const shortWeekdays = {
@@ -44,10 +46,12 @@ export async function getAccessData() {
   const browserCounts = {};
   const cityCounts = {};
   let totalAccesses = 0;
+  const uniqueIPs = new Set();
+  const uniqueUsers = new Set();
 
   for (const l of logs) {
     // índice do dia (0..6) relativo a start7
-    const idx = dayjs(l.createdAt).startOf('day').diff(start7, 'day');
+    const idx = dayjs(l.createdAt).startOf('day').diff(start7.startOf('day'), 'day');
     if (idx < 0 || idx > 6) continue;
 
     if (l.deviceType === 'MOBILE') mobile[idx] += 1;
@@ -58,6 +62,16 @@ export async function getAccessData() {
 
     const c = l.city || 'Desconhecida';
     cityCounts[c] = (cityCounts[c] || 0) + 1;
+
+    // Contar IPs únicos
+    if (l.ip) {
+      uniqueIPs.add(l.ip);
+    }
+
+    // Contar usuários únicos
+    if (l.userId) {
+      uniqueUsers.add(l.userId);
+    }
 
     totalAccesses += 1;
   }
@@ -89,5 +103,37 @@ export async function getAccessData() {
     totalAccesses,
     cityStats,
     top10Cities,
+    uniqueIPsCount: uniqueIPs.size,
+    uniqueUsersCount: uniqueUsers.size,
+    
+    // Adicionar dados para gráficos mais detalhados
+    browserStats: Object.keys(browserCounts).map(browser => ({
+      name: browser,
+      count: browserCounts[browser],
+      percentage: totalAccesses === 0 
+        ? '0.00' 
+        : ((browserCounts[browser] / totalAccesses) * 100).toFixed(2)
+    })).sort((a, b) => b.count - a.count),
+    
+    // Dados dos últimos 7 dias para métricas
+    last7DaysData: {
+      dates,
+      mobileAccesses: mobile,
+      desktopAccesses: desktop,
+      totalPerDay: mobile.map((m, i) => m + desktop[i])
+    },
+
+    // Estatísticas gerais
+    stats: {
+      totalAccesses,
+      uniqueVisitors: uniqueIPs.size,
+      registeredUsers: uniqueUsers.size,
+      mobilePercentage: totalAccesses > 0 
+        ? ((totalMobileAccesses / totalAccesses) * 100).toFixed(2)
+        : '0.00',
+      desktopPercentage: totalAccesses > 0 
+        ? ((totalDesktopAccesses / totalAccesses) * 100).toFixed(2)
+        : '0.00'
+    }
   };
 }
