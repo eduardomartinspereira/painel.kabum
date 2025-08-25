@@ -9,16 +9,16 @@ export async function getSalesAmountToday() {
     const yesterdayEnd = endOfDay(subDays(new Date(), 1));
 
     const paymentsToday = await prisma.$queryRaw`
-        SELECT SUM(\`amount\`) as \`totalSalesAmountToday\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(\`amount\`), 0) as \`totalSalesAmountToday\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${todayStart}
         AND \`createdAt\` <= ${todayEnd}
         AND \`status\` = 'APPROVED';
     `;
 
     const paymentsYesterday = await prisma.$queryRaw`
-        SELECT SUM(\`amount\`) as \`totalSalesAmountYesterday\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(\`amount\`), 0) as \`totalSalesAmountYesterday\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${yesterdayStart}
         AND \`createdAt\` <= ${yesterdayEnd}
         AND \`status\` = 'APPROVED';

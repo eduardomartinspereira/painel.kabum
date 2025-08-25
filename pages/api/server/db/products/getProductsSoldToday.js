@@ -13,8 +13,11 @@ export async function getProductsSoldToday() {
     );
 
     const paymentsToday = await prisma.$queryRaw`
-        SELECT SUM(\`productQuantity\`) as \`totalProductsSold\`
-        FROM \`Payment\`
+        SELECT 
+            COALESCE(SUM(
+                CAST(JSON_UNQUOTE(JSON_EXTRACT(items, '$[*].quantity')) AS DECIMAL(10,2))
+            ), 0) as \`totalProductsSold\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${todayStart}
         AND \`createdAt\` <= ${todayEnd}
         AND \`status\` = 'APPROVED';
@@ -28,8 +31,11 @@ export async function getProductsSoldToday() {
     const yesterdayEnd = endOfDay(subDays(new Date(), 1));
 
     const paymentsYesterday = await prisma.$queryRaw`
-        SELECT SUM(\`productQuantity\`) as \`totalProductsSold\`
-        FROM \`Payment\`
+        SELECT 
+            COALESCE(SUM(
+                CAST(JSON_UNQUOTE(JSON_EXTRACT(items, '$[*].quantity')) AS DECIMAL(10,2))
+            ), 0) as \`totalProductsSold\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${yesterdayStart}
         AND \`createdAt\` <= ${yesterdayEnd}
         AND \`status\` = 'APPROVED';

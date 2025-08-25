@@ -103,14 +103,7 @@ const Home = () => {
                                                         <div className="d-flex mb-4">
                                                             <Link href="/admin/dashboard">
                                                                 <img
-                                                                    src={`${
-                                                                        process
-                                                                            .env
-                                                                            .NODE_ENV ===
-                                                                        'production'
-                                                                            ? basePath
-                                                                            : ''
-                                                                    }/assets/images/brand-logos/logo.png`}
+                                                                    src="https://static.kabum.com.br/conteudo/icons/logo.svg"
                                                                     className="sign-favicon ht-40"
                                                                     alt="logo"
                                                                 />
