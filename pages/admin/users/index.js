@@ -13,7 +13,6 @@ import {
     Spinner,
 } from 'react-bootstrap';
 import { toast } from 'react-toastify';
-import { uploadImageAndGetUrl } from '../../../shared/firebase/uploadClient';
 import { Savetable } from '../../../shared/data/tables/datatablesdata';
 import Pageheader from '../../../shared/layout-components/pageheader/pageheader';
 import Seo from '../../../shared/layout-components/seo/seo';
@@ -28,7 +27,6 @@ const UsersComponent = ({ users }) => {
             role: user.role || 'CUSTOMER',
             cpf: user.cpf || 'Não informado',
             phone: user.phone || 'Não informado',
-            imageUrl: user.imageUrl || '',
             createdAt: user.createdAt
                 ? new Date(user.createdAt).toLocaleDateString('pt-BR')
                 : 'N/A',
@@ -47,11 +45,9 @@ const UsersComponent = ({ users }) => {
         email: '',
         cpf: '',
         phone: '',
-        imageUrl: '',
         role: 'CUSTOMER',
         password: nanoid(12), // Gera uma senha aleatória padrão com 12 caracteres
     });
-    const [uploadingImage, setUploadingImage] = useState(false);
 
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 15;
@@ -97,7 +93,6 @@ const UsersComponent = ({ users }) => {
                     role: user.role || 'CUSTOMER',
                     cpf: user.cpf || 'Não informado',
                     phone: user.phone || 'Não informado',
-                    imageUrl: user.imageUrl || '',
                     createdAt: user.createdAt
                         ? new Date(user.createdAt).toLocaleDateString('pt-BR')
                         : 'N/A',
@@ -124,7 +119,6 @@ const UsersComponent = ({ users }) => {
             email: '',
             cpf: '',
             phone: '',
-            imageUrl: '',
             role: 'CUSTOMER',
             password: nanoid(12), // Gera uma nova senha aleatória ao abrir o modal
         });
@@ -141,7 +135,6 @@ const UsersComponent = ({ users }) => {
             email: contact.email,
             cpf: contact.cpf || '',
             phone: contact.phone || '',
-            imageUrl: contact.imageUrl || '',
             role: contact.role,
             password: '', // Não pré-preencher senha
         };
@@ -149,38 +142,6 @@ const UsersComponent = ({ users }) => {
         setFormData(mappedData);
         setEditMode(true);
         setModalShow(true);
-    };
-
-    const handleImageUpload = async (event) => {
-        const file = event.target.files?.[0];
-        if (!file) return;
-
-        // Validar tipo de arquivo
-        if (!file.type.startsWith('image/')) {
-            toast.error('Por favor, selecione apenas arquivos de imagem');
-            return;
-        }
-
-        // Validar tamanho (max 5MB)
-        if (file.size > 5 * 1024 * 1024) {
-            toast.error('A imagem deve ter no máximo 5MB');
-            return;
-        }
-
-        try {
-            setUploadingImage(true);
-            const imageUrl = await uploadImageAndGetUrl(file, 'users');
-            setFormData(prev => ({
-                ...prev,
-                imageUrl: imageUrl
-            }));
-            toast.success('Imagem carregada com sucesso!');
-        } catch (error) {
-            console.error('Erro ao fazer upload da imagem:', error);
-            toast.error('Erro ao fazer upload da imagem');
-        } finally {
-            setUploadingImage(false);
-        }
     };
 
     const handleSaveChanges = async (event) => {
@@ -226,7 +187,6 @@ const UsersComponent = ({ users }) => {
                     email: '',
                     cpf: '',
                     phone: '',
-                    imageUrl: '',
                     role: 'CUSTOMER',
                     password: nanoid(12),
                 });
@@ -431,34 +391,6 @@ const UsersComponent = ({ users }) => {
                                 </Form.Group>
                             </Col>
                         </Row>
-
-                        <Form.Group controlId="formImage">
-                            <Form.Label>Foto do Perfil</Form.Label>
-                            <div className="d-flex align-items-center gap-3 mb-3">
-                                {formData.imageUrl && (
-                                    <img 
-                                        src={formData.imageUrl} 
-                                        alt="Preview" 
-                                        width="60" 
-                                        height="60" 
-                                        className="rounded-circle object-fit-cover"
-                                        style={{ objectFit: 'cover' }}
-                                    />
-                                )}
-                                <div className="flex-grow-1">
-                                    <Form.Control
-                                        type="file"
-                                        accept="image/*"
-                                        onChange={handleImageUpload}
-                                        disabled={uploadingImage}
-                                        className="mb-1"
-                                    />
-                                    <Form.Text className="text-muted">
-                                        {uploadingImage ? 'Carregando...' : 'Máximo 5MB - JPG, PNG, GIF'}
-                                    </Form.Text>
-                                </div>
-                            </div>
-                        </Form.Group>
 
                         <Form.Group controlId="formRole">
                             <Form.Label>Nível de Acesso</Form.Label>

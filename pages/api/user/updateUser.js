@@ -5,7 +5,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ message: 'Método não permitido' });
     }
 
-    const { id, firstName, lastName, email, cpf, phone, role, password, imageUrl } = req.body;
+    const { id, firstName, lastName, email, cpf, phone, role, password } = req.body;
 
     console.log('Atualizando usuário:', { id, firstName, lastName, email, cpf, phone, role });
 
@@ -29,7 +29,6 @@ export default async function handler(req, res) {
         if (lastName !== undefined) updateData.lastName = lastName;
         if (cpf !== undefined) updateData.cpf = cpf;
         if (phone !== undefined) updateData.phone = phone;
-        if (imageUrl !== undefined) updateData.imageUrl = imageUrl;
         if (password !== undefined && password.trim() !== '') updateData.password = password;
 
         const updatedUser = await prisma.user.update({

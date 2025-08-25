@@ -928,9 +928,9 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             >
                                 <div className="d-flex align-items-center">
                                     <div className="me-sm-2 me-0">
-                                        {session?.user?.imageUrl ? (
+                                        {false ? (
                                             <img
-                                                src={session.user.imageUrl}
+                                                src=""
                                                 alt="img"
                                                 width="32"
                                                 height="32"

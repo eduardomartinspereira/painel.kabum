@@ -15,7 +15,6 @@ model User {
   firstName String?
   lastName  String?
   phone     String?
-  imageUrl  String?  @map("image_url")
   role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
@@ -132,7 +131,7 @@ enum DeviceType {
 model AccessLog {
   id          Int        @id @default(autoincrement())
   userId      Int?
-  ip          String?
+  ip          String
   city        String?
   browser     String      @default("Other")  // evita insert falhar
   deviceType  DeviceType

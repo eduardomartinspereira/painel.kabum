@@ -15,7 +15,6 @@ export const getAllUsers = async () => {
         email: user.email || null,
         cpf: user.cpf || null,
         phone: user.phone || null,
-        imageUrl: user.imageUrl || null,
         role: user.role,
         createdAt: user.createdAt ? user.createdAt.toISOString() : null,
         updatedAt: user.updatedAt ? user.updatedAt.toISOString() : null,
