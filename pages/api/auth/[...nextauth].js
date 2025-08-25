@@ -34,6 +34,7 @@ export const authOptions = {
           email: db.email,
           name: db.firstName ?? undefined,
           lastName: db.lastName ?? undefined,
+          imageUrl: db.imageUrl ?? undefined,
           role: db.role, // 'CUSTOMER' | 'ADMIN' | etc.
         };
 
@@ -49,12 +50,13 @@ export const authOptions = {
 
   callbacks: {
     async jwt({ token, user, account, profile }) {
-      // Se logou agora (credentials ou google), garanta id/role
+      // Se logou agora (credentials ou google), garanta id/role/imageUrl
       if (user?.email) {
         const dbUser = await prisma.user.findUnique({ where: { email: user.email } });
         if (dbUser) {
           token.id = String(dbUser.id);
           token.role = dbUser.role; // string/union é compatível
+          token.imageUrl = dbUser.imageUrl;
         }
       }
 
@@ -70,6 +72,7 @@ export const authOptions = {
       if (session.user) {
         session.user.id = token.id ?? '';
         session.user.role = token.role;
+        session.user.imageUrl = token.imageUrl;
       }
       session.accessToken = token.accessToken;
       return session;

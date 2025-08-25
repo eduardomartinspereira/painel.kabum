@@ -760,7 +760,8 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             </Link>
                         </div>
 
-                        <Dropdown
+{/* NOTIFICAÇÕES COMENTADAS - Removido por solicitação do usuário */}
+                        {/* <Dropdown
                             className="header-element notifications-dropdown"
                             autoClose="outside"
                         >
@@ -898,7 +899,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                     </div>
                                 </div>
                             </Dropdown.Menu>
-                        </Dropdown>
+                        </Dropdown> */}
 
                         <div className="header-element header-fullscreen">
                             <Link
@@ -927,9 +928,9 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                             >
                                 <div className="d-flex align-items-center">
                                     <div className="me-sm-2 me-0">
-                                        {session?.user?.image_url ? (
+                                        {session?.user?.imageUrl ? (
                                             <img
-                                                src={session.user.image_url}
+                                                src={session.user.imageUrl}
                                                 alt="img"
                                                 width="32"
                                                 height="32"
@@ -972,7 +973,8 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                 className="main-header-dropdown dropdown-menu pt-0 overflow-hidden header-profile-dropdown dropdown-menu-end"
                                 aria-labelledby="mainHeaderProfile"
                             >
-                                <li>
+                                {/* ITENS DO MENU COMENTADOS - Removidos por solicitação do usuário */}
+                                {/* <li>
                                     <Link
                                         className="dropdown-item d-flex border-bottom"
                                         href="/admin/pages/profile"
@@ -1019,7 +1021,7 @@ function Header({ local_varaiable, ThemeChanger, session }) {
                                         <i className="far fa-sun fs-16 me-2 op-7"></i>
                                         Settings
                                     </Link>
-                                </li>
+                                </li> */}
                                 <li
                                     className="dropdown-item d-flex"
                                     onClick={() => handleLogout()}

@@ -5,7 +5,7 @@ export default async function handler(req, res) {
         return res.status(405).json({ message: 'Método não permitido' });
     }
 
-    const { firstName, lastName, email, cpf, phone, role, password } = req.body;
+    const { firstName, lastName, email, cpf, phone, role, password, imageUrl } = req.body;
 
     console.log('Criando usuário:', { firstName, lastName, email, cpf, phone, role });
 
@@ -27,6 +27,7 @@ export default async function handler(req, res) {
                 email,
                 cpf: cpf || null,
                 phone: phone || null,
+                imageUrl: imageUrl || null,
                 role,
                 password: password || null,
             },
