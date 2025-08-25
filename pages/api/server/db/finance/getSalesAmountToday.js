@@ -24,9 +24,8 @@ export async function getSalesAmountToday() {
         AND \`status\` = 'APPROVED';
     `;
 
-    const totalSalesAmountToday = paymentsToday[0]?.totalSalesAmountToday || 0;
-    const totalSalesAmountYesterday =
-        paymentsYesterday[0]?.totalSalesAmountYesterday || 0;
+    const totalSalesAmountToday = Number(paymentsToday[0]?.totalSalesAmountToday || 0);
+    const totalSalesAmountYesterday = Number(paymentsYesterday[0]?.totalSalesAmountYesterday || 0);
 
     return {
         totalSalesAmountToday,

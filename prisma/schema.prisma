@@ -18,6 +18,7 @@ model User {
   role      Role
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now()) @updatedAt
+  accessLogs AccessLog[]
 }
 
 model Product {
@@ -119,4 +120,26 @@ enum PaymentStatus {
   IN_PROCESS
   REFUNDED
   CHARGED_BACK
+}
+
+enum DeviceType {
+  MOBILE
+  DESKTOP
+}
+
+model AccessLog {
+  id          Int        @id @default(autoincrement())
+  userId      Int?
+  ip          String
+  city        String?
+  browser     String      @default("Other")  // evita insert falhar
+  deviceType  DeviceType
+  isIphone    Boolean     @default(false)    // evita insert falhar
+  createdAt   DateTime    @default(now())
+  deviceBrand String?
+  deviceModel String?
+
+  user        User?       @relation(fields: [userId], references: [id])
+
+  @@index([userId], map: "AccessLog_userId_fkey")
 }

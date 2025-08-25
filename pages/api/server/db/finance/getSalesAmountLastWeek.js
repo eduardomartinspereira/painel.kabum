@@ -21,26 +21,24 @@ export async function getSalesAmountLastWeek() {
     });
 
     const paymentsLastWeek = await prisma.$queryRaw`
-        SELECT SUM(\`amount\`) as \`totalSalesAmountLastWeek\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(\`amount\`), 0) as \`totalSalesAmountLastWeek\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${lastWeekStart}
         AND \`createdAt\` <= ${lastWeekEnd}
         AND \`status\` = 'APPROVED';
     `;
 
-    const totalSalesAmountLastWeek =
-        paymentsLastWeek[0]?.totalSalesAmountLastWeek || 0;
+    const totalSalesAmountLastWeek = Number(paymentsLastWeek[0]?.totalSalesAmountLastWeek || 0);
 
     const paymentsWeekBeforeLast = await prisma.$queryRaw`
-        SELECT SUM(\`amount\`) as \`totalSalesAmountWeekBeforeLast\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(\`amount\`), 0) as \`totalSalesAmountWeekBeforeLast\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${weekBeforeLastStart}
         AND \`createdAt\` <= ${weekBeforeLastEnd}
         AND \`status\` = 'APPROVED';
     `;
 
-    const totalSalesAmountWeekBeforeLast =
-        paymentsWeekBeforeLast[0]?.totalSalesAmountWeekBeforeLast || 0;
+    const totalSalesAmountWeekBeforeLast = Number(paymentsWeekBeforeLast[0]?.totalSalesAmountWeekBeforeLast || 0);
 
     return {
         totalSalesAmountLastWeek,

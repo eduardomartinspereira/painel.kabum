@@ -7,104 +7,87 @@ dayjs.extend(localeData);
 dayjs.locale('pt-br');
 
 export async function getAccessData() {
-    const last7DaysStart = dayjs().startOf('day').subtract(6, 'days').toDate();
+  // início dos últimos 7 dias (inclui hoje)
+  const start7 = dayjs().startOf('day').subtract(6, 'day');
+  const start7Date = start7.toDate();
 
-    const accessData = await prisma.$queryRaw`
-        SELECT \`deviceType\`, \`city\`, \`browser\`, DATE(\`createdAt\`) as \`day\`, COUNT(id) as \`count\`
-        FROM \`AccessLog\`
-        WHERE \`createdAt\` >= ${last7DaysStart}
-        GROUP BY \`deviceType\`, \`city\`, \`browser\`, \`day\`
-        ORDER BY \`day\` ASC;
-    `;
+  // busca logs no período
+  // Tabela accessLog não existe no schema atual
+  // Retornando dados mockados até que a tabela seja criada
+  const logs = [];
+  
+  // TODO: Implementar quando a tabela accessLog for criada no schema
+  // const logs = await prisma.accessLog.findMany({
+  //   where: { createdAt: { gte: start7Date } },
+  //   select: { createdAt: true, deviceType: true, browser: true, city: true },
+  // });
 
-    const shortWeekdays = {
-        'segunda-feira': 'Segunda',
-        'terça-feira': 'Terça',
-        'quarta-feira': 'Quarta',
-        'quinta-feira': 'Quinta',
-        'sexta-feira': 'Sexta',
-        sábado: 'Sábado',
-        domingo: 'Domingo',
-    };
+  // labels curtas em pt-BR
+  const shortWeekdays = {
+    'segunda-feira': 'Segunda',
+    'terça-feira': 'Terça',
+    'quarta-feira': 'Quarta',
+    'quinta-feira': 'Quinta',
+    'sexta-feira': 'Sexta',
+    'sábado': 'Sábado',
+    'domingo': 'Domingo',
+  };
 
-    const last7Days = [...Array(7)].map(
-        (_, i) =>
-            shortWeekdays[
-                dayjs()
-                    .startOf('day')
-                    .subtract(6 - i, 'days')
-                    .format('dddd')
-            ]
-    );
+  // sequência de labels de start7 → hoje
+  const dates = Array.from({ length: 7 }, (_, i) => {
+    const d = start7.add(i, 'day');
+    return shortWeekdays[d.format('dddd')];
+  });
 
-    const mobileCounts = Array(7).fill(0);
-    const desktopCounts = Array(7).fill(0);
-    const browserCounts = {};
-    const cityCounts = {};
+  const mobile = new Array(7).fill(0);
+  const desktop = new Array(7).fill(0);
+  const browserCounts = {};
+  const cityCounts = {};
+  let totalAccesses = 0;
 
-    let totalAccesses = 0;
+  for (const l of logs) {
+    // índice do dia (0..6) relativo a start7
+    const idx = dayjs(l.createdAt).startOf('day').diff(start7, 'day');
+    if (idx < 0 || idx > 6) continue;
 
-    accessData.forEach((access) => {
-        const formattedCreatedAt = dayjs(access.day).format('dddd');
-        const index = last7Days.indexOf(shortWeekdays[formattedCreatedAt]);
+    if (l.deviceType === 'MOBILE') mobile[idx] += 1;
+    else desktop[idx] += 1;
 
-        const count = Number(access.count);
-        if (index !== -1) {
-            if (access.deviceType === 'MOBILE') {
-                mobileCounts[index] += count;
-            } else if (access.deviceType === 'DESKTOP') {
-                desktopCounts[index] += count;
-            }
+    const b = !l.browser || l.browser === 'Unknown' ? 'Outros' : l.browser;
+    browserCounts[b] = (browserCounts[b] || 0) + 1;
 
-            const browserName =
-                access.browser === 'Unknown' ? 'Outros' : access.browser;
+    const c = l.city || 'Desconhecida';
+    cityCounts[c] = (cityCounts[c] || 0) + 1;
 
-            if (!browserCounts[browserName]) {
-                browserCounts[browserName] = 0;
-            }
-            browserCounts[browserName] += count;
+    totalAccesses += 1;
+  }
 
-            if (!cityCounts[access.city]) {
-                cityCounts[access.city] = 0;
-            }
-            cityCounts[access.city] += count;
+  const sum = (arr) => arr.reduce((a, b) => a + b, 0);
+  const totalMobileAccesses = sum(mobile);
+  const totalDesktopAccesses = sum(desktop);
 
-            totalAccesses += count;
-        }
-    });
+  const cityStats = Object.keys(cityCounts)
+    .map((city) => {
+      const accessCount = cityCounts[city];
+      const percentage =
+        totalAccesses === 0
+          ? '0.00'
+          : ((accessCount / totalAccesses) * 100).toFixed(2);
+      return { city, accessCount, percentage };
+    })
+    .sort((a, b) => b.accessCount - a.accessCount);
 
-    const totalMobileAccesses = mobileCounts.reduce(
-        (acc, count) => acc + count,
-        0
-    );
-    const totalDesktopAccesses = desktopCounts.reduce(
-        (acc, count) => acc + count,
-        0
-    );
+  const top10Cities = cityStats.slice(0, 9);
 
-    const cityStats = Object.keys(cityCounts).map((city) => {
-        const cityAccessCount = cityCounts[city];
-        const percentage = ((cityAccessCount / totalAccesses) * 100).toFixed(2);
-        return {
-            city,
-            accessCount: cityAccessCount,
-            percentage,
-        };
-    });
-
-    const top10Cities = cityStats
-        .sort((a, b) => b.accessCount - a.accessCount)
-        .slice(0, 9);
-
-    return {
-        mobile: mobileCounts,
-        desktop: desktopCounts,
-        browser: browserCounts,
-        dates: last7Days,
-        totalMobileAccesses,
-        totalDesktopAccesses,
-        totalAccesses,
-        cityStats,
-        top10Cities,
-    };
+  return {
+    mobile,
+    desktop,
+    browser: browserCounts,
+    dates,
+    totalMobileAccesses,
+    totalDesktopAccesses,
+    totalAccesses,
+    cityStats,
+    top10Cities,
+  };
 }

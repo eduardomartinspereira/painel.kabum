@@ -10,8 +10,10 @@ export async function getMonthlySalesData() {
         const monthEnd = endOfMonth(new Date(currentYear, month));
 
         const payments = await prisma.$queryRaw`
-            SELECT COUNT(*) as \`totalOrders\`, SUM(\`amount\`) as \`totalRevenue\`
-            FROM \`Payment\`
+            SELECT 
+                COUNT(*) as \`totalOrders\`, 
+                COALESCE(SUM(\`amount\`), 0) as \`totalRevenue\`
+            FROM \`payments\`
             WHERE \`createdAt\` >= ${monthStart}
             AND \`createdAt\` <= ${monthEnd}
             AND \`status\` = 'APPROVED';

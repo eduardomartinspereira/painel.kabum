@@ -20,16 +20,20 @@ export async function getProductsSoldLastWeek() {
     });
 
     const paymentsLastWeek = await prisma.$queryRaw`
-        SELECT SUM(\`productQuantity\`) as \`totalProductsSoldLastWeek\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(
+            CAST(JSON_UNQUOTE(JSON_EXTRACT(items, '$[*].quantity')) AS DECIMAL(10,2))
+        ), 0) as \`totalProductsSoldLastWeek\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${lastWeekStart}
         AND \`createdAt\` <= ${lastWeekEnd}
         AND \`status\` = 'APPROVED';
     `;
 
     const paymentsWeekBeforeLast = await prisma.$queryRaw`
-        SELECT SUM(\`productQuantity\`) as \`totalProductsSoldWeekBeforeLast\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(
+            CAST(JSON_UNQUOTE(JSON_EXTRACT(items, '$[*].quantity')) AS DECIMAL(10,2))
+        ), 0) as \`totalProductsSoldWeekBeforeLast\`
+        FROM \`payments\`
         WHERE \`createdAt\` >= ${weekBeforeLastStart}
         AND \`createdAt\` <= ${weekBeforeLastEnd}
         AND \`status\` = 'APPROVED';

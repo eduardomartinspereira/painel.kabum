@@ -2,8 +2,8 @@ import { prisma } from '../prisma';
 
 export async function getTotalApprovedPayments() {
     const totalApprovedPayments = await prisma.$queryRaw`
-        SELECT SUM(\`amount\`) as \`totalApprovedPayments\`
-        FROM \`Payment\`
+        SELECT COALESCE(SUM(\`amount\`), 0) as \`totalApprovedPayments\`
+        FROM \`payments\`
         WHERE \`status\` = 'APPROVED';
     `;
 

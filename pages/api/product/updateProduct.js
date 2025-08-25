@@ -7,38 +7,82 @@ export default async function handler(req, res) {
         const { id } = req.query;
         if (!id) return res.status(400).json({ error: 'Missing id' });
 
-        const { title, description, price, quantity, categoryId, img } =
-            req.body || {};
+        console.log('Updating product with ID:', id);
+        console.log('Request body:', req.body);
+
+        // Aceitar tanto os campos antigos quanto os novos para compatibilidade
+        const { 
+            title, description, price, quantity, categoryId, img,
+            name, basePrice, category, brand, isActive 
+        } = req.body || {};
+
+        // Mapear campos antigos para novos se necessário
+        const finalName = name || title;
+        const finalBasePrice = basePrice || price;
+        const finalCategory = category || (categoryId ? `Category ${categoryId}` : undefined);
+        const finalDescription = description;
 
         if (
-            !title ||
-            !description ||
-            price == null ||
-            quantity == null ||
-            !categoryId
+            !finalName ||
+            !finalDescription ||
+            finalBasePrice == null
         ) {
-            return res.status(400).json({ error: 'Missing required fields' });
+            console.log('Missing required fields:', { 
+                name: finalName, 
+                description: finalDescription, 
+                basePrice: finalBasePrice 
+            });
+            return res.status(400).json({ 
+                error: 'Missing required fields',
+                received: { 
+                    name: finalName, 
+                    description: finalDescription, 
+                    basePrice: finalBasePrice 
+                }
+            });
         }
 
         const data = {
-            title,
-            description,
-            price: Number(price),
-            quantity: Number(quantity),
-            categoryId: Number(categoryId),
+            name: finalName,
+            description: finalDescription,
+            basePrice: Number(finalBasePrice),
+            category: finalCategory || 'Sem categoria',
         };
 
-        if (img) data.img = img;
+        if (brand !== undefined) data.brand = brand;
+        if (isActive !== undefined) data.isActive = Boolean(isActive);
+
+        console.log('Update data:', data);
+
+        // Verificar se o produto existe antes de atualizar
+        const existingProduct = await prisma.product.findUnique({
+            where: { id: Number(id) }
+        });
+
+        if (!existingProduct) {
+            console.log('Product not found with ID:', id);
+            return res.status(404).json({ error: 'Product not found' });
+        }
 
         const updatedProduct = await prisma.product.update({
             where: { id: Number(id) },
             data,
-            include: { category: { select: { id: true, name: true } } },
         });
 
+        console.log('Product updated successfully:', updatedProduct);
         return res.status(200).json({ success: true, product: updatedProduct });
     } catch (error) {
         console.error('Error updating product:', error);
-        return res.status(500).json({ error: 'Error updating product' });
+        console.error('Error details:', {
+            message: error.message,
+            code: error.code,
+            meta: error.meta
+        });
+        
+        return res.status(500).json({ 
+            error: 'Error updating product',
+            details: error.message,
+            code: error.code
+        });
     }
 }

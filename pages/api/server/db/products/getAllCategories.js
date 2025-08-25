@@ -1,40 +1,25 @@
 import { prisma } from '../prisma';
 
 export const getAllCategories = async () => {
-    const categories = await prisma.$queryRaw`
-    SELECT 
-      c.id AS \`categoryId\`, 
-      c.name AS \`categoryName\`,
-      p.id AS \`productId\`,
-      p.title AS \`productTitle\`,
-      p.price AS \`productPrice\`,
-      p.quantity AS \`productQuantity\`,
-      p.status AS \`productStatus\`
-    FROM \`Category\` c
-    LEFT JOIN \`Product\` p ON c.id = p.\`categoryId\`
-    ORDER BY c.\`name\` ASC
-  `;
-
-    const categoryMap = {};
-    categories.forEach((entry) => {
-        if (!categoryMap[entry.categoryId]) {
-            categoryMap[entry.categoryId] = {
-                id: entry.categoryId,
-                name: entry.categoryName,
-                products: [],
-            };
-        }
-
-        if (entry.productId) {
-            categoryMap[entry.categoryId].products.push({
-                id: entry.productId,
-                title: entry.productTitle,
-                price: entry.productPrice,
-                quantity: entry.productQuantity,
-                status: entry.productStatus,
-            });
-        }
+    // Como não há tabela Category no schema atual, 
+    // vamos buscar categorias únicas dos produtos
+    const products = await prisma.product.findMany({
+        select: {
+            category: true,
+        },
+        where: {
+            isActive: true,
+        },
+        distinct: ['category'],
     });
 
-    return Object.values(categoryMap);
+    // Criar categorias baseadas nos valores únicos encontrados
+    const categories = products.map((product, index) => ({
+        id: index + 1, // ID temporário
+        name: product.category,
+        description: `Categoria: ${product.category}`,
+        createdAt: new Date().toISOString(),
+    }));
+
+    return categories;
 };

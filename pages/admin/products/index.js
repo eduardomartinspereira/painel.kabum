@@ -32,10 +32,14 @@ const DESCRIPTION_LIMIT = 150;
 const ITEMS_PER_PAGE = 8;
 
 const formatCurrency = (value) => {
+    // Tratar valores undefined, null ou NaN
+    if (value == null || isNaN(value)) {
+        return 'R$ 0,00';
+    }
     return new Intl.NumberFormat('pt-BR', {
         style: 'currency',
         currency: 'BRL',
-    }).format(value);
+    }).format(Number(value));
 };
 
 const formatCurrencyInput = (value) => {
@@ -73,8 +77,11 @@ const ProductCard = ({
                             <div onClick={() => handleItemClick(item)}>
                                 <img
                                     className={styles.img}
-                                    src={item.img}
-                                    alt={item.title}
+                                    src={item.img || item.image || '/assets/images/ecommerce/1.jpg'}
+                                    alt={item.title || item.name}
+                                    onError={(e) => {
+                                        e.target.src = '/assets/images/ecommerce/1.jpg';
+                                    }}
                                 />
                             </div>
                         </div>
@@ -113,7 +120,7 @@ const ProductCard = ({
                     </div>
                     <div className="text-center pt-2">
                         <h3 className="h6 mb-2 mt-4 fw-bold text-uppercase">
-                            {item.title}
+                            {item.title || item.name}
                         </h3>
                         <span className="fs-15 ms-auto">
                             <i className="ion ion-md-star text-warning"></i>
@@ -123,7 +130,7 @@ const ProductCard = ({
                             <i className="ion ion-md-star text-warning"></i>
                         </span>
                         <h4 className="h5 mb-0 mt-1 text-center fw-bold fs-22">
-                            {formatCurrency(item.price)}
+                            {formatCurrency(item.price || item.basePrice)}
                             <del className="text-secondary font-weight-normal fs-13 d-inline-block ms-1 prev-price"></del>
                         </h4>
                         <p style={{ marginTop: '10px', minHeight: '70px' }}>
@@ -138,7 +145,7 @@ const ProductCard = ({
                                 </span>
                             )}
                         </p>
-                        <p>Categoria: {item.category?.name}</p>
+                        <p>Categoria: {item.category?.name || item.category}</p>
                     </div>
                 </Card.Body>
             </Card>
@@ -296,7 +303,7 @@ const Shop = ({ initialProducts, categories }) => {
 
     useEffect(() => {
         const filteredProducts = products.filter((product) =>
-            product.title.toLowerCase().includes(searchTerm.toLowerCase())
+            (product.title || product.name || '').toLowerCase().includes(searchTerm.toLowerCase())
         );
         setSearchResults(filteredProducts);
         setCurrentPage(1);
